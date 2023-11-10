@@ -1,415 +1,1435 @@
-/* global NexT, CONFIG */
-
-HTMLElement.prototype.wrap = function(wrapper) {
-  this.parentNode.insertBefore(wrapper, this);
-  this.parentNode.removeChild(this);
-  wrapper.appendChild(this);
-};
-
-NexT.utils = {
-
-  /**
-   * Wrap images with fancybox.
-   */
-  wrapImageWithFancyBox: function() {
-    document.querySelectorAll('.post-body :not(a) > img, .post-body > img').forEach(element => {
-      var $image = $(element);
-      var imageLink = $image.attr('data-src') || $image.attr('src');
-      var $imageWrapLink = $image.wrap(`<a class="fancybox fancybox.image" href="${imageLink}" itemscope itemtype="http://schema.org/ImageObject" itemprop="url"></a>`).parent('a');
-      if ($image.is('.post-gallery img')) {
-        $imageWrapLink.attr('data-fancybox', 'gallery').attr('rel', 'gallery');
-      } else if ($image.is('.group-picture img')) {
-        $imageWrapLink.attr('data-fancybox', 'group').attr('rel', 'group');
-      } else {
-        $imageWrapLink.attr('data-fancybox', 'default').attr('rel', 'default');
-      }
-
-      var imageTitle = $image.attr('title') || $image.attr('alt');
-      if (imageTitle) {
-        $imageWrapLink.append(`<p class="image-caption">${imageTitle}</p>`);
-        // Make sure img title tag will show correctly in fancybox
-        $imageWrapLink.attr('title', imageTitle).attr('data-caption', imageTitle);
-      }
-    });
-
-    $.fancybox.defaults.hash = false;
-    $('.fancybox').fancybox({
-      loop   : true,
-      helpers: {
-        overlay: {
-          locked: false
-        }
-      }
-    });
-  },
-
-  registerExtURL: function() {
-    document.querySelectorAll('span.exturl').forEach(element => {
-      let link = document.createElement('a');
-      // https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
-      link.href = decodeURIComponent(atob(element.dataset.url).split('').map(c => {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-      link.rel = 'noopener external nofollow noreferrer';
-      link.target = '_blank';
-      link.className = element.className;
-      link.title = element.title;
-      link.innerHTML = element.innerHTML;
-      element.parentNode.replaceChild(link, element);
-    });
-  },
-
-  /**
-   * One-click copy code support.
-   */
-  registerCopyCode: function() {
-    document.querySelectorAll('figure.highlight').forEach(element => {
-      const box = document.createElement('div');
-      element.wrap(box);
-      box.classList.add('highlight-container');
-      box.insertAdjacentHTML('beforeend', '<div class="copy-btn"><i class="fa fa-clipboard fa-fw"></i></div>');
-      var button = element.parentNode.querySelector('.copy-btn');
-      button.addEventListener('click', event => {
-        var target = event.currentTarget;
-        var code = [...target.parentNode.querySelectorAll('.code .line')].map(line => line.innerText).join('\n');
-        var ta = document.createElement('textarea');
-        ta.style.top = window.scrollY + 'px'; // Prevent page scrolling
-        ta.style.position = 'absolute';
-        ta.style.opacity = '0';
-        ta.readOnly = true;
-        ta.value = code;
-        document.body.append(ta);
-        const selection = document.getSelection();
-        const selected = selection.rangeCount > 0 ? selection.getRangeAt(0) : false;
-        ta.select();
-        ta.setSelectionRange(0, code.length);
-        ta.readOnly = false;
-        var result = document.execCommand('copy');
-        if (CONFIG.copycode.show_result) {
-          target.querySelector('i').className = result ? 'fa fa-check fa-fw' : 'fa fa-times fa-fw';
-        }
-        ta.blur(); // For iOS
-        target.blur();
-        if (selected) {
-          selection.removeAllRanges();
-          selection.addRange(selected);
-        }
-        document.body.removeChild(ta);
-      });
-      button.addEventListener('mouseleave', event => {
-        setTimeout(() => {
-          event.target.querySelector('i').className = 'fa fa-clipboard fa-fw';
-        }, 300);
-      });
-    });
-  },
-
-  wrapTableWithBox: function() {
-    document.querySelectorAll('table').forEach(element => {
-      const box = document.createElement('div');
-      box.className = 'table-container';
-      element.wrap(box);
-    });
-  },
-
-  registerVideoIframe: function() {
-    document.querySelectorAll('iframe').forEach(element => {
-      const supported = [
-        'www.youtube.com',
-        'player.vimeo.com',
-        'player.youku.com',
-        'player.bilibili.com',
-        'www.tudou.com'
-      ].some(host => element.src.includes(host));
-      if (supported && !element.parentNode.matches('.video-container')) {
-        const box = document.createElement('div');
-        box.className = 'video-container';
-        element.wrap(box);
-        let width = Number(element.width);
-        let height = Number(element.height);
-        if (width && height) {
-          element.parentNode.style.paddingTop = (height / width * 100) + '%';
-        }
-      }
-    });
-  },
-
-  registerScrollPercent: function() {
-    var THRESHOLD = 50;
-    var backToTop = document.querySelector('.back-to-top');
-    var readingProgressBar = document.querySelector('.reading-progress-bar');
-    // For init back to top in sidebar if page was scrolled after page refresh.
-    window.addEventListener('scroll', () => {
-      if (backToTop || readingProgressBar) {
-        var docHeight = document.querySelector('.container').offsetHeight;
-        var winHeight = window.innerHeight;
-        var contentVisibilityHeight = docHeight > winHeight ? docHeight - winHeight : document.body.scrollHeight - winHeight;
-        var scrollPercent = Math.min(100 * window.scrollY / contentVisibilityHeight, 100);
-        if (backToTop) {
-          backToTop.classList.toggle('back-to-top-on', window.scrollY > THRESHOLD);
-          backToTop.querySelector('span').innerText = Math.round(scrollPercent) + '%';
-        }
-        if (readingProgressBar) {
-          readingProgressBar.style.width = scrollPercent.toFixed(2) + '%';
-        }
-      }
-    });
-
-    backToTop && backToTop.addEventListener('click', () => {
-      window.anime({
-        targets  : document.scrollingElement,
-        duration : 500,
-        easing   : 'linear',
-        scrollTop: 0
-      });
-    });
-  },
-
-  /**
-   * Tabs tag listener (without twitter bootstrap).
-   */
-  registerTabsTag: function() {
-    // Binding `nav-tabs` & `tab-content` by real time permalink changing.
-    document.querySelectorAll('.tabs ul.nav-tabs .tab').forEach(element => {
-      element.addEventListener('click', event => {
-        event.preventDefault();
-        var target = event.currentTarget;
-        // Prevent selected tab to select again.
-        if (!target.classList.contains('active')) {
-          // Add & Remove active class on `nav-tabs` & `tab-content`.
-          [...target.parentNode.children].forEach(element => {
-            element.classList.remove('active');
-          });
-          target.classList.add('active');
-          var tActive = document.getElementById(target.querySelector('a').getAttribute('href').replace('#', ''));
-          [...tActive.parentNode.children].forEach(element => {
-            element.classList.remove('active');
-          });
-          tActive.classList.add('active');
-          // Trigger event
-          tActive.dispatchEvent(new Event('tabs:click', {
-            bubbles: true
-          }));
-        }
-      });
-    });
-
-    window.dispatchEvent(new Event('tabs:register'));
-  },
-
-  registerCanIUseTag: function() {
-    // Get responsive height passed from iframe.
-    window.addEventListener('message', ({ data }) => {
-      if ((typeof data === 'string') && data.includes('ciu_embed')) {
-        var featureID = data.split(':')[1];
-        var height = data.split(':')[2];
-        document.querySelector(`iframe[data-feature=${featureID}]`).style.height = parseInt(height, 10) + 5 + 'px';
-      }
-    }, false);
-  },
-
-  registerActiveMenuItem: function() {
-    document.querySelectorAll('.menu-item').forEach(element => {
-      var target = element.querySelector('a[href]');
-      if (!target) return;
-      var isSamePath = target.pathname === location.pathname || target.pathname === location.pathname.replace('index.html', '');
-      var isSubPath = !CONFIG.root.startsWith(target.pathname) && location.pathname.startsWith(target.pathname);
-      element.classList.toggle('menu-item-active', target.hostname === location.hostname && (isSamePath || isSubPath));
-    });
-  },
-
-  registerLangSelect: function() {
-    let selects = document.querySelectorAll('.lang-select');
-    selects.forEach(sel => {
-      sel.value = CONFIG.page.lang;
-      sel.addEventListener('change', () => {
-        let target = sel.options[sel.selectedIndex];
-        document.querySelectorAll('.lang-select-label span').forEach(span => span.innerText = target.text);
-        let url = target.dataset.href;
-        window.pjax ? window.pjax.loadUrl(url) : window.location.href = url;
-      });
-    });
-  },
-
-  registerSidebarTOC: function() {
-    const navItems = document.querySelectorAll('.post-toc li');
-    const sections = [...navItems].map(element => {
-      var link = element.querySelector('a.nav-link');
-      var target = document.getElementById(decodeURI(link.getAttribute('href')).replace('#', ''));
-      // TOC item animation navigate.
-      link.addEventListener('click', event => {
-        event.preventDefault();
-        var offset = target.getBoundingClientRect().top + window.scrollY;
-        window.anime({
-          targets  : document.scrollingElement,
-          duration : 500,
-          easing   : 'linear',
-          scrollTop: offset + 10
-        });
-      });
-      return target;
-    });
-
-    var tocElement = document.querySelector('.post-toc-wrap');
-    function activateNavByIndex(target) {
-      if (target.classList.contains('active-current')) return;
-
-      document.querySelectorAll('.post-toc .active').forEach(element => {
-        element.classList.remove('active', 'active-current');
-      });
-      target.classList.add('active', 'active-current');
-      var parent = target.parentNode;
-      while (!parent.matches('.post-toc')) {
-        if (parent.matches('li')) parent.classList.add('active');
-        parent = parent.parentNode;
-      }
-      // Scrolling to center active TOC element if TOC content is taller then viewport.
-      window.anime({
-        targets  : tocElement,
-        duration : 200,
-        easing   : 'linear',
-        scrollTop: tocElement.scrollTop - (tocElement.offsetHeight / 2) + target.getBoundingClientRect().top - tocElement.getBoundingClientRect().top
-      });
-    }
-
-    function findIndex(entries) {
-      let index = 0;
-      let entry = entries[index];
-      if (entry.boundingClientRect.top > 0) {
-        index = sections.indexOf(entry.target);
-        return index === 0 ? 0 : index - 1;
-      }
-      for (; index < entries.length; index++) {
-        if (entries[index].boundingClientRect.top <= 0) {
-          entry = entries[index];
-        } else {
-          return sections.indexOf(entry.target);
-        }
-      }
-      return sections.indexOf(entry.target);
-    }
-
-    function createIntersectionObserver(marginTop) {
-      marginTop = Math.floor(marginTop + 10000);
-      let intersectionObserver = new IntersectionObserver((entries, observe) => {
-        let scrollHeight = document.documentElement.scrollHeight + 100;
-        if (scrollHeight > marginTop) {
-          observe.disconnect();
-          createIntersectionObserver(scrollHeight);
-          return;
-        }
-        let index = findIndex(entries);
-        activateNavByIndex(navItems[index]);
-      }, {
-        rootMargin: marginTop + 'px 0px -100% 0px',
-        threshold : 0
-      });
-      sections.forEach(element => {
-        element && intersectionObserver.observe(element);
-      });
-    }
-    createIntersectionObserver(document.documentElement.scrollHeight);
-  },
-
-  hasMobileUA: function() {
-    let ua = navigator.userAgent;
-    let pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
-    return pa.test(ua);
-  },
-
-  isTablet: function() {
-    return window.screen.width < 992 && window.screen.width > 767 && this.hasMobileUA();
-  },
-
-  isMobile: function() {
-    return window.screen.width < 767 && this.hasMobileUA();
-  },
-
-  isDesktop: function() {
-    return !this.isTablet() && !this.isMobile();
-  },
-
-  supportsPDFs: function() {
-    let ua = navigator.userAgent;
-    let isFirefoxWithPDFJS = ua.includes('irefox') && parseInt(ua.split('rv:')[1].split('.')[0], 10) > 18;
-    let supportsPdfMimeType = typeof navigator.mimeTypes['application/pdf'] !== 'undefined';
-    let isIOS = /iphone|ipad|ipod/i.test(ua.toLowerCase());
-    return isFirefoxWithPDFJS || (supportsPdfMimeType && !isIOS);
-  },
-
-  /**
-   * Init Sidebar & TOC inner dimensions on all pages and for all schemes.
-   * Need for Sidebar/TOC inner scrolling if content taller then viewport.
-   */
-  initSidebarDimension: function() {
-    var sidebarNav = document.querySelector('.sidebar-nav');
-    var sidebarNavHeight = sidebarNav.style.display !== 'none' ? sidebarNav.offsetHeight : 0;
-    var sidebarOffset = CONFIG.sidebar.offset || 12;
-    var sidebarb2tHeight = CONFIG.back2top.enable && CONFIG.back2top.sidebar ? document.querySelector('.back-to-top').offsetHeight : 0;
-    var sidebarSchemePadding = (CONFIG.sidebar.padding * 2) + sidebarNavHeight + sidebarb2tHeight;
-    // Margin of sidebar b2t: -4px -10px -18px, brings a different of 22px.
-    if (CONFIG.scheme === 'Pisces' || CONFIG.scheme === 'Gemini') sidebarSchemePadding += (sidebarOffset * 2) - 22;
-    // Initialize Sidebar & TOC Height.
-    var sidebarWrapperHeight = document.body.offsetHeight - sidebarSchemePadding + 'px';
-    document.querySelector('.site-overview-wrap').style.maxHeight = sidebarWrapperHeight;
-    document.querySelector('.post-toc-wrap').style.maxHeight = sidebarWrapperHeight;
-  },
-
-  updateSidebarPosition: function() {
-    var sidebarNav = document.querySelector('.sidebar-nav');
-    var hasTOC = document.querySelector('.post-toc');
-    if (hasTOC) {
-      sidebarNav.style.display = '';
-      sidebarNav.classList.add('motion-element');
-      document.querySelector('.sidebar-nav-toc').click();
-    } else {
-      sidebarNav.style.display = 'none';
-      sidebarNav.classList.remove('motion-element');
-      document.querySelector('.sidebar-nav-overview').click();
-    }
-    NexT.utils.initSidebarDimension();
-    if (!this.isDesktop() || CONFIG.scheme === 'Pisces' || CONFIG.scheme === 'Gemini') return;
-    // Expand sidebar on post detail page by default, when post has a toc.
-    var display = CONFIG.page.sidebar;
-    if (typeof display !== 'boolean') {
-      // There's no definition sidebar in the page front-matter.
-      display = CONFIG.sidebar.display === 'always' || (CONFIG.sidebar.display === 'post' && hasTOC);
-    }
-    if (display) {
-      window.dispatchEvent(new Event('sidebar:show'));
-    }
-  },
-
-  getScript: function(url, callback, condition) {
-    if (condition) {
-      callback();
-    } else {
-      var script = document.createElement('script');
-      script.onload = script.onreadystatechange = function(_, isAbort) {
-        if (isAbort || !script.readyState || /loaded|complete/.test(script.readyState)) {
-          script.onload = script.onreadystatechange = null;
-          script = undefined;
-          if (!isAbort && callback) setTimeout(callback, 0);
-        }
+const anzhiyu = {
+  debounce: (func, wait = 0, immediate = false) => {
+    let timeout;
+    return (...args) => {
+      const later = () => {
+        timeout = null;
+        if (!immediate) func(...args);
       };
-      script.src = url;
-      document.head.appendChild(script);
+      const callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func(...args);
+    };
+  },
+
+  throttle: function (func, wait, options = {}) {
+    let timeout, context, args;
+    let previous = 0;
+
+    const later = () => {
+      previous = options.leading === false ? 0 : new Date().getTime();
+      timeout = null;
+      func.apply(context, args);
+      if (!timeout) context = args = null;
+    };
+
+    const throttled = (...params) => {
+      const now = new Date().getTime();
+      if (!previous && options.leading === false) previous = now;
+      const remaining = wait - (now - previous);
+      context = this;
+      args = params;
+      if (remaining <= 0 || remaining > wait) {
+        if (timeout) {
+          clearTimeout(timeout);
+          timeout = null;
+        }
+        previous = now;
+        func.apply(context, args);
+        if (!timeout) context = args = null;
+      } else if (!timeout && options.trailing !== false) {
+        timeout = setTimeout(later, remaining);
+      }
+    };
+
+    return throttled;
+  },
+
+  sidebarPaddingR: () => {
+    const innerWidth = window.innerWidth;
+    const clientWidth = document.body.clientWidth;
+    const paddingRight = innerWidth - clientWidth;
+    if (innerWidth !== clientWidth) {
+      document.body.style.paddingRight = paddingRight + "px";
     }
   },
 
-  loadComments: function(element, callback) {
-    if (!CONFIG.comments.lazyload || !element) {
+  snackbarShow: (text, showActionFunction = false, duration = 2000, actionText = false) => {
+    const { position, bgLight, bgDark } = GLOBAL_CONFIG.Snackbar;
+    const bg = document.documentElement.getAttribute("data-theme") === "light" ? bgLight : bgDark;
+    const root = document.querySelector(":root");
+    root.style.setProperty("--anzhiyu-snackbar-time", duration + "ms");
+
+    Snackbar.show({
+      text: text,
+      backgroundColor: bg,
+      onActionClick: showActionFunction,
+      actionText: actionText,
+      showAction: actionText,
+      duration: duration,
+      pos: position,
+      customClass: "snackbar-css",
+    });
+  },
+
+  loadComment: (dom, callback) => {
+    if ("IntersectionObserver" in window) {
+      const observerItem = new IntersectionObserver(
+        entries => {
+          if (entries[0].isIntersecting) {
+            callback();
+            observerItem.disconnect();
+          }
+        },
+        { threshold: [0] }
+      );
+      observerItem.observe(dom);
+    } else {
       callback();
+    }
+  },
+
+  scrollToDest: (pos, time = 500) => {
+    const currentPos = window.pageYOffset;
+    if ("scrollBehavior" in document.documentElement.style) {
+      window.scrollTo({
+        top: pos,
+        behavior: "smooth",
+      });
       return;
     }
-    let intersectionObserver = new IntersectionObserver((entries, observer) => {
-      let entry = entries[0];
-      if (entry.isIntersecting) {
-        callback();
-        observer.disconnect();
+
+    let start = null;
+    pos = +pos;
+    window.requestAnimationFrame(function step(currentTime) {
+      start = !start ? currentTime : start;
+      const progress = currentTime - start;
+      if (currentPos < pos) {
+        window.scrollTo(0, ((pos - currentPos) * progress) / time + currentPos);
+      } else {
+        window.scrollTo(0, currentPos - ((currentPos - pos) * progress) / time);
+      }
+      if (progress < time) {
+        window.requestAnimationFrame(step);
+      } else {
+        window.scrollTo(0, pos);
       }
     });
-    intersectionObserver.observe(element);
-    return intersectionObserver;
-  }
+  },
+
+  initJustifiedGallery: function (selector) {
+    const runJustifiedGallery = i => {
+      if (!anzhiyu.isHidden(i)) {
+        fjGallery(i, {
+          itemSelector: ".fj-gallery-item",
+          rowHeight: i.getAttribute("data-rowHeight"),
+          gutter: 4,
+          onJustify: function () {
+            this.$container.style.opacity = "1";
+          },
+        });
+      }
+    };
+
+    if (Array.from(selector).length === 0) runJustifiedGallery(selector);
+    else
+      selector.forEach(i => {
+        runJustifiedGallery(i);
+      });
+  },
+
+  animateIn: (ele, text) => {
+    ele.style.display = "block";
+    ele.style.animation = text;
+  },
+
+  animateOut: (ele, text) => {
+    ele.addEventListener("animationend", function f() {
+      ele.style.display = "";
+      ele.style.animation = "";
+      ele.removeEventListener("animationend", f);
+    });
+    ele.style.animation = text;
+  },
+
+  /**
+   * @param {*} selector
+   * @param {*} eleType the type of create element
+   * @param {*} options object key: value
+   */
+  wrap: (selector, eleType, options) => {
+    const creatEle = document.createElement(eleType);
+    for (const [key, value] of Object.entries(options)) {
+      creatEle.setAttribute(key, value);
+    }
+    selector.parentNode.insertBefore(creatEle, selector);
+    creatEle.appendChild(selector);
+  },
+
+  isHidden: ele => ele.offsetHeight === 0 && ele.offsetWidth === 0,
+
+  getEleTop: ele => {
+    let actualTop = ele.offsetTop;
+    let current = ele.offsetParent;
+
+    while (current !== null) {
+      actualTop += current.offsetTop;
+      current = current.offsetParent;
+    }
+
+    return actualTop;
+  },
+
+  loadLightbox: ele => {
+    const service = GLOBAL_CONFIG.lightbox;
+
+    if (service === "mediumZoom") {
+      const zoom = mediumZoom(ele);
+      zoom.on("open", e => {
+        const photoBg = document.documentElement.getAttribute("data-theme") === "dark" ? "#121212" : "#fff";
+        zoom.update({
+          background: photoBg,
+        });
+      });
+    }
+
+    if (service === "fancybox") {
+      Array.from(ele).forEach(i => {
+        if (i.parentNode.tagName !== "A") {
+          const dataSrc = i.dataset.lazySrc || i.src;
+          const dataCaption = i.title || i.alt || "";
+          anzhiyu.wrap(i, "a", {
+            href: dataSrc,
+            "data-fancybox": "gallery",
+            "data-caption": dataCaption,
+            "data-thumb": dataSrc,
+          });
+        }
+      });
+
+      if (!window.fancyboxRun) {
+        Fancybox.bind("[data-fancybox]", {
+          Hash: false,
+          Thumbs: {
+            autoStart: false,
+          },
+        });
+        window.fancyboxRun = true;
+      }
+    }
+  },
+
+  setLoading: {
+    add: ele => {
+      const html = `
+        <div class="loading-container">
+          <div class="loading-item">
+            <div></div><div></div><div></div><div></div><div></div>
+          </div>
+        </div>
+      `;
+      ele.insertAdjacentHTML("afterend", html);
+    },
+    remove: ele => {
+      ele.nextElementSibling.remove();
+    },
+  },
+
+  updateAnchor: anchor => {
+    if (anchor !== window.location.hash) {
+      if (!anchor) anchor = location.pathname;
+      const title = GLOBAL_CONFIG_SITE.title;
+      window.history.replaceState(
+        {
+          url: location.href,
+          title,
+        },
+        title,
+        anchor
+      );
+    }
+  },
+
+  getScrollPercent: (currentTop, ele) => {
+    const docHeight = ele.clientHeight;
+    const winHeight = document.documentElement.clientHeight;
+    const headerHeight = ele.offsetTop;
+    const contentMath =
+      docHeight > winHeight ? docHeight - winHeight : document.documentElement.scrollHeight - winHeight;
+    const scrollPercent = (currentTop - headerHeight) / contentMath;
+    const scrollPercentRounded = Math.round(scrollPercent * 100);
+    const percentage = scrollPercentRounded > 100 ? 100 : scrollPercentRounded <= 0 ? 0 : scrollPercentRounded;
+    return percentage;
+  },
+
+  addGlobalFn: (key, fn, name = false, parent = window) => {
+    const globalFn = parent.globalFn || {};
+    const keyObj = globalFn[key] || {};
+
+    if (name && keyObj[name]) return;
+
+    name = name || Object.keys(keyObj).length;
+    keyObj[name] = fn;
+    globalFn[key] = keyObj;
+    parent.globalFn = globalFn;
+  },
+
+  addEventListenerPjax: (ele, event, fn, option = false) => {
+    ele.addEventListener(event, fn, option);
+    anzhiyu.addGlobalFn("pjax", () => {
+      ele.removeEventListener(event, fn, option);
+    });
+  },
+
+  removeGlobalFnEvent: (key, parent = window) => {
+    const { globalFn = {} } = parent;
+    const keyObj = globalFn[key] || {};
+    const keyArr = Object.keys(keyObj);
+    if (!keyArr.length) return;
+    keyArr.forEach(i => {
+      keyObj[i]();
+    });
+    delete parent.globalFn[key];
+  },
+
+  //更改主题色
+  changeThemeMetaColor: function (color) {
+    // console.info(`%c ${color}`, `font-size:36px;color:${color};`);
+    if (themeColorMeta !== null) {
+      themeColorMeta.setAttribute("content", color);
+    }
+  },
+
+  //顶栏自适应主题色
+  initThemeColor: function () {
+    let themeColor = getComputedStyle(document.documentElement)
+      .getPropertyValue("--anzhiyu-bar-background")
+      .trim()
+      .replace('"', "")
+      .replace('"', "");
+    const currentTop = window.scrollY || document.documentElement.scrollTop;
+    if (currentTop > 26) {
+      if (anzhiyu.is_Post()) {
+        themeColor = getComputedStyle(document.documentElement)
+          .getPropertyValue("--anzhiyu-meta-theme-post-color")
+          .trim()
+          .replace('"', "")
+          .replace('"', "");
+      }
+      if (themeColorMeta.getAttribute("content") === themeColor) return;
+      this.changeThemeMetaColor(themeColor);
+    } else {
+      if (themeColorMeta.getAttribute("content") === themeColor) return;
+      this.changeThemeMetaColor(themeColor);
+    }
+  },
+  //是否是文章页
+  is_Post: function () {
+    var url = window.location.href; //获取url
+    if (url.indexOf("/posts/") >= 0) {
+      //判断url地址中是否包含code字符串
+      return true;
+    } else {
+      return false;
+    }
+  },
+  //监测是否在页面开头
+  addNavBackgroundInit: function () {
+    var scrollTop = 0,
+      bodyScrollTop = 0,
+      documentScrollTop = 0;
+    if ($bodyWrap) {
+      bodyScrollTop = $bodyWrap.scrollTop;
+    }
+    if (document.documentElement) {
+      documentScrollTop = document.documentElement.scrollTop;
+    }
+    scrollTop = bodyScrollTop - documentScrollTop > 0 ? bodyScrollTop : documentScrollTop;
+
+    if (scrollTop != 0) {
+      pageHeaderEl.classList.add("nav-fixed");
+      pageHeaderEl.classList.add("nav-visible");
+    }
+  },
+  // 下载图片
+  downloadImage: function (imgsrc, name) {
+    //下载图片地址和图片名
+    rm.hideRightMenu();
+    if (rm.downloadimging == false) {
+      rm.downloadimging = true;
+      anzhiyu.snackbarShow("正在下载中，请稍后", false, 10000);
+      setTimeout(function () {
+        let image = new Image();
+        // 解决跨域 Canvas 污染问题
+        image.setAttribute("crossOrigin", "anonymous");
+        image.onload = function () {
+          let canvas = document.createElement("canvas");
+          canvas.width = image.width;
+          canvas.height = image.height;
+          let context = canvas.getContext("2d");
+          context.drawImage(image, 0, 0, image.width, image.height);
+          let url = canvas.toDataURL("image/png"); //得到图片的base64编码数据
+          let a = document.createElement("a"); // 生成一个a元素
+          let event = new MouseEvent("click"); // 创建一个单击事件
+          a.download = name || "photo"; // 设置图片名称
+          a.href = url; // 将生成的URL设置为a.href属性
+          a.dispatchEvent(event); // 触发a的单击事件
+        };
+        image.src = imgsrc;
+        anzhiyu.snackbarShow("图片已添加盲水印，请遵守版权协议");
+        rm.downloadimging = false;
+      }, "10000");
+    } else {
+      anzhiyu.snackbarShow("有正在进行中的下载，请稍后再试");
+    }
+  },
+  //禁止图片右键单击
+  stopImgRightDrag: function () {
+    var img = document.getElementsByTagName("img");
+    for (var i = 0; i < img.length; i++) {
+      img[i].addEventListener("dragstart", function () {
+        return false;
+      });
+    }
+  },
+  //滚动到指定id
+  scrollTo: function (id) {
+    var domTop = document.querySelector(id).offsetTop;
+    window.scrollTo(0, domTop - 80);
+  },
+  //隐藏侧边栏
+  hideAsideBtn: () => {
+    // Hide aside
+    const $htmlDom = document.documentElement.classList;
+    $htmlDom.contains("hide-aside")
+      ? saveToLocal.set("aside-status", "show", 2)
+      : saveToLocal.set("aside-status", "hide", 2);
+    $htmlDom.toggle("hide-aside");
+    $htmlDom.contains("hide-aside")
+      ? document.querySelector("#consoleHideAside").classList.add("on")
+      : document.querySelector("#consoleHideAside").classList.remove("on");
+  },
+  // 热评切换
+  switchCommentBarrage: function () {
+    let commentBarrage = document.querySelector(".comment-barrage");
+    if (commentBarrage) {
+      if (window.getComputedStyle(commentBarrage).display === "flex") {
+        commentBarrage.style.display = "none";
+        anzhiyu.snackbarShow("✨ 已关闭评论弹幕");
+        document.querySelector(".menu-commentBarrage-text").textContent = "显示热评";
+        document.querySelector("#consoleCommentBarrage").classList.remove("on");
+        localStorage.setItem("commentBarrageSwitch", "false");
+      } else {
+        commentBarrage.style.display = "flex";
+        document.querySelector(".menu-commentBarrage-text").textContent = "关闭热评";
+        document.querySelector("#consoleCommentBarrage").classList.add("on");
+        anzhiyu.snackbarShow("✨ 已开启评论弹幕");
+        localStorage.removeItem("commentBarrageSwitch");
+      }
+    }
+    rm.hideRightMenu();
+  },
+  initPaginationObserver: () => {
+    const commentElement = document.getElementById("post-comment");
+    const paginationElement = document.getElementById("pagination");
+
+    if (commentElement && paginationElement) {
+      new IntersectionObserver(entries => {
+        const commentBarrage = document.querySelector(".comment-barrage");
+
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            paginationElement.classList.add("show-window");
+            if (commentBarrage) {
+              commentBarrage.style.bottom = "-200px";
+            }
+          } else {
+            paginationElement.classList.remove("show-window");
+            if (commentBarrage) {
+              commentBarrage.style.bottom = "0px";
+            }
+          }
+        });
+      }).observe(commentElement);
+    }
+  },
+  // 初始化即刻
+  initIndexEssay: function () {
+    if (!document.getElementById("bbTimeList")) return;
+    setTimeout(() => {
+      let essay_bar_swiper = new Swiper(".essay_bar_swiper_container", {
+        passiveListeners: true,
+        direction: "vertical",
+        loop: true,
+        autoplay: {
+          disableOnInteraction: true,
+          delay: 3000,
+        },
+        mousewheel: true,
+      });
+
+      let essay_bar_comtainer = document.getElementById("bbtalk");
+      if (essay_bar_comtainer !== null) {
+        essay_bar_comtainer.onmouseenter = function () {
+          essay_bar_swiper.autoplay.stop();
+        };
+        essay_bar_comtainer.onmouseleave = function () {
+          essay_bar_swiper.autoplay.start();
+        };
+      }
+    }, 100);
+  },
+  scrollByMouseWheel: function ($list, $target) {
+    const scrollHandler = function (e) {
+      $list.scrollLeft -= e.wheelDelta / 2;
+      e.preventDefault();
+    };
+    $list.addEventListener("mousewheel", scrollHandler, { passive: false });
+    if ($target) {
+      $target.classList.add("selected");
+      $list.scrollLeft = $target.offsetLeft - $list.offsetLeft - ($list.offsetWidth - $target.offsetWidth) / 2;
+    }
+  },
+  // catalog激活
+  catalogActive: function () {
+    const $list = document.getElementById("catalog-list");
+    if ($list) {
+      const pathname = decodeURIComponent(window.location.pathname);
+      const catalogListItems = $list.querySelectorAll(".catalog-list-item");
+
+      let $catalog = null;
+      catalogListItems.forEach(item => {
+        if (pathname.startsWith(item.id)) {
+          $catalog = item;
+          return;
+        }
+      });
+
+      anzhiyu.scrollByMouseWheel($list, $catalog);
+    }
+  },
+  // Page Tag 激活
+  tagsPageActive: function () {
+    const $list = document.getElementById("tag-page-tags");
+    if ($list) {
+      const $tagPageTags = document.getElementById(decodeURIComponent(window.location.pathname));
+      anzhiyu.scrollByMouseWheel($list, $tagPageTags);
+    }
+  },
+  // 修改时间显示"最近"
+  diffDate: function (d, more = false, simple = false) {
+    const dateNow = new Date();
+    const datePost = new Date(d);
+    const dateDiff = dateNow.getTime() - datePost.getTime();
+    const minute = 1000 * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+    const month = day * 30;
+
+    let result;
+    if (more) {
+      const monthCount = dateDiff / month;
+      const dayCount = dateDiff / day;
+      const hourCount = dateDiff / hour;
+      const minuteCount = dateDiff / minute;
+
+      if (monthCount >= 1) {
+        result = datePost.toLocaleDateString().replace(/\//g, "-");
+      } else if (dayCount >= 1) {
+        result = parseInt(dayCount) + " " + GLOBAL_CONFIG.date_suffix.day;
+      } else if (hourCount >= 1) {
+        result = parseInt(hourCount) + " " + GLOBAL_CONFIG.date_suffix.hour;
+      } else if (minuteCount >= 1) {
+        result = parseInt(minuteCount) + " " + GLOBAL_CONFIG.date_suffix.min;
+      } else {
+        result = GLOBAL_CONFIG.date_suffix.just;
+      }
+    } else if (simple) {
+      const monthCount = dateDiff / month;
+      const dayCount = dateDiff / day;
+      const hourCount = dateDiff / hour;
+      const minuteCount = dateDiff / minute;
+      if (monthCount >= 1) {
+        result = datePost.toLocaleDateString().replace(/\//g, "-");
+      } else if (dayCount >= 1 && dayCount <= 3) {
+        result = parseInt(dayCount) + " " + GLOBAL_CONFIG.date_suffix.day;
+      } else if (dayCount > 3) {
+        result = datePost.getMonth() + 1 + "/" + datePost.getDate();
+      } else if (hourCount >= 1) {
+        result = parseInt(hourCount) + " " + GLOBAL_CONFIG.date_suffix.hour;
+      } else if (minuteCount >= 1) {
+        result = parseInt(minuteCount) + " " + GLOBAL_CONFIG.date_suffix.min;
+      } else {
+        result = GLOBAL_CONFIG.date_suffix.just;
+      }
+    } else {
+      result = parseInt(dateDiff / day);
+    }
+    return result;
+  },
+
+  // 修改即刻中的时间显示
+  changeTimeInEssay: function () {
+    document.querySelector("#bber") &&
+      document.querySelectorAll("#bber time").forEach(function (e) {
+        var t = e,
+          datetime = t.getAttribute("datetime");
+        (t.innerText = anzhiyu.diffDate(datetime, true)), (t.style.display = "inline");
+      });
+  },
+  // 修改相册集中的时间
+  changeTimeInAlbumDetail: function () {
+    document.querySelector("#album_detail") &&
+      document.querySelectorAll("#album_detail time").forEach(function (e) {
+        var t = e,
+          datetime = t.getAttribute("datetime");
+        (t.innerText = anzhiyu.diffDate(datetime, true)), (t.style.display = "inline");
+      });
+  },
+  // 刷新瀑布流
+  reflashEssayWaterFall: function () {
+    const waterfallEl = document.getElementById("waterfall");
+    if (waterfallEl) {
+      setTimeout(function () {
+        waterfall(waterfallEl);
+        waterfallEl.classList.add("show");
+      }, 800);
+    }
+  },
+  sayhi: function () {
+    const $sayhiEl = document.getElementById("author-info__sayhi");
+
+    const getTimeState = () => {
+      const hour = new Date().getHours();
+      let message = "";
+
+      if (hour >= 0 && hour <= 5) {
+        message = "睡个好觉，保证精力充沛";
+      } else if (hour > 5 && hour <= 10) {
+        message = "一日之计在于晨";
+      } else if (hour > 10 && hour <= 14) {
+        message = "吃饱了才有力气干活";
+      } else if (hour > 14 && hour <= 18) {
+        message = "集中精力，攻克难关";
+      } else if (hour > 18 && hour <= 24) {
+        message = "不要太劳累了，早睡更健康";
+      }
+
+      return message;
+    };
+
+    if ($sayhiEl) {
+      $sayhiEl.innerHTML = getTimeState();
+    }
+  },
+
+  // 友链注入预设评论
+  addFriendLink() {
+    var input = document.getElementsByClassName("el-textarea__inner")[0];
+    if (!input) return;
+    const evt = new Event("input", { cancelable: true, bubbles: true });
+    const defaultPlaceholder =
+      "昵称（请勿包含博客等字样）：\n网站地址（要求博客地址，请勿提交个人主页）：\n头像图片url（请提供尽可能清晰的图片，我会上传到我自己的图床）：\n描述：\n站点截图（可选）：\n";
+    input.value = this.getConfigIfPresent(GLOBAL_CONFIG.linkPageTop, "addFriendPlaceholder", defaultPlaceholder);
+    input.dispatchEvent(evt);
+    input.focus();
+    input.setSelectionRange(-1, -1);
+  },
+  // 获取配置，如果为空则返回默认值
+  getConfigIfPresent: function (config, configKey, defaultValue) {
+    if (!config) return defaultValue;
+    if (!config.hasOwnProperty(configKey)) return defaultValue;
+    if (!config[configKey]) return defaultValue;
+    return config[configKey];
+  },
+  //切换音乐播放状态
+  musicToggle: function (changePaly = true) {
+    if (!anzhiyu_musicFirst) {
+      anzhiyu.musicBindEvent();
+      anzhiyu_musicFirst = true;
+    }
+    let msgPlay = '<i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span>';
+    let msgPause = '<i class="anzhiyufont anzhiyu-icon-pause"></i><span>暂停音乐</span>';
+    if (anzhiyu_musicPlaying) {
+      navMusicEl.classList.remove("playing");
+      document.getElementById("menu-music-toggle").innerHTML = msgPlay;
+      document.getElementById("nav-music-hoverTips").innerHTML = "音乐已暂停";
+      document.querySelector("#consoleMusic").classList.remove("on");
+      anzhiyu_musicPlaying = false;
+      navMusicEl.classList.remove("stretch");
+    } else {
+      navMusicEl.classList.add("playing");
+      document.getElementById("menu-music-toggle").innerHTML = msgPause;
+      document.querySelector("#consoleMusic").classList.add("on");
+      anzhiyu_musicPlaying = true;
+      navMusicEl.classList.add("stretch");
+    }
+    if (changePaly) document.querySelector("#nav-music meting-js").aplayer.toggle();
+    rm.hideRightMenu();
+  },
+  // 音乐伸缩
+  musicTelescopic: function () {
+    if (navMusicEl.classList.contains("stretch")) {
+      navMusicEl.classList.remove("stretch");
+    } else {
+      navMusicEl.classList.add("stretch");
+    }
+  },
+
+  //音乐上一曲
+  musicSkipBack: function () {
+    navMusicEl.querySelector("meting-js").aplayer.skipBack();
+    rm.hideRightMenu();
+  },
+
+  //音乐下一曲
+  musicSkipForward: function () {
+    navMusicEl.querySelector("meting-js").aplayer.skipForward();
+    rm.hideRightMenu();
+  },
+
+  //获取音乐中的名称
+  musicGetName: function () {
+    var x = document.querySelector(".aplayer-title");
+    var arr = [];
+    for (var i = x.length - 1; i >= 0; i--) {
+      arr[i] = x[i].innerText;
+    }
+    return arr[0];
+  },
+
+  //初始化console图标
+  initConsoleState: function () {
+    //初始化隐藏边栏
+    const $htmlDomClassList = document.documentElement.classList;
+    $htmlDomClassList.contains("hide-aside")
+      ? document.querySelector("#consoleHideAside").classList.add("on")
+      : document.querySelector("#consoleHideAside").classList.remove("on");
+  },
+
+  // 显示打赏中控台
+  rewardShowConsole: function () {
+    // 判断是否为赞赏打开控制台
+    consoleEl.classList.add("reward-show");
+    anzhiyu.initConsoleState();
+  },
+  // 显示中控台
+  showConsole: function () {
+    consoleEl.classList.add("show");
+    anzhiyu.initConsoleState();
+  },
+
+  //隐藏中控台
+  hideConsole: function () {
+    if (consoleEl.classList.contains("show")) {
+      // 如果是一般控制台，就关闭一般控制台
+      consoleEl.classList.remove("show");
+    } else if (consoleEl.classList.contains("reward-show")) {
+      // 如果是打赏控制台，就关闭打赏控制台
+      consoleEl.classList.remove("reward-show");
+    }
+    // 获取center-console元素
+    const centerConsole = document.getElementById("center-console");
+
+    // 检查center-console是否被选中
+    if (centerConsole.checked) {
+      // 取消选中状态
+      centerConsole.checked = false;
+    }
+  },
+  // 取消加载动画
+  hideLoading: function () {
+    document.getElementById("loading-box").classList.add("loaded");
+  },
+  // 将音乐缓存播放
+  cacheAndPlayMusic() {
+    let data = localStorage.getItem("musicData");
+    if (data) {
+      data = JSON.parse(data);
+      const currentTime = new Date().getTime();
+      if (currentTime - data.timestamp < 24 * 60 * 60 * 1000) {
+        // 如果缓存的数据没有过期，直接使用
+        anzhiyu.playMusic(data.songs);
+        return;
+      }
+    }
+
+    // 否则重新从服务器获取数据
+    fetch("/json/music.json")
+      .then(response => response.json())
+      .then(songs => {
+        const cacheData = {
+          timestamp: new Date().getTime(),
+          songs: songs,
+        };
+        localStorage.setItem("musicData", JSON.stringify(cacheData));
+        anzhiyu.playMusic(songs);
+      });
+  },
+  // 播放音乐
+  playMusic(songs) {
+    const anMusicPage = document.getElementById("anMusic-page");
+    const metingAplayer = anMusicPage.querySelector("meting-js").aplayer;
+    const randomIndex = Math.floor(Math.random() * songs.length);
+    const randomSong = songs[randomIndex];
+    const allAudios = metingAplayer.list.audios;
+    if (!selectRandomSong.includes(randomSong.name)) {
+      // 如果随机到的歌曲已经未被随机到过，就添加进metingAplayer.list
+      metingAplayer.list.add([randomSong]);
+      // 播放最后一首(因为是添加到了最后)
+      metingAplayer.list.switch(allAudios.length);
+      // 添加到已被随机的歌曲列表
+      selectRandomSong.push(randomSong.name);
+    } else {
+      // 随机到的歌曲已经在播放列表中了
+      // 直接继续随机直到随机到没有随机过的歌曲，如果全部随机过了就切换到对应的歌曲播放即可
+      let songFound = false;
+      while (!songFound) {
+        const newRandomIndex = Math.floor(Math.random() * songs.length);
+        const newRandomSong = songs[newRandomIndex];
+        if (!selectRandomSong.includes(newRandomSong.name)) {
+          metingAplayer.list.add([newRandomSong]);
+          metingAplayer.list.switch(allAudios.length);
+          selectRandomSong.push(newRandomSong.name);
+          songFound = true;
+        }
+        // 如果全部歌曲都已被随机过，跳出循环
+        if (selectRandomSong.length === songs.length) {
+          break;
+        }
+      }
+      if (!songFound) {
+        // 如果全部歌曲都已被随机过，切换到对应的歌曲播放
+        const palyMusicIndex = allAudios.findIndex(song => song.name === randomSong.name);
+        if (palyMusicIndex != -1) metingAplayer.list.switch(palyMusicIndex);
+      }
+    }
+
+    console.info("已随机歌曲：", selectRandomSong, "本次随机歌曲：", randomSong.name);
+  },
+  // 音乐节目切换背景
+  changeMusicBg: function (isChangeBg = true) {
+    const anMusicBg = document.getElementById("an_music_bg");
+
+    if (isChangeBg) {
+      // player listswitch 会进入此处
+      const musiccover = document.querySelector("#anMusic-page .aplayer-pic");
+      anMusicBg.style.backgroundImage = musiccover.style.backgroundImage;
+    } else {
+      // 第一次进入，绑定事件，改背景
+      let timer = setInterval(() => {
+        const musiccover = document.querySelector("#anMusic-page .aplayer-pic");
+        // 确保player加载完成
+        if (musiccover) {
+          clearInterval(timer);
+          // 绑定事件
+          anzhiyu.addEventListenerMusic();
+          // 确保第一次能够正确替换背景
+          anzhiyu.changeMusicBg();
+
+          // 暂停nav的音乐
+          if (
+            document.querySelector("#nav-music meting-js").aplayer &&
+            !document.querySelector("#nav-music meting-js").aplayer.audio.paused
+          ) {
+            anzhiyu.musicToggle();
+          }
+        }
+      }, 100);
+    }
+  },
+  // 获取自定义播放列表
+  getCustomPlayList: function () {
+    if (!window.location.pathname.startsWith("/music/")) {
+      return;
+    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = "8152976493";
+    const userServer = "netease";
+    const anMusicPageMeting = document.getElementById("anMusic-page-meting");
+    if (urlParams.get("id") && urlParams.get("server")) {
+      const id = urlParams.get("id");
+      const server = urlParams.get("server");
+      anMusicPageMeting.innerHTML = `<meting-js id="${id}" server=${server} type="playlist" type="playlist" mutex="true" preload="auto" theme="var(--anzhiyu-main)" order="list" list-max-height="calc(100vh - 169px)!important"></meting-js>`;
+    } else {
+      anMusicPageMeting.innerHTML = `<meting-js id="${userId}" server="${userServer}" type="playlist" mutex="true" preload="auto" theme="var(--anzhiyu-main)" order="list" list-max-height="calc(100vh - 169px)!important"></meting-js>`;
+    }
+    anzhiyu.changeMusicBg(false);
+  },
+  //隐藏今日推荐
+  hideTodayCard: function () {
+    if (document.getElementById("todayCard")) {
+      document.getElementById("todayCard").classList.add("hide");
+      const topGroup = document.querySelector(".topGroup");
+      const recentPostItems = topGroup.querySelectorAll(".recent-post-item");
+      recentPostItems.forEach(item => {
+        item.style.display = "flex";
+      });
+    }
+  },
+
+  // 监听音乐背景改变
+  addEventListenerMusic: function () {
+    const anMusicPage = document.getElementById("anMusic-page");
+    const aplayerIconMenu = anMusicPage.querySelector(".aplayer-info .aplayer-time .aplayer-icon-menu");
+    const anMusicBtnGetSong = anMusicPage.querySelector("#anMusicBtnGetSong");
+    const anMusicRefreshBtn = anMusicPage.querySelector("#anMusicRefreshBtn");
+    const anMusicSwitchingBtn = anMusicPage.querySelector("#anMusicSwitching");
+    const metingAplayer = anMusicPage.querySelector("meting-js").aplayer;
+    //初始化音量
+    metingAplayer.volume(0.8, true);
+    metingAplayer.on("loadeddata", function () {
+      anzhiyu.changeMusicBg();
+    });
+
+    aplayerIconMenu.addEventListener("click", function () {
+      document.getElementById("menu-mask").style.display = "block";
+      document.getElementById("menu-mask").style.animation = "0.5s ease 0s 1 normal none running to_show";
+      anMusicPage.querySelector(".aplayer.aplayer-withlist .aplayer-list").style.opacity = "1";
+    });
+
+    function anMusicPageMenuAask() {
+      if (window.location.pathname != "/music/") {
+        document.getElementById("menu-mask").removeEventListener("click", anMusicPageMenuAask);
+        return;
+      }
+
+      anMusicPage.querySelector(".aplayer-list").classList.remove("aplayer-list-hide");
+    }
+
+    document.getElementById("menu-mask").addEventListener("click", anMusicPageMenuAask);
+
+    // 监听增加单曲按钮
+    anMusicBtnGetSong.addEventListener("click", () => {
+      if (changeMusicListFlag) {
+        const anMusicPage = document.getElementById("anMusic-page");
+        const metingAplayer = anMusicPage.querySelector("meting-js").aplayer;
+        const allAudios = metingAplayer.list.audios;
+        const randomIndex = Math.floor(Math.random() * allAudios.length);
+        // 随机播放一首
+        metingAplayer.list.switch(randomIndex);
+      } else {
+        anzhiyu.cacheAndPlayMusic();
+      }
+    });
+    anMusicRefreshBtn.addEventListener("click", () => {
+      localStorage.removeItem("musicData");
+      anzhiyu.snackbarShow("已移除相关缓存歌曲");
+    });
+    anMusicSwitchingBtn.addEventListener("click", () => {
+      anzhiyu.changeMusicList();
+    });
+
+    // 监听键盘事件
+    //空格控制音乐
+    document.addEventListener("keydown", function (event) {
+      //暂停开启音乐
+      if (event.code === "Space") {
+        event.preventDefault();
+        metingAplayer.toggle();
+      }
+      //切换下一曲
+      if (event.keyCode === 39) {
+        event.preventDefault();
+        metingAplayer.skipForward();
+      }
+      //切换上一曲
+      if (event.keyCode === 37) {
+        event.preventDefault();
+        metingAplayer.skipBack();
+      }
+      //增加音量
+      if (event.keyCode === 38) {
+        if (musicVolume <= 1) {
+          musicVolume += 0.1;
+          metingAplayer.volume(musicVolume, true);
+        }
+      }
+      //减小音量
+      if (event.keyCode === 40) {
+        if (musicVolume >= 0) {
+          musicVolume += -0.1;
+          metingAplayer.volume(musicVolume, true);
+        }
+      }
+    });
+  },
+  // 切换歌单
+  changeMusicList: async function () {
+    const anMusicPage = document.getElementById("anMusic-page");
+    const metingAplayer = anMusicPage.querySelector("meting-js").aplayer;
+    const currentTime = new Date().getTime();
+    const cacheData = JSON.parse(localStorage.getItem("musicData")) || { timestamp: 0 };
+    let songs = [];
+
+    if (changeMusicListFlag) {
+      songs = defaultPlayMusicList;
+    } else {
+      // 保存当前默认播放列表，以使下次可以切换回来
+      defaultPlayMusicList = metingAplayer.list.audios;
+      // 如果缓存的数据没有过期，直接使用
+      if (currentTime - cacheData.timestamp < 24 * 60 * 60 * 1000) {
+        songs = cacheData.songs;
+      } else {
+        // 否则重新从服务器获取数据
+        const response = await fetch("/json/music.json");
+        songs = await response.json();
+        cacheData.timestamp = currentTime;
+        cacheData.songs = songs;
+        localStorage.setItem("musicData", JSON.stringify(cacheData));
+      }
+    }
+
+    // 清除当前播放列表并添加新的歌曲
+    metingAplayer.list.clear();
+    metingAplayer.list.add(songs);
+
+    // 切换标志位
+    changeMusicListFlag = !changeMusicListFlag;
+  },
+  // 控制台音乐列表监听
+  addEventListenerConsoleMusicList: function () {
+    const navMusic = document.getElementById("nav-music");
+    if (!navMusic) return;
+    navMusic.addEventListener("click", e => {
+      const aplayerList = navMusic.querySelector(".aplayer-list");
+      const listBtn = navMusic.querySelector(
+        "div.aplayer-info > div.aplayer-controller > div.aplayer-time.aplayer-time-narrow > button.aplayer-icon.aplayer-icon-menu svg"
+      );
+      if (e.target != listBtn && aplayerList.classList.contains("aplayer-list-hide")) {
+        aplayerList.classList.remove("aplayer-list-hide");
+      }
+    });
+  },
+  // 监听按键
+  toPage: function () {
+    var toPageText = document.getElementById("toPageText"),
+      toPageButton = document.getElementById("toPageButton"),
+      pageNumbers = document.querySelectorAll(".page-number"),
+      lastPageNumber = Number(pageNumbers[pageNumbers.length - 1].innerHTML),
+      pageNumber = Number(toPageText.value);
+
+    if (!isNaN(pageNumber) && pageNumber >= 1 && Number.isInteger(pageNumber)) {
+      var url = "/page/" + (pageNumber > lastPageNumber ? lastPageNumber : pageNumber) + "/";
+      toPageButton.href = pageNumber === 1 ? "/" : url;
+    } else {
+      toPageButton.href = "javascript:void(0);";
+    }
+  },
+
+  //删除多余的class
+  removeBodyPaceClass: function () {
+    document.body.className = "pace-done";
+  },
+  // 修改body的type类型以适配css
+  setValueToBodyType: function () {
+    const input = document.getElementById("page-type"); // 获取input元素
+    const value = input.value; // 获取input的value值
+    document.body.dataset.type = value; // 将value值赋值到body的type属性上
+  },
+  //匿名评论
+  addRandomCommentInfo: function () {
+    // 从形容词数组中随机取一个值
+    const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+
+    // 从蔬菜水果动物名字数组中随机取一个值
+    const randomName = vegetablesAndFruits[Math.floor(Math.random() * vegetablesAndFruits.length)];
+
+    // 将两个值组合成一个字符串
+    const name = `${randomAdjective}${randomName}`;
+
+    function dr_js_autofill_commentinfos() {
+      var lauthor = [
+          "#author",
+          "input[name='comname']",
+          "#inpName",
+          "input[name='author']",
+          "#ds-dialog-name",
+          "#name",
+          "input[name='nick']",
+          "#comment_author",
+        ],
+        lmail = [
+          "#mail",
+          "#email",
+          "input[name='commail']",
+          "#inpEmail",
+          "input[name='email']",
+          "#ds-dialog-email",
+          "input[name='mail']",
+          "#comment_email",
+        ],
+        lurl = [
+          "#url",
+          "input[name='comurl']",
+          "#inpHomePage",
+          "#ds-dialog-url",
+          "input[name='url']",
+          "input[name='website']",
+          "#website",
+          "input[name='link']",
+          "#comment_url",
+        ];
+      for (var i = 0; i < lauthor.length; i++) {
+        var author = document.querySelector(lauthor[i]);
+        if (author != null) {
+          author.value = name;
+          author.dispatchEvent(new Event("input"));
+          author.dispatchEvent(new Event("change"));
+          break;
+        }
+      }
+      for (var j = 0; j < lmail.length; j++) {
+        var mail = document.querySelector(lmail[j]);
+        if (mail != null) {
+          mail.value = visitorMail;
+          mail.dispatchEvent(new Event("input"));
+          mail.dispatchEvent(new Event("change"));
+          break;
+        }
+      }
+      return !1;
+    }
+
+    dr_js_autofill_commentinfos();
+    var input = document.getElementsByClassName("el-textarea__inner")[0];
+    input.focus();
+    input.setSelectionRange(-1, -1);
+  },
+
+  // 跳转开往
+  totraveling: function () {
+    anzhiyu.snackbarShow(
+      "即将跳转到「开往」项目的成员博客，不保证跳转网站的安全性和可用性",
+      element => {
+        element.style.opacity = 0;
+        travellingsTimer && clearTimeout(travellingsTimer);
+      },
+      5000,
+      "取消"
+    );
+    travellingsTimer = setTimeout(function () {
+      window.open("https://www.travellings.cn/go.html", "_blank");
+    }, "5000");
+  },
+
+  // 工具函数替换字符串
+  replaceAll: function (e, n, t) {
+    return e.split(n).join(t);
+  },
+
+  // 音乐绑定事件
+  musicBindEvent: function () {
+    document.querySelector("#nav-music .aplayer-music").addEventListener("click", function () {
+      anzhiyu.musicTelescopic();
+    });
+    document.querySelector("#nav-music .aplayer-button").addEventListener("click", function () {
+      anzhiyu.musicToggle(false);
+    });
+  },
+
+  // 判断是否是移动端
+  hasMobile: function () {
+    let isMobile = false;
+    if (
+      navigator.userAgent.match(
+        /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+      ) ||
+      document.body.clientWidth < 800
+    ) {
+      // 移动端
+      isMobile = true;
+    }
+    return isMobile;
+  },
+
+  // 创建二维码
+  qrcodeCreate: function () {
+    if (document.getElementById("qrcode")) {
+      document.getElementById("qrcode").innerHTML = "";
+      var qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: window.location.href,
+        width: 250,
+        height: 250,
+        colorDark: "#000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+    }
+  },
+
+  // 判断是否在el内
+  isInViewPortOfOne: function (el) {
+    if (!el) return;
+    const viewPortHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    const offsetTop = el.offsetTop;
+    const scrollTop = document.documentElement.scrollTop;
+    const top = offsetTop - scrollTop;
+    return top <= viewPortHeight;
+  },
+  //添加赞赏蒙版
+  addRewardMask: function () {
+    if (!document.querySelector(".reward-main")) return;
+    document.querySelector(".reward-main").style.display = "flex";
+    document.querySelector(".reward-main").style.zIndex = "102";
+    document.getElementById("quit-box").style.display = "flex";
+  },
+  // 移除赞赏蒙版
+  removeRewardMask: function () {
+    if (!document.querySelector(".reward-main")) return;
+    document.querySelector(".reward-main").style.display = "none";
+    document.getElementById("quit-box").style.display = "none";
+  },
+
+  keyboardToggle: function () {
+    const isKeyboardOn = anzhiyu_keyboard;
+
+    if (isKeyboardOn) {
+      const consoleKeyboard = document.querySelector("#consoleKeyboard");
+      consoleKeyboard.classList.remove("on");
+      anzhiyu_keyboard = false;
+    } else {
+      const consoleKeyboard = document.querySelector("#consoleKeyboard");
+      consoleKeyboard.classList.add("on");
+      anzhiyu_keyboard = true;
+    }
+
+    localStorage.setItem("keyboardToggle", isKeyboardOn ? "false" : "true");
+  },
+  rightMenuToggle: function () {
+    if (window.oncontextmenu) {
+      window.oncontextmenu = null;
+    } else if (!window.oncontextmenu && oncontextmenuFunction) {
+      window.oncontextmenu = oncontextmenuFunction;
+    }
+  },
+  switchConsole: () => {
+    // switch console
+    const consoleEl = document.getElementById("console");
+    //初始化隐藏边栏
+    const $htmlDom = document.documentElement.classList;
+    $htmlDom.contains("hide-aside")
+      ? document.querySelector("#consoleHideAside").classList.add("on")
+      : document.querySelector("#consoleHideAside").classList.remove("on");
+    if (consoleEl.classList.contains("show")) {
+      consoleEl.classList.remove("show");
+    } else {
+      consoleEl.classList.add("show");
+    }
+    const consoleKeyboard = document.querySelector("#consoleKeyboard");
+
+    if (consoleKeyboard) {
+      if (localStorage.getItem("keyboardToggle") === "true") {
+        consoleKeyboard.classList.add("on");
+        anzhiyu_keyboard = true;
+      } else {
+        consoleKeyboard.classList.remove("on");
+        anzhiyu_keyboard = false;
+      }
+    }
+  },
+  // 定义 intersectionObserver 函数，并接收两个可选参数
+  intersectionObserver: function (enterCallback, leaveCallback) {
+    let observer;
+    return () => {
+      if (!observer) {
+        observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.intersectionRatio > 0) {
+              enterCallback?.();
+            } else {
+              leaveCallback?.();
+            }
+          });
+        });
+      } else {
+        // 如果 observer 对象已经存在，则先取消对之前元素的观察
+        observer.disconnect();
+      }
+      return observer;
+    };
+  },
+  // CategoryBar滚动
+  scrollCategoryBarToRight: function () {
+    // 获取需要操作的元素
+    const items = document.getElementById("catalog-list");
+    const nextButton = document.getElementById("category-bar-next");
+
+    // 检查元素是否存在
+    if (items && nextButton) {
+      const itemsWidth = items.clientWidth;
+
+      // 判断是否已经滚动到最右侧
+      if (items.scrollLeft + items.clientWidth + 1 >= items.scrollWidth) {
+        // 滚动到初始位置并更新按钮内容
+        items.scroll({
+          left: 0,
+          behavior: "smooth",
+        });
+        nextButton.innerHTML = '<i class="anzhiyufont anzhiyu-icon-angle-double-right"></i>';
+      } else {
+        // 滚动到下一个视图
+        items.scrollBy({
+          left: itemsWidth,
+          behavior: "smooth",
+        });
+      }
+    } else {
+      console.error("Element(s) not found: 'catalog-list' and/or 'category-bar-next'.");
+    }
+  },
+  // 分类条
+  categoriesBarActive: function () {
+    const urlinfo = decodeURIComponent(window.location.pathname);
+    const $categoryBar = document.getElementById("category-bar");
+    if (!$categoryBar) return;
+
+    if (urlinfo === "/") {
+      $categoryBar.querySelector("#首页").classList.add("select");
+    } else {
+      const pattern = /\/categories\/.*?\//;
+      const patbool = pattern.test(urlinfo);
+      if (!patbool) return;
+
+      const nowCategorie = urlinfo.split("/")[2];
+      $categoryBar.querySelector(`#${nowCategorie}`).classList.add("select");
+    }
+  },
+  topCategoriesBarScroll: function () {
+    const $categoryBarItems = document.getElementById("category-bar-items");
+    if (!$categoryBarItems) return;
+
+    $categoryBarItems.addEventListener("mousewheel", function (e) {
+      const v = -e.wheelDelta / 2;
+      this.scrollLeft += v;
+      e.preventDefault();
+    });
+  },
+  // 切换菜单显示热评
+  switchRightClickMenuHotReview: function () {
+    const postComment = document.getElementById("post-comment");
+    const menuCommentBarrageDom = document.getElementById("menu-commentBarrage");
+    if (postComment) {
+      menuCommentBarrageDom.style.display = "flex";
+    } else {
+      menuCommentBarrageDom.style.display = "none";
+    }
+  },
+  // 切换作者卡片状态文字
+  changeSayHelloText: function () {
+    const greetings = GLOBAL_CONFIG.authorStatus.skills;
+
+    const authorInfoSayHiElement = document.getElementById("author-info__sayhi");
+
+    // 如果只有一个问候语，设置为默认值
+    if (greetings.length === 1) {
+      authorInfoSayHiElement.textContent = greetings[0];
+      return;
+    }
+
+    let lastSayHello = authorInfoSayHiElement.textContent;
+
+    let randomGreeting = lastSayHello;
+    while (randomGreeting === lastSayHello) {
+      randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+    }
+    authorInfoSayHiElement.textContent = randomGreeting;
+  },
+};
+
+const anzhiyuPopupManager = {
+  queue: [],
+  processing: false,
+  Jump: false,
+
+  enqueuePopup(title, tip, url, duration = 3000) {
+    this.queue.push({ title, tip, url, duration });
+    if (!this.processing) {
+      this.processQueue();
+    }
+  },
+
+  processQueue() {
+    if (this.queue.length > 0 && !this.processing) {
+      this.processing = true;
+      const { title, tip, url, duration } = this.queue.shift();
+      this.popupShow(title, tip, url, duration);
+    }
+  },
+
+  popupShow(title, tip, url, duration) {
+    const popupWindow = document.getElementById("popup-window");
+    if (!popupWindow) return;
+    const windowTitle = popupWindow.querySelector(".popup-window-title");
+    const windowContent = popupWindow.querySelector(".popup-window-content");
+    const cookiesTip = windowContent.querySelector(".popup-tip");
+    if (popupWindow.classList.contains("show-popup-window")) {
+      popupWindow.classList.add("popup-hide");
+    }
+
+    // 等待上一个弹窗完全消失
+    setTimeout(() => {
+      // 移除之前的点击事件处理程序
+      popupWindow.removeEventListener("click", this.clickEventHandler);
+      if (url) {
+        if (window.pjax) {
+          this.clickEventHandler = event => {
+            event.preventDefault();
+            pjax.loadUrl(url);
+            popupWindow.classList.remove("show-popup-window");
+            popupWindow.classList.remove("popup-hide");
+            this.Jump = true;
+
+            // 处理队列中的下一个弹出窗口
+            this.processing = false;
+            this.processQueue();
+          };
+
+          popupWindow.addEventListener("click", this.clickEventHandler);
+        } else {
+          this.clickEventHandler = () => {
+            window.location.href = url;
+          };
+          popupWindow.addEventListener("click", this.clickEventHandler);
+        }
+        if (popupWindow.classList.contains("no-url")) {
+          popupWindow.classList.remove("no-url");
+        }
+      } else {
+        if (!popupWindow.classList.contains("no-url")) {
+          popupWindow.classList.add("no-url");
+        }
+
+        this.clickEventHandler = () => {
+          popupWindow.classList.add("popup-hide");
+          setTimeout(() => {
+            popupWindow.classList.remove("popup-hide");
+            popupWindow.classList.remove("show-popup-window");
+          }, 1000);
+        };
+        popupWindow.addEventListener("click", this.clickEventHandler);
+      }
+
+      if (popupWindow.classList.contains("popup-hide")) {
+        popupWindow.classList.remove("popup-hide");
+      }
+      popupWindow.classList.add("show-popup-window");
+      windowTitle.textContent = title;
+      cookiesTip.textContent = tip;
+    }, 800);
+
+    setTimeout(() => {
+      if (url && !this.Jump) {
+        this.Jump = false;
+      }
+      if (!popupWindow.classList.contains("popup-hide") && popupWindow.className != "") {
+        popupWindow.classList.add("popup-hide");
+      }
+
+      // 处理队列中的下一个弹出窗口
+      this.processing = false;
+      this.processQueue();
+    }, duration);
+  },
 };
