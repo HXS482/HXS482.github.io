@@ -8,15 +8,14 @@
 
   <!-- Title -->
   
-  <title>text1 - Hexo</title>
+  <title>hexo博客部署 - Hexo</title>
 
   <!--Favicon-->
   <link rel="icon" href="favicon/favicon.ico">
 
   <!--Description-->
   
-      <meta name="description" content="1. 准备注意事项输入代码时，核对准确，最好切换成英文输入法；将文中的 “用户名” 和 “邮箱” 替换为自己的 GitHub 账户名和绑定的邮箱；统一使用 Git Bash 进行操作（支持 Win、Mac）；小白请严格按步骤进行，不要跳！
-环境搭建Hexo 基于 Node.js，搭建过程中还需要使用">
+      <meta name="description" content="title: text1date: 2024-03-05 21:55:32tags:1. 准备注意事项输入代码时，核对准确，最好切换成英文输入法；将文中的 “用户名” 和 “邮箱” 替换为自己的 GitHub 账户名和绑定的邮箱；统一使用 Git Bash 进行操作（支持 Win、Mac）；小白请严">
   
 
   <!--Author-->
@@ -64,13 +63,14 @@
 
   		<div class="row">
   			<div class="col-12 mb-4">
-  <img class="img-fluid project-img" src="/images/unsplash.jpg" alt="text1">
+  <img class="img-fluid project-img" src="/images/unsplash.jpg" alt="hexo博客部署">
 </div>
 <div class="col-lg-4 col-12 pt-3 px-4 pr-lg-5">
-  <h1>text1</h1>
+  <h1>hexo博客部署</h1>
 </div>
 <div class="col-lg-8 col-12 pt-lg-3 mb-4 pl-lg-5 px-lg-0 px-4 portfolio-content">
-  <h1 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>输入代码时，核对准确，最好切换成英文输入法；<br>将文中的 “用户名” 和 “邮箱” 替换为自己的 GitHub 账户名和绑定的邮箱；<br>统一使用 Git Bash 进行操作（支持 Win、Mac）；<br>小白请严格按步骤进行，不要跳！</p>
+  <hr>
+<h2 id="title-text1date-2024-03-05-21-55-32tags"><a href="#title-text1date-2024-03-05-21-55-32tags" class="headerlink" title="title: text1date: 2024-03-05 21:55:32tags:"></a>title: text1<br>date: 2024-03-05 21:55:32<br>tags:</h2><h1 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>输入代码时，核对准确，最好切换成英文输入法；<br>将文中的 “用户名” 和 “邮箱” 替换为自己的 GitHub 账户名和绑定的邮箱；<br>统一使用 Git Bash 进行操作（支持 Win、Mac）；<br>小白请严格按步骤进行，不要跳！</p>
 <h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>Hexo 基于 Node.js，搭建过程中还需要使用 npm（Node.js 已带） 和 git，因此先搭建本地操作环境，安装 Node.js 和 Git。</p>
 <p>Node.js：<a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn">https://nodejs.org/zh-cn</a><br>Git：<a target="_blank" rel="noopener" href="https://git-scm.com/downloads">https://git-scm.com/downloads</a><br>下载 Node.js 和 Git 程序并安装，一路点 “下一步” 按默认配置完成安装。</p>
 <p>安装完成后，Win+R 输入 cmd 并打开，依次输入 node -v、npm -v 和 git –version 并回车，如下图出现程序版本号即可。</p>
@@ -83,7 +83,7 @@
 <p>登陆 GitHub ，进入 Settings 页面，选择左边栏的 SSH and GPG keys，点击 New SSH key。</p>
 <p>Title 随便取个名字，粘贴复制的 id_rsa.pub 内容到 Key 中，点击 Add SSH key 完成添加。</p>
 <p>验证连接：</p>
-<p>打开 Git Bash，输入 ssh -T <a href="mailto:&#103;&#x69;&#x74;&#x40;&#103;&#x69;&#x74;&#x68;&#x75;&#98;&#x2e;&#99;&#x6f;&#x6d;">&#103;&#x69;&#x74;&#x40;&#103;&#x69;&#x74;&#x68;&#x75;&#98;&#x2e;&#99;&#x6f;&#x6d;</a> 出现 “Are you sure……”，输入 yes 回车确认。</p>
+<p>打开 Git Bash，输入 ssh -T <a href="mailto:&#x67;&#105;&#x74;&#64;&#x67;&#x69;&#116;&#x68;&#117;&#x62;&#x2e;&#x63;&#x6f;&#x6d;">&#x67;&#105;&#x74;&#64;&#x67;&#x69;&#116;&#x68;&#117;&#x62;&#x2e;&#x63;&#x6f;&#x6d;</a> 出现 “Are you sure……”，输入 yes 回车确认。</p>
 <p>显示 “Hi xxx! You’ve successfully……” 即连接成功。</p>
 <h1 id="3-创建-Github-Pages-仓库"><a href="#3-创建-Github-Pages-仓库" class="headerlink" title="3. 创建 Github Pages 仓库"></a>3. 创建 Github Pages 仓库</h1><p>GitHub 主页右上角加号 -&gt; New repository：</p>
 <p>Repository name 中输入 用户名.github.io<br>勾选 “Initialize this repository with a README”<br>Description 选填<br>填好后点击 Create repository 创建。</p>
@@ -100,7 +100,7 @@
 <h1 id="5-部署-Hexo-到-GitHub-Pages"><a href="#5-部署-Hexo-到-GitHub-Pages" class="headerlink" title="5. 部署 Hexo 到 GitHub Pages"></a>5. 部署 Hexo 到 GitHub Pages</h1><p>本地博客测试成功后，就是上传到 GitHub 进行部署，使其能够在网络上访问。</p>
 <p>首先安装 hexo-deployer-git：</p>
 <p>npm install hexo-deployer-git –save<br>然后修改 _config.yml 文件末尾的 Deployment 部分，修改成如下：</p>
-<p>deploy:<br>  type: git<br>  repository: <a href="mailto:&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#x68;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;">&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#x68;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;</a>:用户名&#x2F;用户名.github.io.git<br>  branch: master<br>完成后运行 hexo d 将网站上传部署到 GitHub Pages。</p>
+<p>deploy:<br>  type: git<br>  repository: <a href="mailto:&#x67;&#105;&#x74;&#64;&#103;&#105;&#x74;&#x68;&#x75;&#x62;&#46;&#x63;&#111;&#109;">&#x67;&#105;&#x74;&#64;&#103;&#105;&#x74;&#x68;&#x75;&#x62;&#46;&#x63;&#111;&#109;</a>:用户名&#x2F;用户名.github.io.git<br>  branch: master<br>完成后运行 hexo d 将网站上传部署到 GitHub Pages。</p>
 <p>完成！这时访问我们的 GitHub 域名 https:&#x2F;&#x2F;用户名.github.io 就可以看到 Hexo 网站了。</p>
 
 </div>
