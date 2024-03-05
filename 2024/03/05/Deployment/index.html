@@ -83,7 +83,7 @@
 <p>登陆 GitHub ，进入 Settings 页面，选择左边栏的 SSH and GPG keys，点击 New SSH key。</p>
 <p>Title 随便取个名字，粘贴复制的 id_rsa.pub 内容到 Key 中，点击 Add SSH key 完成添加。</p>
 <p>验证连接：</p>
-<p>打开 Git Bash，输入 ssh -T <a href="mailto:&#x67;&#x69;&#116;&#x40;&#x67;&#105;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;">&#x67;&#x69;&#116;&#x40;&#x67;&#105;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;</a> 出现 “Are you sure……”，输入 yes 回车确认。</p>
+<p>打开 Git Bash，输入 ssh -T <a href="mailto:&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#109;">&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#109;</a> 出现 “Are you sure……”，输入 yes 回车确认。</p>
 <p>显示 “Hi xxx! You’ve successfully……” 即连接成功。</p>
 <h1 id="3-创建-Github-Pages-仓库"><a href="#3-创建-Github-Pages-仓库" class="headerlink" title="3. 创建 Github Pages 仓库"></a>3. 创建 Github Pages 仓库</h1><p>GitHub 主页右上角加号 -&gt; New repository：</p>
 <p>Repository name 中输入 用户名.github.io<br>勾选 “Initialize this repository with a README”<br>Description 选填<br>填好后点击 Create repository 创建。</p>
@@ -100,7 +100,7 @@
 <h1 id="5-部署-Hexo-到-GitHub-Pages"><a href="#5-部署-Hexo-到-GitHub-Pages" class="headerlink" title="5. 部署 Hexo 到 GitHub Pages"></a>5. 部署 Hexo 到 GitHub Pages</h1><p>本地博客测试成功后，就是上传到 GitHub 进行部署，使其能够在网络上访问。</p>
 <p>首先安装 hexo-deployer-git：</p>
 <p>npm install hexo-deployer-git –save<br>然后修改 _config.yml 文件末尾的 Deployment 部分，修改成如下：</p>
-<p>deploy:<br>  type: git<br>  repository: <a href="mailto:&#103;&#105;&#116;&#64;&#x67;&#105;&#x74;&#104;&#x75;&#x62;&#46;&#99;&#111;&#109;">&#103;&#105;&#116;&#64;&#x67;&#105;&#x74;&#104;&#x75;&#x62;&#46;&#99;&#111;&#109;</a>:用户名&#x2F;用户名.github.io.git<br>  branch: master<br>完成后运行 hexo d 将网站上传部署到 GitHub Pages。</p>
+<p>deploy:<br>  type: git<br>  repository: <a href="mailto:&#103;&#x69;&#x74;&#64;&#103;&#105;&#116;&#x68;&#x75;&#x62;&#46;&#99;&#x6f;&#x6d;">&#103;&#x69;&#x74;&#64;&#103;&#105;&#116;&#x68;&#x75;&#x62;&#46;&#99;&#x6f;&#x6d;</a>:用户名&#x2F;用户名.github.io.git<br>  branch: master<br>完成后运行 hexo d 将网站上传部署到 GitHub Pages。</p>
 <p>完成！这时访问我们的 GitHub 域名 https:&#x2F;&#x2F;用户名.github.io 就可以看到 Hexo 网站了。</p>
 
 </div>
