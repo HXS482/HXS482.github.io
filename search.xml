@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>手机root指南</title>
+      <link href="/2024/03/09/%E6%89%8B%E6%9C%BAroot%E6%8C%87%E5%8D%97/"/>
+      <url>/2024/03/09/%E6%89%8B%E6%9C%BAroot%E6%8C%87%E5%8D%97/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Magisk安装教程"><a href="#Magisk安装教程" class="headerlink" title="Magisk安装教程"></a>Magisk安装教程</h1><h3 id="理论上安卓设备都能刷，只要能解锁Bootloader（如果不能解锁，推荐光速虚拟机）"><a href="#理论上安卓设备都能刷，只要能解锁Bootloader（如果不能解锁，推荐光速虚拟机）" class="headerlink" title="理论上安卓设备都能刷，只要能解锁Bootloader（如果不能解锁，推荐光速虚拟机）"></a>理论上安卓设备都能刷，只要能解锁Bootloader（如果不能解锁，推荐<a href="https://magiskcn.com/gsxnj">光速虚拟机</a>）</h3><p>大致思路：解锁Bootloader &gt; 修补boot.img &gt; fastboot刷入修补文件</p><h2 id="内核安卓13-14-型号请看这个教程：init-boot-magisk"><a href="#内核安卓13-14-型号请看这个教程：init-boot-magisk" class="headerlink" title="内核安卓13-14 型号请看这个教程：init-boot-magisk"></a>内核安卓13-14 型号请看这个教程：<a href="https://magiskcn.com/init-boot-magisk">init-boot-magisk</a></h2><p>##演示环境：</p><p>手机机型：小米 10 Pro<br>手机系统：MIUI14（安卓13）</p><p>演示步骤：</p><h2 id="一、小米解锁-Bootloader：Xiaomi-unlock"><a href="#一、小米解锁-Bootloader：Xiaomi-unlock" class="headerlink" title="一、小米解锁 Bootloader：Xiaomi-unlock"></a>一、小米解锁 Bootloader：<a href="https://magiskcn.com/xiaomi-unlock">Xiaomi-unlock</a></h2><p>如果你的手机不能解锁BL，推荐 光速虚拟机（不用解锁BL也可以刷面具）</p><h2 id="二、下载系统包：rom"><a href="#二、下载系统包：rom" class="headerlink" title="二、下载系统包：rom"></a>二、下载系统包：<a href="https://magiskcn.com/rom">rom</a></h2><p>（一定要下载和手机系统版本一致的系统包）</p><h2 id="三、提取-boot-img-：payload-dumper-go-boot"><a href="#三、提取-boot-img-：payload-dumper-go-boot" class="headerlink" title="三、提取 boot.img ：payload-dumper-go-boot"></a>三、提取 boot.img ：<a href="https://magiskcn.com/payload-dumper-go-boot">payload-dumper-go-boot</a></h2><p>（如果系统包有 boot.img，可以跳过此步骤）</p><h2 id="四、手机插电脑，文件传输模式，复制-boot-img-到手机-Download-目录"><a href="#四、手机插电脑，文件传输模式，复制-boot-img-到手机-Download-目录" class="headerlink" title="四、手机插电脑，文件传输模式，复制 boot.img 到手机 Download 目录"></a>四、手机插电脑，文件传输模式，复制 boot.img 到手机 Download 目录</h2><h2 id="五、手机下载-Magisk-APP-安装：Magisk-download"><a href="#五、手机下载-Magisk-APP-安装：Magisk-download" class="headerlink" title="五、手机下载 Magisk APP 安装：Magisk-download"></a>五、手机下载 Magisk APP 安装：<a href="https://magiskcn.com/magisk-download">Magisk-download</a></h2><h2 id="六、打开-Magisk，1：安装-–-2：选择-boot-img-–-3：开始修补文件-–-4：修补成功"><a href="#六、打开-Magisk，1：安装-–-2：选择-boot-img-–-3：开始修补文件-–-4：修补成功" class="headerlink" title="六、打开 Magisk，1：安装 – 2：选择 boot.img – 3：开始修补文件 – 4：修补成功"></a>六、打开 Magisk，1：安装 – 2：选择 boot.img – 3：开始修补文件 – 4：修补成功</h2><p><img src="https://cdn.magiskcn.com/wp-content/uploads/2024/01/19bfce39a8275b1.jpg" alt="图片alt" title="图片title"></p><h2 id="七、电脑下载-adb-fastboot：蓝奏盘（解压出来）"><a href="#七、电脑下载-adb-fastboot：蓝奏盘（解压出来）" class="headerlink" title="七、电脑下载 adb-fastboot：蓝奏盘（解压出来）"></a>七、电脑下载 adb-fastboot：<a href="https://mrzzoxo.lanzoui.com/b02plghuh">蓝奏盘</a>（解压出来）</h2><h2 id="八、手机插电脑，打开-文件传输-模式，打开-Download-目录，把-boot-img-和-magisk-img-复制到电脑-adb-fastboot-目录"><a href="#八、手机插电脑，打开-文件传输-模式，打开-Download-目录，把-boot-img-和-magisk-img-复制到电脑-adb-fastboot-目录" class="headerlink" title="八、手机插电脑，打开 文件传输 模式，打开 Download 目录，把 boot.img 和 magisk.img 复制到电脑 adb-fastboot 目录"></a>八、手机插电脑，打开 文件传输 模式，打开 Download 目录，把 boot.img 和 magisk.img 复制到电脑 adb-fastboot 目录</h2><p><img src="https://cdn.magiskcn.com/wp-content/uploads/2024/01/4b21d64dd896f28.png" alt="图片alt" title="图片title"></p><h2 id="九、手机进入-Bootloader-模式，再插入电脑。"><a href="#九、手机进入-Bootloader-模式，再插入电脑。" class="headerlink" title="九、手机进入 Bootloader 模式，再插入电脑。"></a>九、手机进入 Bootloader 模式，再插入电脑。</h2><p>（手机关机，电源键+音量下键，两个键长按）</p><h1 id=""><a href="#" class="headerlink" title=""></a><img src="https://cdn.magiskcn.com/wp-content/uploads/2024/01/a4381a987eb897e.png" alt="图片alt" title="图片title"></h1><h2 id="十、打开“打开CMD命令行-bat”，输入下面的命令"><a href="#十、打开“打开CMD命令行-bat”，输入下面的命令" class="headerlink" title="十、打开“打开CMD命令行.bat”，输入下面的命令"></a>十、打开“打开CMD命令行.bat”，输入下面的命令</h2><p>magisk.img每次修补的名字都不一样，使用的时候请输入生成的名字。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fastboot flash boot 面具文件</span><br></pre></td></tr></table></figure><p><img src="https://cdn.magiskcn.com/wp-content/uploads/2024/01/6d3259ecbbccbd9.png" alt="图片alt" title="图片title"></p><h2 id="十一、输出下面这三行代码，就是成功刷入了。再使用指令-fastboot-reboot-重启手机。"><a href="#十一、输出下面这三行代码，就是成功刷入了。再使用指令-fastboot-reboot-重启手机。" class="headerlink" title="十一、输出下面这三行代码，就是成功刷入了。再使用指令 fastboot reboot 重启手机。"></a>十一、输出下面这三行代码，就是成功刷入了。再使用指令 fastboot reboot 重启手机。</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ Sending <span class="string">&#x27;boot&#x27;</span> (131072 KB) OKAY [ 3.105s]</span><br><span class="line">$ Writing <span class="string">&#x27;boot&#x27;</span>             OKAY [ 0.404s]</span><br><span class="line">$ Finished. Total time: 3.556s</span><br></pre></td></tr></table></figure><h2 id="十二、重启手机（开机有震动基本没问题了）耐心等手机开机。（显示Magisk的版本，就是刷好了的）"><a href="#十二、重启手机（开机有震动基本没问题了）耐心等手机开机。（显示Magisk的版本，就是刷好了的）" class="headerlink" title="十二、重启手机（开机有震动基本没问题了）耐心等手机开机。（显示Magisk的版本，就是刷好了的）"></a>十二、重启手机（开机有震动基本没问题了）耐心等手机开机。（显示Magisk的版本，就是刷好了的）</h2><p><img src="https://cdn.magiskcn.com/wp-content/uploads/2024/01/808eac2afd92a6a.jpg" alt="图片alt" title="图片title"></p><p>温馨提示:</p><p>如果刷入 magisk.img 不能开机，可以把前面提取的 boot.img 通过 fastboot 刷回去，恢复原 boot，一般都能正常开机！<br>boot.img 保留一份在电脑，避免出问题了可以自救下！还原 boot 指令</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fastboot flash boot boot.img</span><br></pre></td></tr></table></figure><p>后期系统更新，直接下载全量完整包升级，然后重复上面的步骤就可以继续愉快的使用 Magisk 了！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> ROOT </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ROOT </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Deployment</title>
+      <link href="/2024/03/05/Hexo%20Deployment/"/>
+      <url>/2024/03/05/Hexo%20Deployment/</url>
+      
+        <content type="html"><![CDATA[<hr><h2 id="title-text1date-2024-03-05-21-55-32"><a href="#title-text1date-2024-03-05-21-55-32" class="headerlink" title="title: text1date: 2024-03-05 21:55:32"></a>title: text1<br>date: 2024-03-05 21:55:32</h2><h1 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>输入代码时，核对准确，最好切换成英文输入法；<br>将文中的 “用户名” 和 “邮箱” 替换为自己的 GitHub 账户名和绑定的邮箱；<br>统一使用 Git Bash 进行操作（支持 Win、Mac）；<br>小白请严格按步骤进行，不要跳！</p><h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>Hexo 基于 Node.js，搭建过程中还需要使用 npm（Node.js 已带） 和 git，因此先搭建本地操作环境，安装 Node.js 和 Git。</p><p>Node.js：<a href="https://nodejs.org/zh-cn">https://nodejs.org/zh-cn</a><br>Git：<a href="https://git-scm.com/downloads">https://git-scm.com/downloads</a><br>下载 Node.js 和 Git 程序并安装，一路点 “下一步” 按默认配置完成安装。</p><p>安装完成后，Win+R 输入 cmd 并打开，依次输入 node -v、npm -v 和 git –version 并回车，如下图出现程序版本号即可。</p><h1 id="2-连接-Github"><a href="#2-连接-Github" class="headerlink" title="2. 连接 Github"></a>2. 连接 Github</h1><p>使用邮箱注册 GitHub 账户，选择免费账户（Free），并完成邮件验证。</p><p>右键 -&gt; Git Bash Here，设置用户名和邮箱：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;GitHub 用户名&quot;</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;GitHub 邮箱&quot;</span></span><br></pre></td></tr></table></figure><p>创建 SSH 密匙：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C <span class="string">&quot;GitHub 邮箱&quot;</span>，然后一路回车。</span><br></pre></td></tr></table></figure><p>添加密匙：</p><p>进入 [C:\Users\用户名.ssh] 目录（要勾选显示“隐藏的项目”），用记事本打开公钥 id_rsa.pub 文件并复制里面的内容。</p><p>登陆 GitHub ，进入 Settings 页面，选择左边栏的 SSH and GPG keys，点击 New SSH key。</p><p>Title 随便取个名字，粘贴复制的 id_rsa.pub 内容到 Key 中，点击 Add SSH key 完成添加。</p><p>验证连接：</p><p>打开 Git Bash，输入 ssh -T <a href="mailto:&#103;&#105;&#116;&#x40;&#x67;&#x69;&#x74;&#x68;&#117;&#x62;&#46;&#x63;&#111;&#109;">&#103;&#105;&#116;&#x40;&#x67;&#x69;&#x74;&#x68;&#117;&#x62;&#46;&#x63;&#111;&#109;</a> 出现 “Are you sure……”，输入 yes 回车确认。</p><p>显示 “Hi xxx! You’ve successfully……” 即连接成功。</p><h1 id="3-创建-Github-Pages-仓库"><a href="#3-创建-Github-Pages-仓库" class="headerlink" title="3. 创建 Github Pages 仓库"></a>3. 创建 Github Pages 仓库</h1><p>GitHub 主页右上角加号 -&gt; New repository：</p><p>Repository name 中输入 用户名.github.io<br>勾选 “Initialize this repository with a README”<br>Description 选填<br>填好后点击 Create repository 创建。</p><p>创建后默认自动启用 HTTPS，博客地址为：https:&#x2F;&#x2F;用户名.github.io</p><h1 id="4-本地安装-Hexo-博客程序"><a href="#4-本地安装-Hexo-博客程序" class="headerlink" title="4. 本地安装 Hexo 博客程序"></a>4. 本地安装 Hexo 博客程序</h1><p>新建一个文件夹用来存放 Hexo 的程序文件，如 Hexo-Blog。打开该文件夹，右键 -&gt; Git Bash Here。</p><h2 id="1-安装-Hexo"><a href="#1-安装-Hexo" class="headerlink" title="1.安装 Hexo"></a>1.安装 Hexo</h2><p>使用 npm 一键安装 Hexo 博客程序：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure><p>Mac 用户需要管理员权限（sudo），运行这条命令：</p><p>sudo npm install -g hexo-cli<br>安装时间有点久（真的很慢！），界面也没任何反应，耐心等待，安装完成后如下图。</p><h2 id="2-Hexo-初始化和本地预览"><a href="#2-Hexo-初始化和本地预览" class="headerlink" title="2. Hexo 初始化和本地预览"></a>2. Hexo 初始化和本地预览</h2><p>初始化并安装所需组件：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init      <span class="comment"># 初始化</span></span><br><span class="line">$ npm install    <span class="comment"># 安装组件</span></span><br></pre></td></tr></table></figure><p>完成后依次输入下面命令，启动本地服务器进行预览：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g   <span class="comment"># 生成页面</span></span><br><span class="line">$ hexo s   <span class="comment"># 启动预览</span></span><br></pre></td></tr></table></figure><p>访问 <a href="http://localhost:4000，出现">http://localhost:4000，出现</a> Hexo 默认页面，本地博客安装成功！</p><p>Tips：如果出现页面加载不出来，可能是端口被占用了。Ctrl+C 关闭服务器，运行 hexo server -p 5000 更改端口号后重试。</p><p>Hexo 博客文件夹目录结构如下：</p><h1 id="5-部署-Hexo-到-GitHub-Pages"><a href="#5-部署-Hexo-到-GitHub-Pages" class="headerlink" title="5. 部署 Hexo 到 GitHub Pages"></a>5. 部署 Hexo 到 GitHub Pages</h1><p>本地博客测试成功后，就是上传到 GitHub 进行部署，使其能够在网络上访问。</p><p>首先安装 hexo-deployer-git：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure><p>然后修改 _config.yml 文件末尾的 Deployment 部分，修改成如下：</p><p>deploy:<br>  type: git<br>  repository: <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#x69;&#116;&#x68;&#117;&#x62;&#46;&#99;&#111;&#109;">&#x67;&#x69;&#116;&#64;&#103;&#x69;&#116;&#x68;&#117;&#x62;&#46;&#99;&#111;&#109;</a>:用户名&#x2F;用户名.github.io.git<br>  branch: master<br>完成后运行 hexo d 将网站上传部署到 GitHub Pages。</p><p>完成！这时访问我们的 GitHub 域名 https:&#x2F;&#x2F;用户名.github.io 就可以看到 Hexo 网站了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> code </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> code </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2024/03/04/hello-world/"/>
+      <url>/2024/03/04/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> hexo </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
