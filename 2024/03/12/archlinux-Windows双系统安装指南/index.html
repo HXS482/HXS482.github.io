@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="资源准备：清华大学镜像站：https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F; ventoy 下载链接：（安装介质引导）https:&#x2F;&#x2F;www.ventoy.net&#x2F;en&#x2F;download.html 1.分区打开Windows磁盘管理，选择你要安装Linux的盘符，根据自己的需求选择大小![图片alt](C:\Users\HXS\Pictures\Screenshots\屏幕">
+<meta property="og:type" content="article">
+<meta property="og:title" content="archlinux+Windows双系统安装指南">
+<meta property="og:url" content="http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="资源准备：清华大学镜像站：https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F; ventoy 下载链接：（安装介质引导）https:&#x2F;&#x2F;www.ventoy.net&#x2F;en&#x2F;download.html 1.分区打开Windows磁盘管理，选择你要安装Linux的盘符，根据自己的需求选择大小![图片alt](C:\Users\HXS\Pictures\Screenshots\屏幕">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-03-12T04:55:56.000Z">
+<meta property="article:modified_time" content="2024-03-12T05:46:33.506Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="system">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>archlinux+Windows双系统安装指南</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/HXS482">Projects</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2024/03/09/%E6%89%8B%E6%9C%BAroot%E6%8C%87%E5%8D%97/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&text=archlinux+Windows双系统安装指南"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&title=archlinux+Windows双系统安装指南"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&is_video=false&description=archlinux+Windows双系统安装指南"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=archlinux+Windows双系统安装指南&body=Check out this article: http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&title=archlinux+Windows双系统安装指南"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&title=archlinux+Windows双系统安装指南"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&title=archlinux+Windows双系统安装指南"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&title=archlinux+Windows双系统安装指南"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&name=archlinux+Windows双系统安装指南&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&t=archlinux+Windows双系统安装指南"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E5%87%86%E5%A4%87%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">资源准备：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%E9%95%9C%E5%83%8F%E7%AB%99%EF%BC%9A"><span class="toc-number">1.0.1.</span> <span class="toc-text">清华大学镜像站：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ventoy-%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%EF%BC%9A%EF%BC%88%E5%AE%89%E8%A3%85%E4%BB%8B%E8%B4%A8%E5%BC%95%E5%AF%BC%EF%BC%89"><span class="toc-number">1.0.2.</span> <span class="toc-text">ventoy 下载链接：（安装介质引导）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%88%86%E5%8C%BA"><span class="toc-number">2.</span> <span class="toc-text">1.分区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%93%E5%BC%80Windows%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86%EF%BC%8C%E9%80%89%E6%8B%A9%E4%BD%A0%E8%A6%81%E5%AE%89%E8%A3%85Linux%E7%9A%84%E7%9B%98%E7%AC%A6%EF%BC%8C%E6%A0%B9%E6%8D%AE%E8%87%AA%E5%B7%B1%E7%9A%84%E9%9C%80%E6%B1%82%E9%80%89%E6%8B%A9%E5%A4%A7%E5%B0%8F"><span class="toc-number">2.1.</span> <span class="toc-text">打开Windows磁盘管理，选择你要安装Linux的盘符，根据自己的需求选择大小</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%BF%9B%E5%85%A5bios%E7%95%8C%E9%9D%A2"><span class="toc-number">3.</span> <span class="toc-text">2.进入bios界面</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%87%8D%E5%90%AF%E5%90%8E%E8%BF%9B%E5%85%A5bios%E7%95%8C%E9%9D%A2%E5%85%B3%E9%97%AD%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8-%E6%AD%A4%E8%BF%87%E7%A8%8B%E5%8F%AF%E4%BB%A5%E6%A0%B9%E6%8D%AE%E8%87%AA%E5%B7%B1%E7%9A%84%E6%9C%BA%E5%9E%8B%E7%99%BE%E5%BA%A6%E6%9F%A5%E6%89%BE%E6%96%B9%E6%B3%95"><span class="toc-number">3.1.</span> <span class="toc-text">(1). 重启后进入bios界面关闭安全启动(此过程可以根据自己的机型百度查找方法)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F%E9%80%89%E6%8B%A9u%E7%9B%98%E5%90%AF%E5%8A%A8-%E8%A6%81%E5%85%88%E7%A1%AE%E4%BF%9Du%E7%9B%98%E5%9C%A8%E8%BF%9B%E5%85%A5bios%E7%95%8C%E9%9D%A2%E6%97%B6%E5%B7%B2%E7%BB%8F%E6%8F%92%E5%85%A5%E7%94%B5%E8%84%91"><span class="toc-number">3.2.</span> <span class="toc-text">(2).启动方式选择u盘启动 (要先确保u盘在进入bios界面时已经插入电脑)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E8%BF%9B%E5%85%A5ventoy%E5%AE%89%E8%A3%85%E5%BC%95%E5%AF%BC%E7%95%8C%E9%9D%A2"><span class="toc-number">4.</span> <span class="toc-text">3.进入ventoy安装引导界面</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E4%BD%A0%E8%A6%81%E5%AE%89%E8%A3%85%E7%9A%84%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F%E4%B8%80%E8%B7%AF%E5%9B%9E%E8%BD%A6"><span class="toc-number">4.1.</span> <span class="toc-text">选择你要安装的系统镜像一路回车</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E6%AD%A3%E5%BC%8F%E8%BF%9B%E5%85%A5arch-Linux%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">5.</span> <span class="toc-text">4.正式进入arch Linux的安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%97%A0%E7%BA%BF%E7%BD%91%E5%8D%A1%E7%9A%84%E5%AE%89%E8%A3%85%EF%BC%8C%E6%9C%89%E7%BA%BF%E5%8F%AF%E5%BF%BD%E7%95%A5%EF%BC%8C%E4%BD%BF%E7%94%A8%E4%BB%A5%E4%B8%8B%E5%91%BD%E4%BB%A4"><span class="toc-number">5.1.</span> <span class="toc-text">(1).无线网卡的安装，有线可忽略，使用以下命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E8%88%AC%E4%BC%9A%E6%98%BE%E7%A4%BAwlan0%EF%BC%8C%E6%B3%A8%E6%84%8F%EF%BC%81%E6%9F%A5%E7%9C%8B%E4%BD%A0%E7%9A%84%E5%BC%80%E5%85%B3-powered-%E6%98%AF%E5%90%A6%E5%A4%84%E4%BA%8E-on%E7%9A%84%E7%8A%B6%E6%80%81%EF%BC%8C%E5%A6%82%E8%8B%A5%E6%98%AFoff%E7%8A%B6%E6%80%81%EF%BC%8C%E8%AF%B7%E6%89%A7%E8%A1%8C%E4%BB%A5%E4%B8%8B%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-number">5.1.1.</span> <span class="toc-text">!一般会显示wlan0，注意！查看你的开关(powered)是否处于 on的状态，如若是off状态，请执行以下步骤：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%BF%9B%E8%A1%8CWiFi%E7%9A%84%E8%BF%9E%E6%8E%A5"><span class="toc-number">5.2.</span> <span class="toc-text">(2).进行WiFi的连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4"><span class="toc-number">5.3.</span> <span class="toc-text">(3).更新系统时间</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        archlinux+Windows双系统安装指南
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-03-12T04:55:56.000Z" class="dt-published" itemprop="datePublished">2024-03-12</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/system/" rel="tag">system</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="资源准备："><a href="#资源准备：" class="headerlink" title="资源准备："></a>资源准备：</h1><h3 id="清华大学镜像站："><a href="#清华大学镜像站：" class="headerlink" title="清华大学镜像站："></a>清华大学镜像站：</h3><p><a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/">https://mirrors.tuna.tsinghua.edu.cn/</a></p>
+<h3 id="ventoy-下载链接：（安装介质引导）"><a href="#ventoy-下载链接：（安装介质引导）" class="headerlink" title="ventoy 下载链接：（安装介质引导）"></a>ventoy 下载链接：（安装介质引导）</h3><p><a target="_blank" rel="noopener" href="https://www.ventoy.net/en/download.html">https://www.ventoy.net/en/download.html</a></p>
+<h1 id="1-分区"><a href="#1-分区" class="headerlink" title="1.分区"></a>1.分区</h1><h2 id="打开Windows磁盘管理，选择你要安装Linux的盘符，根据自己的需求选择大小"><a href="#打开Windows磁盘管理，选择你要安装Linux的盘符，根据自己的需求选择大小" class="headerlink" title="打开Windows磁盘管理，选择你要安装Linux的盘符，根据自己的需求选择大小"></a>打开Windows磁盘管理，选择你要安装Linux的盘符，根据自己的需求选择大小</h2><p>![图片alt](C:\Users\HXS\Pictures\Screenshots\屏幕截图 2024-03-12 130739.png “图片title”)</p>
+<h1 id="2-进入bios界面"><a href="#2-进入bios界面" class="headerlink" title="2.进入bios界面"></a>2.进入bios界面</h1><h2 id="1-重启后进入bios界面关闭安全启动-此过程可以根据自己的机型百度查找方法"><a href="#1-重启后进入bios界面关闭安全启动-此过程可以根据自己的机型百度查找方法" class="headerlink" title="(1). 重启后进入bios界面关闭安全启动(此过程可以根据自己的机型百度查找方法)"></a>(1). 重启后进入bios界面关闭安全启动(此过程可以根据自己的机型百度查找方法)</h2><h2 id="2-启动方式选择u盘启动-要先确保u盘在进入bios界面时已经插入电脑"><a href="#2-启动方式选择u盘启动-要先确保u盘在进入bios界面时已经插入电脑" class="headerlink" title="(2).启动方式选择u盘启动 (要先确保u盘在进入bios界面时已经插入电脑)"></a>(2).启动方式选择u盘启动 (要先确保u盘在进入bios界面时已经插入电脑)</h2><h1 id="3-进入ventoy安装引导界面"><a href="#3-进入ventoy安装引导界面" class="headerlink" title="3.进入ventoy安装引导界面"></a>3.进入ventoy安装引导界面</h1><h2 id="选择你要安装的系统镜像一路回车"><a href="#选择你要安装的系统镜像一路回车" class="headerlink" title="选择你要安装的系统镜像一路回车"></a>选择你要安装的系统镜像一路回车</h2><p>![图片alt](C:\Users\HXS\Pictures\Screenshots\屏幕截图 2024-03-12 131632.png “图片title”)<br>此时会进入纯命令行界面耐心等待资源加载即可.</p>
+<h1 id="4-正式进入arch-Linux的安装"><a href="#4-正式进入arch-Linux的安装" class="headerlink" title="4.正式进入arch Linux的安装"></a>4.正式进入arch Linux的安装</h1><h2 id="1-无线网卡的安装，有线可忽略，使用以下命令"><a href="#1-无线网卡的安装，有线可忽略，使用以下命令" class="headerlink" title="(1).无线网卡的安装，有线可忽略，使用以下命令"></a>(1).无线网卡的安装，有线可忽略，使用以下命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ iwctl</span><br><span class="line">$ device list (列出所有WiFi设备)</span><br></pre></td></tr></table></figure>
+<h3 id="一般会显示wlan0，注意！查看你的开关-powered-是否处于-on的状态，如若是off状态，请执行以下步骤："><a href="#一般会显示wlan0，注意！查看你的开关-powered-是否处于-on的状态，如若是off状态，请执行以下步骤：" class="headerlink" title="!一般会显示wlan0，注意！查看你的开关(powered)是否处于 on的状态，如若是off状态，请执行以下步骤："></a>!一般会显示wlan0，注意！查看你的开关(powered)是否处于 on的状态，如若是off状态，请执行以下步骤：</h3><p>无线设备有时会被禁用，如果 device list 输出的powered 字段为off(断电)，则需要使用以下命令开启：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rfkill list</span><br></pre></td></tr></table></figure>
+<p>如果看到 blocked: yes 字样，说明无线连接被禁用,尝试使用解锁命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rfkill unblock wifi</span><br></pre></td></tr></table></figure>
+<h2 id="2-进行WiFi的连接"><a href="#2-进行WiFi的连接" class="headerlink" title="(2).进行WiFi的连接"></a>(2).进行WiFi的连接</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ station [网卡名字] scan    扫描网络</span><br><span class="line">$ station [网卡名字] get-networks</span><br><span class="line">$ station [网卡名字] connect [wifi名称]</span><br></pre></td></tr></table></figure>
+<p>然后依据提示输入密码.ctrl+d 退出iwctl(网络连接)。可以ping以下测试连接延迟(输入 ping <a target="_blank" rel="noopener" href="http://www.baidu.com),ctrl+c退出连接测试./">www.baidu.com)，ctrl+c退出连接测试。</a></p>
+<h2 id="3-更新系统时间"><a href="#3-更新系统时间" class="headerlink" title="(3).更新系统时间"></a>(3).更新系统时间</h2>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/HXS482">Projects</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+          <li><a href="/categories/">Category</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E5%87%86%E5%A4%87%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">资源准备：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%E9%95%9C%E5%83%8F%E7%AB%99%EF%BC%9A"><span class="toc-number">1.0.1.</span> <span class="toc-text">清华大学镜像站：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ventoy-%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%EF%BC%9A%EF%BC%88%E5%AE%89%E8%A3%85%E4%BB%8B%E8%B4%A8%E5%BC%95%E5%AF%BC%EF%BC%89"><span class="toc-number">1.0.2.</span> <span class="toc-text">ventoy 下载链接：（安装介质引导）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%88%86%E5%8C%BA"><span class="toc-number">2.</span> <span class="toc-text">1.分区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%93%E5%BC%80Windows%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86%EF%BC%8C%E9%80%89%E6%8B%A9%E4%BD%A0%E8%A6%81%E5%AE%89%E8%A3%85Linux%E7%9A%84%E7%9B%98%E7%AC%A6%EF%BC%8C%E6%A0%B9%E6%8D%AE%E8%87%AA%E5%B7%B1%E7%9A%84%E9%9C%80%E6%B1%82%E9%80%89%E6%8B%A9%E5%A4%A7%E5%B0%8F"><span class="toc-number">2.1.</span> <span class="toc-text">打开Windows磁盘管理，选择你要安装Linux的盘符，根据自己的需求选择大小</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%BF%9B%E5%85%A5bios%E7%95%8C%E9%9D%A2"><span class="toc-number">3.</span> <span class="toc-text">2.进入bios界面</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%87%8D%E5%90%AF%E5%90%8E%E8%BF%9B%E5%85%A5bios%E7%95%8C%E9%9D%A2%E5%85%B3%E9%97%AD%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8-%E6%AD%A4%E8%BF%87%E7%A8%8B%E5%8F%AF%E4%BB%A5%E6%A0%B9%E6%8D%AE%E8%87%AA%E5%B7%B1%E7%9A%84%E6%9C%BA%E5%9E%8B%E7%99%BE%E5%BA%A6%E6%9F%A5%E6%89%BE%E6%96%B9%E6%B3%95"><span class="toc-number">3.1.</span> <span class="toc-text">(1). 重启后进入bios界面关闭安全启动(此过程可以根据自己的机型百度查找方法)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F%E9%80%89%E6%8B%A9u%E7%9B%98%E5%90%AF%E5%8A%A8-%E8%A6%81%E5%85%88%E7%A1%AE%E4%BF%9Du%E7%9B%98%E5%9C%A8%E8%BF%9B%E5%85%A5bios%E7%95%8C%E9%9D%A2%E6%97%B6%E5%B7%B2%E7%BB%8F%E6%8F%92%E5%85%A5%E7%94%B5%E8%84%91"><span class="toc-number">3.2.</span> <span class="toc-text">(2).启动方式选择u盘启动 (要先确保u盘在进入bios界面时已经插入电脑)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E8%BF%9B%E5%85%A5ventoy%E5%AE%89%E8%A3%85%E5%BC%95%E5%AF%BC%E7%95%8C%E9%9D%A2"><span class="toc-number">4.</span> <span class="toc-text">3.进入ventoy安装引导界面</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E4%BD%A0%E8%A6%81%E5%AE%89%E8%A3%85%E7%9A%84%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F%E4%B8%80%E8%B7%AF%E5%9B%9E%E8%BD%A6"><span class="toc-number">4.1.</span> <span class="toc-text">选择你要安装的系统镜像一路回车</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E6%AD%A3%E5%BC%8F%E8%BF%9B%E5%85%A5arch-Linux%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">5.</span> <span class="toc-text">4.正式进入arch Linux的安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%97%A0%E7%BA%BF%E7%BD%91%E5%8D%A1%E7%9A%84%E5%AE%89%E8%A3%85%EF%BC%8C%E6%9C%89%E7%BA%BF%E5%8F%AF%E5%BF%BD%E7%95%A5%EF%BC%8C%E4%BD%BF%E7%94%A8%E4%BB%A5%E4%B8%8B%E5%91%BD%E4%BB%A4"><span class="toc-number">5.1.</span> <span class="toc-text">(1).无线网卡的安装，有线可忽略，使用以下命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E8%88%AC%E4%BC%9A%E6%98%BE%E7%A4%BAwlan0%EF%BC%8C%E6%B3%A8%E6%84%8F%EF%BC%81%E6%9F%A5%E7%9C%8B%E4%BD%A0%E7%9A%84%E5%BC%80%E5%85%B3-powered-%E6%98%AF%E5%90%A6%E5%A4%84%E4%BA%8E-on%E7%9A%84%E7%8A%B6%E6%80%81%EF%BC%8C%E5%A6%82%E8%8B%A5%E6%98%AFoff%E7%8A%B6%E6%80%81%EF%BC%8C%E8%AF%B7%E6%89%A7%E8%A1%8C%E4%BB%A5%E4%B8%8B%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-number">5.1.1.</span> <span class="toc-text">!一般会显示wlan0，注意！查看你的开关(powered)是否处于 on的状态，如若是off状态，请执行以下步骤：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%BF%9B%E8%A1%8CWiFi%E7%9A%84%E8%BF%9E%E6%8E%A5"><span class="toc-number">5.2.</span> <span class="toc-text">(2).进行WiFi的连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4"><span class="toc-number">5.3.</span> <span class="toc-text">(3).更新系统时间</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&text=archlinux+Windows双系统安装指南"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&title=archlinux+Windows双系统安装指南"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&is_video=false&description=archlinux+Windows双系统安装指南"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=archlinux+Windows双系统安装指南&body=Check out this article: http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&title=archlinux+Windows双系统安装指南"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&title=archlinux+Windows双系统安装指南"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&title=archlinux+Windows双系统安装指南"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&title=archlinux+Windows双系统安装指南"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&name=archlinux+Windows双系统安装指南&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2024/03/12/archlinux-Windows%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/&t=archlinux+Windows双系统安装指南"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2024
+    John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/HXS482">Projects</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
