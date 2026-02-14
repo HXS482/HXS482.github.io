@@ -1,5 +1,34 @@
 /* 文章卡片悬浮在背景图上效果 */
 
+/* 整个页面背景固定 */
+body {
+  background-image: url('/images/tech-bg.jpg') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+}
+
+/* 内容区域透明，让背景图显示 */
+#body-wrap {
+  background: transparent !important;
+}
+
+/* 主要内容区域透明 */
+#page-header {
+  background: transparent !important;
+}
+
+/* 文章列表区域透明 */
+#content-inner {
+  background: transparent !important;
+}
+
+/* 布局容器透明 */
+.layout {
+  background: transparent !important;
+}
+
 /* 文章卡片整体容器 - 添加半透明和模糊效果 */
 #recent-posts .recent-post-item {
   background: rgba(255, 255, 255, 0.75) !important;
@@ -76,5 +105,105 @@
 }
 
 [data-theme="dark"] .layout #post {
+  background: rgba(30, 30, 30, 0.85) !important;
+}
+
+/* 归档页面卡片效果 */
+#archive .article-sort-item {
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  margin-bottom: 15px !important;
+  padding: 15px !important;
+}
+
+[data-theme="dark"] #archive .article-sort-item {
+  background: rgba(30, 30, 30, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 分类页面卡片效果 */
+#category .category-list-item,
+#tag .tag-list-item {
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+[data-theme="dark"] #category .category-list-item,
+[data-theme="dark"] #tag .tag-list-item {
+  background: rgba(30, 30, 30, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 分类和标签列表项 */
+.category-list-link,
+.tag-list-link {
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  border-radius: 8px !important;
+  padding: 8px 15px !important;
+  margin: 5px !important;
+  display: inline-block !important;
+}
+
+[data-theme="dark"] .category-list-link,
+[data-theme="dark"] .tag-list-link {
+  background: rgba(30, 30, 30, 0.6) !important;
+}
+
+/* 文章列表项 */
+.article-sort-item {
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  margin-bottom: 15px !important;
+  padding: 20px !important;
+}
+
+[data-theme="dark"] .article-sort-item {
+  background: rgba(30, 30, 30, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 分页器毛玻璃效果 */
+#pagination {
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+[data-theme="dark"] #pagination {
+  background: rgba(30, 30, 30, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 文章分类和标签信息卡片 */
+#post-info {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="dark"] #post-info {
   background: rgba(30, 30, 30, 0.85) !important;
 }
