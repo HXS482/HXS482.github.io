@@ -1,0 +1,80 @@
+/* 文章卡片悬浮在背景图上效果 */
+
+/* 文章卡片整体容器 - 添加半透明和模糊效果 */
+#recent-posts .recent-post-item {
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* 暗黑模式下的卡片样式 */
+[data-theme="dark"] #recent-posts .recent-post-item {
+  background: rgba(30, 30, 30, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 卡片悬停效果 - 上浮 */
+#recent-posts .recent-post-item:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme="dark"] #recent-posts .recent-post-item:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 侧边栏卡片也添加悬浮效果 */
+.aside-content .card-widget {
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+[data-theme="dark"] .aside-content .card-widget {
+  background: rgba(30, 30, 30, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 导航栏也添加毛玻璃效果 */
+#nav {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+[data-theme="dark"] #nav {
+  background: rgba(30, 30, 30, 0.8) !important;
+}
+
+/* 页脚添加毛玻璃效果 */
+#footer {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+[data-theme="dark"] #footer {
+  background: rgba(30, 30, 30, 0.8) !important;
+}
+
+/* 文章页内容区也添加悬浮效果 */
+.layout #post {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="dark"] .layout #post {
+  background: rgba(30, 30, 30, 0.85) !important;
+}
