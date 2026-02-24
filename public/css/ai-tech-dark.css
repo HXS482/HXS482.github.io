@@ -1,0 +1,852 @@
+/* ============================================
+   AI Tech Dark Theme - 暗黑科技风
+   IDE代码配色 + 高级毛玻璃 + AI光效
+   ============================================ */
+
+/* ============================================
+   1. 设计系统 / Design System
+   ============================================ */
+
+:root {
+  /* IDE暗黑配色 - VS Code风格 */
+  --ide-bg: #0d1117;
+  --ide-bg-secondary: #161b22;
+  --ide-bg-tertiary: #21262d;
+  --ide-border: #30363d;
+  --ide-text: #c9d1d9;
+  --ide-text-secondary: #8b949e;
+  --ide-text-muted: #6e7681;
+  
+  /* AI科技强调色 */
+  --ai-cyan: #00f5ff;
+  --ai-blue: #00d4ff;
+  --ai-purple: #a855f7;
+  --ai-pink: #ff0080;
+  --ai-orange: #ff6b35;
+  --ai-green: #00ff88;
+  --ai-yellow: #ffd700;
+  
+  /* IDE代码配色 */
+  --code-keyword: #ff7b72;
+  --code-string: #a5d6ff;
+  --code-function: #d2a8ff;
+  --code-variable: #ffa657;
+  --code-comment: #8b949e;
+  --code-number: #79c0ff;
+  
+  /* 光效 */
+  --glow-cyan: 0 0 20px rgba(0, 245, 255, 0.5);
+  --glow-blue: 0 0 30px rgba(0, 212, 255, 0.4);
+  --glow-purple: 0 0 25px rgba(168, 85, 247, 0.5);
+  
+  /* 玻璃效果 */
+  --glass-bg: rgba(13, 17, 23, 0.7);
+  --glass-border: rgba(0, 245, 255, 0.1);
+  --glass-backdrop: blur(20px) saturate(180%);
+}
+
+/* 强制暗黑模式 */
+[data-theme="light"],
+[data-theme="dark"] {
+  background: var(--ide-bg) !important;
+}
+
+/* ============================================
+   2. 全局背景与光效 / Global Background
+   ============================================ */
+
+body {
+  background: var(--ide-bg) !important;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(255, 0, 128, 0.02) 0%, transparent 50%) !important;
+  color: var(--ide-text) !important;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace !important;
+}
+
+/* 动态网格背景 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ============================================
+   3. 毛玻璃导航栏 / Glass Navigation
+   ============================================ */
+
+#nav {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-backdrop) !important;
+  -webkit-backdrop-filter: var(--glass-backdrop) !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
+  height: 70px !important;
+}
+
+#nav::before {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--ai-cyan) 20%, 
+    var(--ai-purple) 50%, 
+    var(--ai-cyan) 80%, 
+    transparent 100%
+  );
+  opacity: 0.5;
+}
+
+#nav .nav-site-title {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, var(--ai-cyan), var(--ai-purple)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: none !important;
+  letter-spacing: -0.02em !important;
+}
+
+#nav .menus_item a {
+  color: var(--ide-text-secondary) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease !important;
+}
+
+#nav .menus_item a::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ai-cyan), var(--ai-purple));
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+#nav .menus_item a:hover {
+  color: var(--ai-cyan) !important;
+  background: rgba(0, 245, 255, 0.1) !important;
+  text-shadow: 0 0 10px var(--ai-cyan);
+}
+
+#nav .menus_item a:hover::before {
+  width: 80%;
+}
+
+/* ============================================
+   4. AI科技感Hero区 / AI Hero Section
+   ============================================ */
+
+#page-header {
+  background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1a1f2e 100%) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+#page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 245, 255, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 0, 128, 0.05) 0%, transparent 60%);
+  animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* 代码雨效果 */
+#page-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 245, 255, 0.03) 2px,
+    rgba(0, 245, 255, 0.03) 4px
+  );
+  animation: codeRain 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes codeRain {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+#site-title {
+  font-size: 64px !important;
+  font-weight: 800 !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  letter-spacing: -0.03em !important;
+  background: linear-gradient(135deg, var(--ai-cyan), var(--ai-blue), var(--ai-purple)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: var(--glow-cyan) !important;
+  animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+#site-subtitle {
+  font-size: 20px !important;
+  color: var(--ide-text-secondary) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  margin-top: 16px !important;
+}
+
+#site-subtitle::before {
+  content: '> ';
+  color: var(--ai-green);
+}
+
+/* ============================================
+   5. IDE风格卡片 / IDE Cards
+   ============================================ */
+
+#recent-posts .recent-post-item {
+  background: var(--ide-bg-secondary) !important;
+  border: 1px solid var(--ide-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 卡片顶部彩色条 */
+#recent-posts .recent-post-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ai-cyan), var(--ai-purple), var(--ai-pink));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#recent-posts .recent-post-item:hover::before {
+  opacity: 1;
+}
+
+#recent-posts .recent-post-item:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(0, 245, 255, 0.3) !important;
+  box-shadow: 
+    0 8px 40px rgba(0, 0, 0, 0.5),
+    var(--glow-cyan),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+#recent-posts .recent-post-item .recent-post-info {
+  padding: 24px !important;
+}
+
+#recent-posts .recent-post-item .article-title {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: var(--code-function) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+#recent-posts .recent-post-item .article-title::before {
+  content: 'class ';
+  color: var(--code-keyword);
+}
+
+#recent-posts .recent-post-item .article-title::after {
+  content: ' {';
+  color: var(--ide-text);
+}
+
+/* 文章内容 */
+#recent-posts .recent-post-item .content {
+  color: var(--ide-text-secondary) !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+  margin-top: 12px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* ============================================
+   6. IDE风格元信息 / IDE Meta
+   ============================================ */
+
+.article-meta-wrap {
+  margin-top: 16px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid var(--ide-border) !important;
+}
+
+.article-meta-wrap span {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  color: var(--code-comment) !important;
+}
+
+.article-meta-wrap .post-meta-date {
+  background: var(--ide-bg-tertiary) !important;
+  border: 1px solid var(--ide-border) !important;
+  border-radius: 6px !important;
+  padding: 4px 10px !important;
+  color: var(--ai-green) !important;
+}
+
+.article-meta-wrap .post-meta-date::before {
+  content: '// ';
+  color: var(--code-comment);
+}
+
+/* ============================================
+   7. 毛玻璃侧边栏 / Glass Sidebar
+   ============================================ */
+
+.aside-content .card-widget {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-backdrop) !important;
+  -webkit-backdrop-filter: var(--glass-backdrop) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 16px !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 侧边栏光效边框 */
+.aside-content .card-widget::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ai-cyan), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* 作者卡片 */
+.card-info {
+  background: linear-gradient(180deg, var(--ide-bg-secondary) 0%, var(--ide-bg) 100%) !important;
+}
+
+.card-info::before {
+  height: 100px;
+  background: linear-gradient(180deg, 
+    rgba(0, 245, 255, 0.2) 0%, 
+    transparent 100%
+  );
+}
+
+.card-info .avatar-img img {
+  border: 3px solid var(--ai-cyan) !important;
+  box-shadow: var(--glow-cyan) !important;
+}
+
+.card-info .author-info-name {
+  color: var(--ai-cyan) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 20px !important;
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+}
+
+/* Follow按钮 */
+#card-info-btn {
+  background: linear-gradient(135deg, var(--ai-cyan), var(--ai-blue)) !important;
+  color: var(--ide-bg) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 12px 28px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  box-shadow: var(--glow-cyan) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+#card-info-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+#card-info-btn:hover::before {
+  left: 100%;
+}
+
+#card-info-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 25px rgba(0, 245, 255, 0.6) !important;
+}
+
+/* ============================================
+   8. IDE风格文章页 / IDE Post Page
+   ============================================ */
+
+.layout #post {
+  background: var(--ide-bg-secondary) !important;
+  border: 1px solid var(--ide-border) !important;
+  border-radius: 16px !important;
+  box-shadow: 
+    0 10px 50px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 文章头部 - 类似代码编辑器 */
+#post-info {
+  background: var(--ide-bg-tertiary) !important;
+  border-bottom: 1px solid var(--ide-border) !important;
+  border-radius: 16px 16px 0 0 !important;
+  padding: 30px 40px !important;
+  position: relative;
+}
+
+/* 窗口按钮 */
+#post-info::before {
+  content: '● ● ●';
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 12px;
+  letter-spacing: 6px;
+  color: var(--ide-text-muted);
+}
+
+#post-info .post-title {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  color: var(--code-function) !important;
+  margin-top: 10px !important;
+}
+
+#post-info .post-title::before {
+  content: 'function ';
+  color: var(--code-keyword);
+}
+
+#post-info .post-title::after {
+  content: '() {';
+  color: var(--ide-text);
+}
+
+/* 文章内容 */
+#article-container {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 15px !important;
+  line-height: 1.8 !important;
+  color: var(--ide-text) !important;
+  padding: 0 40px 40px !important;
+}
+
+/* 标题 */
+#article-container h1,
+#article-container h2,
+#article-container h3 {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-weight: 700 !important;
+  color: var(--ai-cyan) !important;
+  border-bottom: 1px solid var(--ide-border) !important;
+  padding-bottom: 12px !important;
+  margin-top: 40px !important;
+}
+
+#article-container h1::before { content: '# '; color: var(--code-keyword); }
+#article-container h2::before { content: '## '; color: var(--code-keyword); }
+#article-container h3::before { content: '### '; color: var(--code-keyword); }
+
+/* 代码块恢复默认主题样式 - 不进行自定义 */
+
+/* 引用块 */
+#article-container blockquote {
+  background: rgba(0, 245, 255, 0.05) !important;
+  border-left: 4px solid var(--ai-cyan) !important;
+  border-radius: 0 8px 8px 0 !important;
+  padding: 16px 20px !important;
+  color: var(--ide-text-secondary) !important;
+}
+
+#article-container blockquote::before {
+  content: '> ';
+  color: var(--ai-cyan);
+}
+
+/* 链接 */
+#article-container a {
+  color: var(--ai-blue) !important;
+  text-decoration: none !important;
+  border-bottom: 1px dashed var(--ai-blue) !important;
+  transition: all 0.3s ease !important;
+}
+
+#article-container a:hover {
+  color: var(--ai-cyan) !important;
+  border-bottom-style: solid !important;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+/* ============================================
+   9. 归档页面IDE风格 / IDE Archive
+   ============================================ */
+
+#archive {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+#archive .article-sort-item {
+  background: var(--ide-bg-secondary) !important;
+  border: 1px solid var(--ide-border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+  margin-bottom: 12px !important;
+  padding: 18px 24px !important;
+  position: relative;
+  transition: all 0.3s ease !important;
+}
+
+#archive .article-sort-item:hover {
+  border-color: rgba(0, 245, 255, 0.3) !important;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4), var(--glow-cyan) !important;
+  transform: translateX(5px);
+}
+
+/* 时间戳 */
+#archive .article-sort-item .article-sort-item-time {
+  color: var(--code-comment) !important;
+  font-size: 12px !important;
+}
+
+#archive .article-sort-item .article-sort-item-time::before {
+  content: '// ';
+}
+
+/* 标题 */
+#archive .article-sort-item .article-sort-item-title {
+  color: var(--code-function) !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+}
+
+/* 时间线 */
+#archive .article-sort-item::before {
+  background: var(--ai-cyan) !important;
+  box-shadow: var(--glow-cyan) !important;
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  border: 2px solid var(--ide-bg) !important;
+}
+
+/* 年份标题 */
+.article-sort-year {
+  color: var(--ai-purple) !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+}
+
+.article-sort-year::before {
+  content: '/* ';
+  color: var(--code-comment);
+}
+
+.article-sort-year::after {
+  content: ' */';
+  color: var(--code-comment);
+}
+
+/* ============================================
+   10. 分类和标签页 / IDE Category & Tag
+   ============================================ */
+
+/* 分类列表 */
+.category-list-item {
+  background: var(--ide-bg-secondary) !important;
+  border: 1px solid var(--ide-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s ease !important;
+  overflow: hidden;
+}
+
+.category-list-item:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  border-color: var(--ai-purple) !important;
+  box-shadow: var(--glow-purple) !important;
+}
+
+.category-list-link {
+  color: var(--code-function) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-weight: 600 !important;
+  padding: 16px 24px !important;
+  display: block;
+}
+
+.category-list-link::before {
+  content: 'folder://';
+  color: var(--ai-yellow);
+  margin-right: 8px;
+}
+
+.category-list-count {
+  color: var(--code-number) !important;
+  background: var(--ide-bg-tertiary) !important;
+  padding: 4px 10px !important;
+  border-radius: 20px !important;
+  font-size: 12px !important;
+}
+
+/* 标签云 */
+.tag-cloud-list a {
+  background: var(--ide-bg-tertiary) !important;
+  border: 1px solid var(--ide-border) !important;
+  color: var(--ai-cyan) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  padding: 8px 16px !important;
+  border-radius: 20px !important;
+  transition: all 0.3s ease !important;
+  margin: 6px !important;
+}
+
+.tag-cloud-list a::before {
+  content: '# ';
+  color: var(--code-keyword);
+}
+
+.tag-cloud-list a:hover {
+  background: rgba(0, 245, 255, 0.1) !important;
+  border-color: var(--ai-cyan) !important;
+  box-shadow: var(--glow-cyan) !important;
+  transform: translateY(-2px) scale(1.1);
+}
+
+/* ============================================
+   11. 分页器 / IDE Pagination
+   ============================================ */
+
+#pagination {
+  background: var(--ide-bg-secondary) !important;
+  border: 1px solid var(--ide-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+#pagination a,
+#pagination span {
+  color: var(--ide-text) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+#pagination a:hover {
+  background: rgba(0, 245, 255, 0.1) !important;
+  border-color: var(--ai-cyan) !important;
+  color: var(--ai-cyan) !important;
+}
+
+#pagination .current {
+  background: var(--ai-cyan) !important;
+  color: var(--ide-bg) !important;
+  font-weight: 600 !important;
+}
+
+/* ============================================
+   12. 页脚 / IDE Footer
+   ============================================ */
+
+#footer {
+  background: var(--ide-bg-secondary) !important;
+  border-top: 1px solid var(--ide-border) !important;
+  margin-top: 80px !important;
+  position: relative;
+}
+
+#footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--ai-cyan) 20%, 
+    var(--ai-purple) 50%, 
+    var(--ai-cyan) 80%, 
+    transparent 100%
+  );
+  opacity: 0.5;
+}
+
+#footer-wrap {
+  color: var(--ide-text-secondary) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+}
+
+/* ============================================
+   13. 滚动条 / IDE Scrollbar
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ide-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ide-border);
+  border-radius: 5px;
+  border: 2px solid var(--ide-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ide-text-muted);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--ide-bg);
+}
+
+/* ============================================
+   14. 选中文字 / Selection
+   ============================================ */
+
+::selection {
+  background: rgba(0, 245, 255, 0.3);
+  color: var(--ai-cyan);
+}
+
+/* ============================================
+   15. 动画效果 / Animations
+   ============================================ */
+
+/* 页面加载 */
+#page-header #site-title {
+  animation: glitch 1s ease-in-out;
+}
+
+@keyframes glitch {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+}
+
+/* 卡片进入 */
+#recent-posts .recent-post-item {
+  animation: slideIn 0.6s ease forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+#recent-posts .recent-post-item:nth-child(1) { animation-delay: 0.1s; }
+#recent-posts .recent-post-item:nth-child(2) { animation-delay: 0.2s; }
+#recent-posts .recent-post-item:nth-child(3) { animation-delay: 0.3s; }
+#recent-posts .recent-post-item:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 打字光标 */
+#site-subtitle::after {
+  content: '|';
+  animation: blink 1s step-end infinite;
+  color: var(--ai-green);
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ============================================
+   16. 响应式 / Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+  #site-title {
+    font-size: 40px !important;
+  }
+  
+  #nav .nav-site-title {
+    font-size: 18px !important;
+  }
+  
+  .layout #post {
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+  
+  #article-container {
+    padding: 0 20px 30px !important;
+  }
+  
+  #post-info {
+    padding: 50px 20px 20px !important;
+    border-radius: 0 !important;
+  }
+}

@@ -1,0 +1,566 @@
+/* ============================================
+   iOS Style Theme for Hexo Butterfly
+   简约 · 高级 · 优雅 · 炫酷
+   ============================================ */
+
+/* ============================================
+   1. 设计系统 / Design System
+   ============================================ */
+
+:root {
+  /* iOS 色彩系统 */
+  --ios-bg-primary: #F5F5F7;
+  --ios-bg-secondary: #FFFFFF;
+  --ios-bg-tertiary: rgba(255, 255, 255, 0.72);
+  --ios-text-primary: #1D1D1F;
+  --ios-text-secondary: #86868B;
+  --ios-accent-blue: #007AFF;
+  --ios-accent-purple: #AF52DE;
+  --ios-accent-pink: #FF2D55;
+  --ios-accent-orange: #FF9500;
+  --ios-accent-green: #34C759;
+  --ios-border: rgba(0, 0, 0, 0.1);
+  --ios-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --ios-shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --ios-shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --ios-radius-sm: 10px;
+  --ios-radius-md: 18px;
+  --ios-radius-lg: 24px;
+  --ios-radius-xl: 32px;
+}
+
+/* 暗黑模式 */
+[data-theme="dark"] {
+  --ios-bg-primary: #000000;
+  --ios-bg-secondary: #1C1C1E;
+  --ios-bg-tertiary: rgba(28, 28, 30, 0.72);
+  --ios-text-primary: #FFFFFF;
+  --ios-text-secondary: #98989D;
+  --ios-border: rgba(255, 255, 255, 0.1);
+  --ios-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --ios-shadow-md: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --ios-shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================
+   2. 全局样式 / Global Styles
+   ============================================ */
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--ios-bg-primary) !important;
+  color: var(--ios-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* ============================================
+   3. 毛玻璃导航栏 / Glass Navigation
+   ============================================ */
+
+#nav {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: saturate(180%) blur(20px) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  box-shadow: none !important;
+  height: 60px !important;
+  padding: 0 20px !important;
+}
+
+[data-theme="dark"] #nav {
+  background: rgba(28, 28, 30, 0.72) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+#nav .nav-site-title {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+#nav .menus_item a {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  padding: 8px 16px !important;
+  border-radius: 100px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+#nav .menus_item a:hover {
+  background: var(--ios-accent-blue) !important;
+  color: white !important;
+  transform: scale(1.02);
+}
+
+/* ============================================
+   4. Hero区域 / Hero Section
+   ============================================ */
+
+#page-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+#page-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+#site-title {
+  font-size: 56px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  background: linear-gradient(to right, #fff, rgba(255,255,255,0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none !important;
+}
+
+#site-subtitle {
+  font-size: 22px !important;
+  font-weight: 400 !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  margin-top: 12px !important;
+}
+
+/* ============================================
+   5. iOS风格卡片 / iOS Cards
+   ============================================ */
+
+/* 文章卡片 */
+#recent-posts .recent-post-item {
+  background: var(--ios-bg-secondary) !important;
+  border-radius: var(--ios-radius-lg) !important;
+  box-shadow: var(--ios-shadow-md) !important;
+  border: none !important;
+  padding: 0 !important;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+#recent-posts .recent-post-item:hover {
+  transform: translateY(-4px) scale(1.01) !important;
+  box-shadow: var(--ios-shadow-lg) !important;
+}
+
+#recent-posts .recent-post-item .recent-post-info {
+  padding: 24px !important;
+}
+
+#recent-posts .recent-post-item .article-title {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--ios-text-primary) !important;
+}
+
+#recent-posts .recent-post-item .content {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  color: var(--ios-text-secondary) !important;
+  margin-top: 12px !important;
+}
+
+/* 文章元信息 */
+.article-meta-wrap {
+  margin-top: 16px !important;
+}
+
+.article-meta-wrap span,
+.article-meta-wrap a {
+  font-size: 13px !important;
+  color: var(--ios-text-secondary) !important;
+}
+
+.article-meta-wrap .post-meta-date {
+  background: linear-gradient(135deg, var(--ios-accent-blue), var(--ios-accent-purple)) !important;
+  color: white !important;
+  padding: 4px 12px !important;
+  border-radius: 100px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+.article-meta-wrap .post-meta-date i,
+.article-meta-wrap .post-meta-date time {
+  color: white !important;
+}
+
+/* ============================================
+   6. 侧边栏 / Sidebar
+   ============================================ */
+
+.aside-content .card-widget {
+  background: var(--ios-bg-secondary) !important;
+  border-radius: var(--ios-radius-lg) !important;
+  box-shadow: var(--ios-shadow-sm) !important;
+  border: none !important;
+  padding: 20px !important;
+  margin-bottom: 20px !important;
+  transition: all 0.3s ease !important;
+}
+
+.aside-content .card-widget:hover {
+  box-shadow: var(--ios-shadow-md) !important;
+}
+
+/* 作者卡片 */
+.card-info {
+  text-align: center !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(135deg, var(--ios-accent-blue), var(--ios-accent-purple));
+  z-index: 0;
+}
+
+.card-info .avatar-img {
+  position: relative;
+  z-index: 1;
+  margin-top: 40px !important;
+}
+
+.card-info .avatar-img img {
+  width: 90px !important;
+  height: 90px !important;
+  border-radius: 50% !important;
+  border: 4px solid var(--ios-bg-secondary) !important;
+  box-shadow: var(--ios-shadow-md) !important;
+  transition: transform 0.3s ease !important;
+}
+
+.card-info .avatar-img img:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.card-info .author-info-name {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  margin-top: 12px !important;
+  color: var(--ios-text-primary) !important;
+}
+
+/* Follow按钮 */
+#card-info-btn {
+  background: linear-gradient(135deg, var(--ios-accent-blue), var(--ios-accent-purple)) !important;
+  color: white !important;
+  border-radius: 100px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  margin-top: 16px !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3) !important;
+}
+
+#card-info-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 122, 255, 0.4) !important;
+}
+
+/* ============================================
+   7. 文章页 / Post Page
+   ============================================ */
+
+.layout #post {
+  background: var(--ios-bg-secondary) !important;
+  border-radius: var(--ios-radius-xl) !important;
+  box-shadow: var(--ios-shadow-md) !important;
+  padding: 40px !important;
+  border: none !important;
+}
+
+#post-info {
+  background: linear-gradient(135deg, var(--ios-accent-blue), var(--ios-accent-purple)) !important;
+  border-radius: var(--ios-radius-lg) !important;
+  padding: 30px !important;
+  margin-bottom: 30px !important;
+  color: white !important;
+}
+
+#post-info .post-title {
+  font-size: 32px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  color: white !important;
+}
+
+/* 文章内容 */
+#article-container {
+  font-size: 17px !important;
+  line-height: 1.8 !important;
+  color: var(--ios-text-primary) !important;
+}
+
+#article-container h1,
+#article-container h2,
+#article-container h3 {
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  margin-top: 40px !important;
+  margin-bottom: 20px !important;
+}
+
+#article-container h2 {
+  font-size: 28px !important;
+  border-bottom: 2px solid var(--ios-accent-blue) !important;
+  padding-bottom: 10px !important;
+  display: inline-block;
+}
+
+#article-container code {
+  background: rgba(0, 122, 255, 0.1) !important;
+  color: var(--ios-accent-blue) !important;
+  padding: 2px 8px !important;
+  border-radius: 6px !important;
+  font-family: 'SF Mono', Monaco, monospace !important;
+  font-size: 0.9em !important;
+}
+
+/* 代码块 */
+#article-container pre {
+  background: #1C1C1E !important;
+  border-radius: var(--ios-radius-md) !important;
+  padding: 20px !important;
+  box-shadow: var(--ios-shadow-md) !important;
+}
+
+#article-container pre code {
+  background: transparent !important;
+  color: #fff !important;
+}
+
+/* ============================================
+   8. 归档、分类、标签页 / Archive, Category, Tag
+   ============================================ */
+
+/* 归档页 */
+#archive .article-sort-item {
+  background: var(--ios-bg-secondary) !important;
+  border-radius: var(--ios-radius-md) !important;
+  box-shadow: var(--ios-shadow-sm) !important;
+  border: none !important;
+  padding: 20px 24px !important;
+  margin-bottom: 16px !important;
+  transition: all 0.3s ease !important;
+  border-left: 4px solid transparent !important;
+}
+
+#archive .article-sort-item:hover {
+  transform: translateX(8px) !important;
+  box-shadow: var(--ios-shadow-md) !important;
+  border-left-color: var(--ios-accent-blue) !important;
+}
+
+/* 时间线 */
+.article-sort-item::before {
+  background: linear-gradient(135deg, var(--ios-accent-blue), var(--ios-accent-purple)) !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  border: 3px solid var(--ios-bg-secondary) !important;
+  box-shadow: 0 0 0 3px var(--ios-accent-blue) !important;
+}
+
+/* 分类和标签 */
+.category-list-item,
+.tag-list-item {
+  background: var(--ios-bg-secondary) !important;
+  border-radius: var(--ios-radius-md) !important;
+  box-shadow: var(--ios-shadow-sm) !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.category-list-item:hover,
+.tag-list-item:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--ios-shadow-md) !important;
+}
+
+/* 标签云 */
+.tag-cloud-list a {
+  background: rgba(0, 122, 255, 0.1) !important;
+  color: var(--ios-accent-blue) !important;
+  border-radius: 100px !important;
+  padding: 8px 16px !important;
+  margin: 4px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.tag-cloud-list a:hover {
+  background: var(--ios-accent-blue) !important;
+  color: white !important;
+  transform: scale(1.1);
+}
+
+/* ============================================
+   9. 页脚 / Footer
+   ============================================ */
+
+#footer {
+  background: var(--ios-bg-secondary) !important;
+  border-top: 1px solid var(--ios-border) !important;
+  padding: 40px 0 !important;
+  margin-top: 60px !important;
+}
+
+#footer-wrap {
+  font-size: 14px !important;
+  color: var(--ios-text-secondary) !important;
+}
+
+/* ============================================
+   10. 动画效果 / Animations
+   ============================================ */
+
+/* 页面加载动画 */
+#page-header #site-title,
+#page-header #site-subtitle {
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+#page-header #site-subtitle {
+  animation-delay: 0.2s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 卡片进入动画 */
+#recent-posts .recent-post-item {
+  animation: cardEnter 0.6s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+#recent-posts .recent-post-item:nth-child(1) { animation-delay: 0.1s; }
+#recent-posts .recent-post-item:nth-child(2) { animation-delay: 0.2s; }
+#recent-posts .recent-post-item:nth-child(3) { animation-delay: 0.3s; }
+#recent-posts .recent-post-item:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes cardEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ios-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 选中文字样式 */
+::selection {
+  background: rgba(0, 122, 255, 0.3);
+  color: inherit;
+}
+
+/* ============================================
+   11. 响应式设计 / Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+  #site-title {
+    font-size: 36px !important;
+  }
+  
+  #site-subtitle {
+    font-size: 18px !important;
+  }
+  
+  .layout #post {
+    padding: 24px !important;
+    border-radius: var(--ios-radius-md) !important;
+  }
+  
+  #recent-posts .recent-post-item .recent-post-info {
+    padding: 20px !important;
+  }
+  
+  .aside-content .card-widget {
+    border-radius: var(--ios-radius-md) !important;
+  }
+}
+
+/* ============================================
+   12. 特殊效果 / Special Effects
+   ============================================ */
+
+/* 渐变文字效果 */
+.gradient-text {
+  background: linear-gradient(135deg, var(--ios-accent-blue), var(--ios-accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 霓虹发光效果 */
+.glow {
+  box-shadow: 0 0 20px rgba(0, 122, 255, 0.3);
+}
+
+/* 玻璃拟态效果增强 */
+.glass {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: saturate(180%) blur(20px) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
