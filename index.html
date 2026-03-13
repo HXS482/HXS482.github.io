@@ -4,72 +4,587 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arch_jing&#39;s Blog</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&amp;family=JetBrains+Mono:wght@100;400;700&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/main.css">
-<meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-    <div id="glcanvas"></div>
-
-    <div class="ui-layer">
-        <aside class="spine">
-            <div class="spine-top">
-                <div class="mark">S</div>
-                <div class="spine-year">2026</div>
-                <div class="spine-divider"></div>
-            </div>
-            <div class="spine-brand">
-                Arch_jing&#39;s Blog
-            </div>
-        </aside>
-
-        <main class="main-stage">
-            <div class="top-meta">
-                <nav class="meta-nav">
-                    <a href="/" class="nav-link">Home</a>
-                    <a href="/archives" class="nav-link">Archive</a>
-                    <a href="/categories" class="nav-link">Categories</a>
-                    <a href="/tags" class="nav-link">Tags</a>
-                </nav>
-                <div class="meta-coords" id="coords">TRGT: 0.000, 0.000</div>
-            </div>
-
-            <div class="title-group">
-                <h1 class="display-title">Arch_jing&#39;s Blog</h1>
-                <div class="subtitle">记录技术，分享生活</div>
-            </div>
-        </main>
-
-        <aside class="data-panel">
-            <div>
-                <div class="data-block">
-                    <div class="data-label">Blog Status</div>
-                    <div class="data-value">
-                        THEME: SYMBOLON<br>
-                        POSTS: 0<br>
-                        STATUS: ACTIVE
-                    </div>
-                </div>
-
-                <div class="data-block">
-                    <div class="data-label">Latest Posts</div>
-                    <div class="semiotic-grid">
-                        
-                    </div>
-                </div>
-            </div>
-
-            <div class="data-block" style="margin-bottom: 0;">
-                <div class="data-label">Operative</div>
-                <div class="data-value" style="color: var(--text-bright);">
-                    Ready for Input
-                </div>
-            </div>
-        </aside>
-    </div>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@100;300;400&display=swap" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+
+    <style>
+        #clock {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--fg);
+        }
+
+        /* 左侧入口容器 - 左上角导航栏下方 */
+        .side-entries {
+            position: fixed;
+            left: 16px;
+            top: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 90;
+        }
+
+        /* 入口项基础样式 - 圆形容器带环形嵌套效果 */
+        .entry-item {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(2, 2, 2, 0.8);
+            backdrop-filter: blur(8px);
+            text-decoration: none;
+            padding: 2px;
+        }
+
+        /* OpenClaw 入口 - 圆形带悬浮动画 */
+        .entry-item.openclaw {
+            animation: openclaw-float 3s ease-in-out infinite;
+        }
+
+        @keyframes openclaw-float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* 悬停效果 */
+        .entry-item:hover {
+            border-color: var(--border-hover);
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .entry-item.github:hover {
+            transform: scale(1.05);
+        }
+
+        .entry-item.openclaw:hover {
+            animation: none;
+            transform: scale(1.05);
+        }
+
+        .entry-item img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        /* 响应式：小屏幕隐藏 */
+        @media (max-width: 768px) {
+            .side-entries {
+                display: none;
+            }
+        }
+
+        .post-list-section {
+            padding-top: var(--space-lg);
+            padding-bottom: var(--space-xl);
+        }
+
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            margin-bottom: var(--space-sm);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            color: var(--fg);
+        }
+    </style>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="canvas-container"></div>
+
+    <nav>
+        <div class="nav-link">
+            <span>SYS.ID</span>
+            <div>Arch_jing&#39;s Blog</div>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link"><span>01</span>Home</a>
+            <a href="/archives" class="nav-link"><span>02</span>Archive</a>
+            <a href="/categories" class="nav-link"><span>03</span>Categories</a>
+            <a href="/tags" class="nav-link"><span>04</span>Tags</a>
+        </div>
+    </nav>
+
+    <!-- 左侧入口 -->
+    <div class="side-entries">
+        <!-- GitHub 入口 -->
+        <a href="https://github.com/HXS482" class="entry-item github" target="_blank" title="GitHub">
+            <img src="https://avatars.githubusercontent.com/HXS482" alt="GitHub">
+        </a>
+        <!-- OpenClaw 入口 -->
+        <a href="http://127.0.0.1:18789/chat?session=agent%3Amain%3Atelegram%3Adirect%3A1620807165" class="entry-item openclaw" target="_blank" title="OpenClaw">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.568c-6.33 0-9.495 5.275-9.495 9.495 0 4.22 3.165 8.44 6.33 9.494v2.11h2.11v-2.11s1.055.422 2.11 0v2.11h2.11v-2.11c3.165-1.055 6.33-5.274 6.33-9.494S18.33 2.568 12 2.568z' fill='url(%23lobe-icons-open-claw-fill-0)'/%3E%3Cpath d='M3.56 9.953C.396 8.898-.66 11.008.396 13.118c1.055 2.11 3.164 1.055 4.22-1.055.632-1.477 0-2.11-1.056-2.11z' fill='url(%23lobe-icons-open-claw-fill-1)'/%3E%3Cpath d='M20.44 9.953c3.164-1.055 4.22 1.055 3.164 3.165-1.055 2.11-3.164 1.055-4.22-1.055-.632-1.477 0-2.11 1.056-2.11z' fill='url(%23lobe-icons-open-claw-fill-2)'/%3E%3Cpath d='M5.507 1.875c.476-.285 1.036-.233 1.615.037.577.27 1.223.774 1.937 1.488a.316.316 0 01-.447.447c-.693-.693-1.279-1.138-1.757-1.361-.475-.222-.795-.205-1.022-.069a.317.317 0 01-.326-.542zM16.877 1.913c.58-.27 1.14-.323 1.616-.038a.317.317 0 01-.326.542c-.227-.136-.547-.153-1.022.069-.478.223-1.064.668-1.756 1.361a.316.316 0 11-.448-.447c.714-.714 1.36-1.218 1.936-1.487z' fill='%23FF4D4D'/%3E%3Cpath d='M8.835 9.109a1.266 1.266 0 100-2.532 1.266 1.266 0 000 2.532zM15.165 9.109a1.266 1.266 0 100-2.532 1.266 1.266 0 000 2.532z' fill='%23050810'/%3E%3Cpath d='M9.046 8.16a.527.527 0 100-1.056.527.527 0 000 1.055zM15.376 8.16a.527.527 0 100-1.055.527.527 0 000 1.054z' fill='%2300E5CC'/%3E%3Cdefs%3E%3ClinearGradient gradientUnits='userSpaceOnUse' id='lobe-icons-open-claw-fill-0' x1='-.659' x2='27.023' y1='.458' y2='22.855'%3E%3Cstop stop-color='%23FF4D4D'/%3E%3Cstop offset='1' stop-color='%23991B1B'/%3E%3C/linearGradient%3E%3ClinearGradient gradientUnits='userSpaceOnUse' id='lobe-icons-open-claw-fill-1' x1='0' x2='4.311' y1='9.672' y2='14.949'%3E%3Cstop stop-color='%23FF4D4D'/%3E%3Cstop offset='1' stop-color='%23991B1B'/%3E%3C/linearGradient%3E%3ClinearGradient gradientUnits='userSpaceOnUse' id='lobe-icons-open-claw-fill-2' x1='19.385' x2='24.399' y1='9.953' y2='14.462'%3E%3Cstop stop-color='%23FF4D4D'/%3E%3Cstop offset='1' stop-color='%23991B1B'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E" alt="OpenClaw">
+        </a>
+    </div>
+
+    <div class="container">
+        <section id="landing">
+            <div class="hero-data-corners">
+                <div class="data-block">
+                    <span class="t-label">Protocol</span>
+                    <span class="t-data">BLOG-CORE-V1</span>
+                    <span class="t-data">HEXO-ENGINE</span>
+                </div>
+                <div class="data-block text-right">
+                    <span class="t-label">Status</span>
+                    <span class="t-data">ONLINE</span>
+                    <span class="t-data text-right" id="clock">00:00:00</span>
+                </div>
+            </div>
+
+            <div class="hero-title-wrapper">
+                <h2 class="t-hero-sub" style="margin-bottom: var(--space-md); font-size: clamp(1rem, 2vw, 1.5rem);">记录技术，分享生活</h2>
+                <h1 class="t-hero" style="font-size: clamp(1.5rem, 4vw, 3rem); letter-spacing: 0.05em;">Arch_jing&#39;s Blog</h1>
+            </div>
+
+            <div style="position:absolute; bottom: var(--space-xl); width: calc(100% - var(--space-md)*2);">
+                <div class="system-banner">
+                    <div class="sys-item">
+                        <span class="t-label sys-label">Mission</span>
+                        <span class="t-body">敬厚萍的个人技术博客</span>
+                    </div>
+                    <div class="sys-item">
+                        <span class="t-label">Posts: 14</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="posts" class="post-list-section">
+            <div class="page-header">
+                <div>
+                    <div class="section-label">Section_01</div>
+                    <h2 class="section-title">Latest Transmissions</h2>
+                </div>
+                <div class="t-label">Items: 10</div>
+            </div>
+
+            <div class="post-list">
+                
+                <a href="/2026/03/14/hello-world/" style="text-decoration: none;">
+                    <div class="bracket-box post-card">
+                        <div class="bb-inner"></div>
+                        <h3 class="post-title">Hello World</h3>
+                        <div class="post-meta">
+                            <div class="post-date">2026-03-14</div>
+                            
+                            
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="/2026/03/13/2026-03-13-ai-news-digest/" style="text-decoration: none;">
+                    <div class="bracket-box post-card">
+                        <div class="bb-inner"></div>
+                        <h3 class="post-title">AI 技术日报 - 2026-03-13</h3>
+                        <div class="post-meta">
+                            <div class="post-date">2026-03-13</div>
+                            
+                            <div class="post-category">CAT: 技术观察</div>
+                            
+                            
+                            <div class="post-tags">
+                                
+                                <span>#AI</span>
+                                
+                                <span>#技术新闻</span>
+                                
+                                <span>#日报</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="/2026/03/12/2026-03-12-ai-news-digest/" style="text-decoration: none;">
+                    <div class="bracket-box post-card">
+                        <div class="bb-inner"></div>
+                        <h3 class="post-title">AI 技术日报 - 2026-03-12</h3>
+                        <div class="post-meta">
+                            <div class="post-date">2026-03-12</div>
+                            
+                            <div class="post-category">CAT: 技术观察</div>
+                            
+                            
+                            <div class="post-tags">
+                                
+                                <span>#AI</span>
+                                
+                                <span>#技术新闻，日报</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="/2026/03/11/2026-03-11-ai-news-digest/" style="text-decoration: none;">
+                    <div class="bracket-box post-card">
+                        <div class="bb-inner"></div>
+                        <h3 class="post-title">AI 技术日报 - 2026-03-11</h3>
+                        <div class="post-meta">
+                            <div class="post-date">2026-03-11</div>
+                            
+                            <div class="post-category">CAT: 技术观察</div>
+                            
+                            
+                            <div class="post-tags">
+                                
+                                <span>#AI</span>
+                                
+                                <span>#技术新闻，日报</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="/2026/03/10/2026-03-10-ai-news-digest/" style="text-decoration: none;">
+                    <div class="bracket-box post-card">
+                        <div class="bb-inner"></div>
+                        <h3 class="post-title">AI 技术日报 - 2026-03-10</h3>
+                        <div class="post-meta">
+                            <div class="post-date">2026-03-10</div>
+                            
+                            <div class="post-category">CAT: 技术观察</div>
+                            
+                            
+                            <div class="post-tags">
+                                
+                                <span>#AI</span>
+                                
+                                <span>#技术新闻，日报</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="/2026/03/09/2026-03-09-ai-news-digest/" style="text-decoration: none;">
+                    <div class="bracket-box post-card">
+                        <div class="bb-inner"></div>
+                        <h3 class="post-title">AI 技术日报 - 2026-03-09</h3>
+                        <div class="post-meta">
+                            <div class="post-date">2026-03-09</div>
+                            
+                            <div class="post-category">CAT: 技术观察</div>
+                            
+                            
+                            <div class="post-tags">
+                                
+                                <span>#AI</span>
+                                
+                                <span>#技术新闻，日报</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="/2026/03/08/2026-03-08-ai-news-digest/" style="text-decoration: none;">
+                    <div class="bracket-box post-card">
+                        <div class="bb-inner"></div>
+                        <h3 class="post-title">AI 技术日报 - 2026-03-08</h3>
+                        <div class="post-meta">
+                            <div class="post-date">2026-03-08</div>
+                            
+                            <div class="post-category">CAT: 技术观察</div>
+                            
+                            
+                            <div class="post-tags">
+                                
+                                <span>#AI</span>
+                                
+                                <span>#技术新闻，日报</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="/2026/03/07/2026-03-07-ai-news-digest/" style="text-decoration: none;">
+                    <div class="bracket-box post-card">
+                        <div class="bb-inner"></div>
+                        <h3 class="post-title">AI 技术日报 - 2026-03-07</h3>
+                        <div class="post-meta">
+                            <div class="post-date">2026-03-07</div>
+                            
+                            <div class="post-category">CAT: 技术观察</div>
+                            
+                            
+                            <div class="post-tags">
+                                
+                                <span>#AI</span>
+                                
+                                <span>#技术新闻，日报</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="/2026/03/06/2026-03-06-ai-agent-vs-ai/" style="text-decoration: none;">
+                    <div class="bracket-box post-card">
+                        <div class="bb-inner"></div>
+                        <h3 class="post-title">AI Agent 与传统 AI 的本质区别</h3>
+                        <div class="post-meta">
+                            <div class="post-date">2026-03-06</div>
+                            
+                            <div class="post-category">CAT: 技术</div>
+                            
+                            
+                            <div class="post-tags">
+                                
+                                <span>#AI</span>
+                                
+                                <span>#Agent</span>
+                                
+                                <span>#人工智能</span>
+                                
+                                <span>#技术思考</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="/2026/02/25/2026-02-25-ai-tech-trends-2026/" style="text-decoration: none;">
+                    <div class="bracket-box post-card">
+                        <div class="bb-inner"></div>
+                        <h3 class="post-title">2026年人工智能技术发展趋势：深度学习与大模型的进化</h3>
+                        <div class="post-meta">
+                            <div class="post-date">2026-02-25</div>
+                            
+                            <div class="post-category">CAT: 技术观察</div>
+                            
+                            
+                            <div class="post-tags">
+                                
+                                <span>#AI</span>
+                                
+                                <span>#人工智能</span>
+                                
+                                <span>#科技</span>
+                                
+                                <span>#趋势</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+                
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-grid">
+                <div class="f-col" style="grid-column: span 2;">
+                    <h2 class="t-hero-sub" style="font-size: 1.5rem; margin-bottom:var(--space-sm);">Arch_jing&#39;s Blog</h2>
+                    <p class="t-body" style="font-size:12px;">敬厚萍的个人技术博客</p>
+                </div>
+                <div class="f-col">
+                    <span class="t-label">Navigation</span>
+                    <a href="/">Home</a>
+                    <a href="/archives">Archive</a>
+                    <a href="/categories">Categories</a>
+                    <a href="/tags">Tags</a>
+                </div>
+                <div class="f-col">
+                    <span class="t-label">System</span>
+                    <span class="t-data">Powered by Hexo</span>
+                    <span class="t-data">Theme: KKG</span>
+                    <span class="t-data">v1.0.0</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span class="t-label">© 2026 Arch_jing. ALL RIGHTS RESERVED.</span>
+                <span class="t-label">SYSTEM V.1.0.0</span>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toISOString().substr(11, 8);
+        }, 1000);
+
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+
+        scene.fog = new THREE.Fog('#020202', 3, 10);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0, 5);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const vertexShader = `
+            varying vec3 vNormal;
+            varying vec3 vPosition;
+            varying vec2 vUv;
+            uniform float time;
+
+            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+            vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+            float snoise(vec3 v) {
+                const vec2  C = vec2(1.0/6.0, 1.0/3.0);
+                const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+                vec3 i  = floor(v + dot(v, C.yyy));
+                vec3 x0 = v - i + dot(i, C.xxx);
+                vec3 g = step(x0.yzx, x0.xyz);
+                vec3 l = 1.0 - g;
+                vec3 i1 = min(g.xyz, l.zxy);
+                vec3 i2 = max(g.xyz, l.zxy);
+                vec3 x1 = x0 - i1 + C.xxx;
+                vec3 x2 = x0 - i2 + C.yyy;
+                vec3 x3 = x0 - D.yyy;
+                i = mod289(i);
+                vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+                float n_ = 0.142857142857;
+                vec3  ns = n_ * D.wyz - D.xzx;
+                vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+                vec4 x_ = floor(j * ns.z);
+                vec4 y_ = floor(j - 7.0 * x_);
+                vec4 x = x_ *ns.x + ns.yyyy;
+                vec4 y = y_ *ns.x + ns.yyyy;
+                vec4 h = 1.0 - abs(x) - abs(y);
+                vec4 b0 = vec4(x.xy, y.xy);
+                vec4 b1 = vec4(x.zw, y.zw);
+                vec4 s0 = floor(b0)*2.0 + 1.0;
+                vec4 s1 = floor(b1)*2.0 + 1.0;
+                vec4 sh = -step(h, vec4(0.0));
+                vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+                vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+                vec3 p0 = vec3(a0.xy,h.x);
+                vec3 p1 = vec3(a0.zw,h.y);
+                vec3 p2 = vec3(a1.xy,h.z);
+                vec3 p3 = vec3(a1.zw,h.w);
+                vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+                p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+                vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                m = m * m;
+                return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+            }
+
+            void main() {
+                vUv = uv;
+                vNormal = normalize(normalMatrix * normal);
+                float noise = snoise(vec3(position.x * 2.0 + time * 0.2, position.y * 2.0, position.z * 2.0));
+                vec3 newPosition = position + normal * (noise * 0.15);
+                vPosition = (modelViewMatrix * vec4(newPosition, 1.0)).xyz;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            varying vec3 vNormal;
+            varying vec3 vPosition;
+
+            vec3 palette(float t, vec3 a, vec3 b, vec3 c, vec3 d) {
+                return a + b*cos(6.28318*(c*t+d));
+            }
+
+            void main() {
+                vec3 viewDirection = normalize(-vPosition);
+                float fresnel = dot(viewDirection, vNormal);
+                fresnel = clamp(1.0 - fresnel, 0.0, 1.0);
+                fresnel = pow(fresnel, 3.0);
+                float colorFactor = vNormal.x * 0.5 + vNormal.y * 0.5 + 0.5;
+                vec3 a = vec3(0.5, 0.5, 0.5);
+                vec3 b = vec3(0.5, 0.5, 0.5);
+                vec3 c = vec3(1.0, 1.0, 1.0);
+                vec3 d = vec3(0.263, 0.416, 0.557);
+                vec3 baseColor = palette(colorFactor + fresnel, a, b, c, d);
+                vec3 finalColor = mix(vec3(0.01, 0.01, 0.05), baseColor, fresnel * 1.5);
+                finalColor += vec3(0.5, 0.8, 1.0) * pow(fresnel, 5.0);
+                gl_FragColor = vec4(finalColor, 0.85);
+            }
+        `;
+
+        const geometry = new THREE.SphereGeometry(1.2, 128, 128);
+        geometry.scale(0.6, 1.2, 0.6);
+
+        const material = new THREE.ShaderMaterial({
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+            uniforms: { time: { value: 0.0 } },
+            transparent: true,
+            wireframe: false
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.y = 0.5;
+        scene.add(mesh);
+
+        let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX) * 0.001;
+            mouseY = (event.clientY - windowHalfY) * 0.001;
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+            material.uniforms.time.value = elapsedTime;
+            targetX = mouseX * 0.5;
+            targetY = mouseY * 0.5;
+            mesh.rotation.y += 0.01 + (targetX - mesh.rotation.y) * 0.05;
+            mesh.rotation.x += 0.005 + (targetY - mesh.rotation.x) * 0.05;
+            mesh.position.y = 0.5 + Math.sin(elapsedTime * 0.5) * 0.1;
+            mesh.position.z = -window.scrollY * 0.005;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
