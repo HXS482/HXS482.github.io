@@ -1,0 +1,34 @@
+# KKG Theme Configuration
+# A dark tech-inspired theme for Hexo
+
+# Site info
+site_name: Arch_jing's Blog
+author: Arch_jing
+description: 记录技术，分享生活
+
+# Header navigation
+nav:
+  - name: Home
+    url: /
+    label: 01
+  - name: Archive
+    url: /archives
+    label: 02
+  - name: Categories
+    url: /categories
+    label: 03
+  - name: Tags
+    url: /tags
+    label: 04
+
+# Three.js background
+threejs:
+  enable: true
+  color: "#020202"
+  fog_near: 3
+  fog_far: 10
+
+# Footer
+footer:
+  copyright: "© 2026 Arch_jing. ALL RIGHTS RESERVED."
+  version: "v1.0.0"

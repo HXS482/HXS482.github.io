@@ -1,171 +1,374 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>归档 | Arch_jing's Blog</title><meta name="author" content="Arch_jing"><meta name="copyright" content="Arch_jing"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="敬厚萍的个人技术博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="归档">
-<meta property="og:url" content="http://example.com/archives/index.html">
-<meta property="og:site_name" content="Arch_jing&#39;s Blog">
-<meta property="og:description" content="敬厚萍的个人技术博客">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/img/butterfly-icon.png">
-<meta property="article:author" content="Arch_jing">
-<meta property="article:tag" content="技术,编程,AI,博客">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/img/butterfly-icon.png"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/archives/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive - Arch_jing&#39;s Blog</title>
 
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@100;300;400&display=swap" rel="stylesheet">
 
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
 
-      const theme = saveToLocal.get('theme')
-    
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: undefined,
-  translate: undefined,
-  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
-  copy: {
-    success: 'Copy Successful',
-    error: 'Copy Failed',
-    noSupport: 'Browser Not Supported'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: 'Just now',
-    min: 'minutes ago',
-    hour: 'hours ago',
-    day: 'days ago',
-    month: 'months ago'
-  },
-  copyright: undefined,
-  lightbox: 'null',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
-    buttonText: 'Load More'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: false,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: false,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '归档',
-  isHighlightShrink: false,
-  isToc: false,
-  pageType: 'archive'
-}</script><link rel="stylesheet" href="/css/ai-tech-dark.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Arch_jing's Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">归档</h1></header><main class="layout" id="content-inner"><div id="archive"><div class="article-sort-title">All Articles - 5</div><div class="article-sort"><div class="article-sort-item year">2026</div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2026-02-24T07:00:00.000Z" title="Created 2026-02-24 15:00:00">2026-02-24</time></div><a class="article-sort-item-title" href="/2026/02/24/2026-02-24-a-stock-market-update/" title="2026年2月24日A股市场：三大指数全线上涨，市场信心提振">2026年2月24日A股市场：三大指数全线上涨，市场信心提振</a></div></div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2026-02-13T15:00:00.000Z" title="Created 2026-02-13 23:00:00">2026-02-13</time></div><a class="article-sort-item-title" href="/2026/02/13/mac-deploy-openclaw-guide/" title="Mac 部署 OpenClaw 完整指南：用 WhatsApp/Telegram 控制你的 Mac">Mac 部署 OpenClaw 完整指南：用 WhatsApp/Telegram 控制你的 Mac</a></div></div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2026-02-13T14:49:27.251Z" title="Created 2026-02-13 22:49:27">2026-02-13</time></div><a class="article-sort-item-title" href="/2026/02/13/hello-world/" title="Hello World">Hello World</a></div></div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2026-02-13T14:06:03.000Z" title="Created 2026-02-13 22:06:03">2026-02-13</time></div><a class="article-sort-item-title" href="/2026/02/13/OpenCode%E6%B7%BB%E5%8A%A0Skill%E6%8C%87%E5%8D%97/" title="OpenCode添加Skill指南">OpenCode添加Skill指南</a></div></div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2026-02-13T13:32:35.000Z" title="Created 2026-02-13 21:32:35">2026-02-13</time></div><a class="article-sort-item-title" href="/2026/02/13/My-First-Hexo-Blog/" title="My First Hexo Blog">My First Hexo Blog</a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Arch_jing</div><div class="author-info-description">敬厚萍的个人技术博客</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/HXS482"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/24/2026-02-24-a-stock-market-update/" title="2026年2月24日A股市场：三大指数全线上涨，市场信心提振">2026年2月24日A股市场：三大指数全线上涨，市场信心提振</a><time datetime="2026-02-24T07:00:00.000Z" title="Created 2026-02-24 15:00:00">2026-02-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/13/mac-deploy-openclaw-guide/" title="Mac 部署 OpenClaw 完整指南：用 WhatsApp/Telegram 控制你的 Mac">Mac 部署 OpenClaw 完整指南：用 WhatsApp/Telegram 控制你的 Mac</a><time datetime="2026-02-13T15:00:00.000Z" title="Created 2026-02-13 23:00:00">2026-02-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/13/hello-world/" title="Hello World">Hello World</a><time datetime="2026-02-13T14:49:27.251Z" title="Created 2026-02-13 22:49:27">2026-02-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/13/OpenCode%E6%B7%BB%E5%8A%A0Skill%E6%8C%87%E5%8D%97/" title="OpenCode添加Skill指南">OpenCode添加Skill指南</a><time datetime="2026-02-13T14:06:03.000Z" title="Created 2026-02-13 22:06:03">2026-02-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/13/My-First-Hexo-Blog/" title="My First Hexo Blog">My First Hexo Blog</a><time datetime="2026-02-13T13:32:35.000Z" title="Created 2026-02-13 21:32:35">2026-02-13</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
-            <i class="fas fa-folder-open"></i>
-            <span>Categories</span>
-            
-          </div>
-          <ul class="card-category-list" id="aside-cat-list">
-            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/"><span class="card-category-list-name">技术教程</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%99%E7%A8%8B/"><span class="card-category-list-name">教程</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%B4%A2%E7%BB%8F%E8%A7%82%E5%AF%9F/"><span class="card-category-list-name">财经观察</span><span class="card-category-list-count">1</span></a></li>
-          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/%E8%B4%A2%E7%BB%8F/" style="font-size: 1.1em; color: #999">财经</a> <a href="/tags/A%E8%82%A1/" style="font-size: 1.1em; color: #999">A股</a> <a href="/tags/macOS/" style="font-size: 1.1em; color: #999">macOS</a> <a href="/tags/%E8%82%A1%E5%B8%82/" style="font-size: 1.1em; color: #999">股市</a> <a href="/tags/Skill/" style="font-size: 1.1em; color: #999">Skill</a> <a href="/tags/%E4%B8%8A%E8%AF%81%E6%8C%87%E6%95%B0/" style="font-size: 1.1em; color: #999">上证指数</a> <a href="/tags/OpenCode/" style="font-size: 1.1em; color: #999">OpenCode</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 1.1em; color: #999">教程</a> <a href="/tags/OpenClaw/" style="font-size: 1.1em; color: #999">OpenClaw</a> <a href="/tags/Node-js/" style="font-size: 1.1em; color: #999">Node.js</a> <a href="/tags/AI/" style="font-size: 1.1em; color: #999">AI</a></div></div><div class="card-widget card-archives">
-    <div class="item-headline">
-      <i class="fas fa-archive"></i>
-      <span>Archives</span>
-      
+    <style>
+        #clock {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--fg);
+        }
+
+        .archive-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-xl) 0;
+        }
+
+        .archive-list {
+            margin-top: var(--space-lg);
+        }
+
+        .archive-year {
+            margin-bottom: var(--space-xl);
+        }
+
+        .archive-year-title {
+            font-size: 1.5rem;
+            color: var(--fg);
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .archive-year-title .year-count {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        .archive-posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .archive-post-item {
+            padding: var(--space-md);
+            border: 1px solid var(--border);
+            background: #050505;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .archive-post-item:hover {
+            border-color: var(--border-hover);
+            background: #0a0a0a;
+        }
+
+        .archive-post-item .post-date {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: var(--space-xs);
+        }
+
+        .archive-post-item .post-title {
+            color: var(--fg);
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .archive-nav {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-btn {
+            padding: var(--space-xs) var(--space-md);
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--fg);
+            color: var(--fg);
+        }
+
+        .nav-btn.active {
+            border-color: var(--fg);
+            background: var(--fg);
+            color: var(--bg);
+        }
+    </style>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="canvas-container"></div>
+
+    <nav>
+        <div class="nav-link">
+            <span>SYS.ID</span>
+            <div>Arch_jing&#39;s Blog</div>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link"><span>01</span>Home</a>
+            <a href="/archives" class="nav-link"><span>02</span>Archive</a>
+            <a href="/categories" class="nav-link"><span>03</span>Categories</a>
+            <a href="/tags" class="nav-link"><span>04</span>Tags</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="archive-container">
+            <div class="page-header">
+                <div>
+                    <div class="t-label">Section_02</div>
+                    <h2 class="t-hero-sub" style="font-size: 2rem;">Master Archive</h2>
+                </div>
+                <div class="t-label">Total: 10 posts</div>
+            </div>
+
+            <div class="archive-list">
+                
+                <div class="archive-year">
+                    <h3 class="archive-year-title">
+                        2026
+                        <span class="year-count">
+                            
+                            [10 items]
+                        </span>
+                    </h3>
+                    <div class="archive-posts">
+                
+                <a href="/2026/03/13/2026-03-13-ai-news-digest/" class="archive-post-item">
+                    <div class="post-date">03-13</div>
+                    <div class="post-title">AI 技术日报 - 2026-03-13</div>
+                </a>
+                
+                <a href="/2026/03/12/2026-03-12-ai-news-digest/" class="archive-post-item">
+                    <div class="post-date">03-12</div>
+                    <div class="post-title">AI 技术日报 - 2026-03-12</div>
+                </a>
+                
+                <a href="/2026/03/11/2026-03-11-ai-news-digest/" class="archive-post-item">
+                    <div class="post-date">03-11</div>
+                    <div class="post-title">AI 技术日报 - 2026-03-11</div>
+                </a>
+                
+                <a href="/2026/03/10/2026-03-10-ai-news-digest/" class="archive-post-item">
+                    <div class="post-date">03-10</div>
+                    <div class="post-title">AI 技术日报 - 2026-03-10</div>
+                </a>
+                
+                <a href="/2026/03/09/2026-03-09-ai-news-digest/" class="archive-post-item">
+                    <div class="post-date">03-09</div>
+                    <div class="post-title">AI 技术日报 - 2026-03-09</div>
+                </a>
+                
+                <a href="/2026/03/08/2026-03-08-ai-news-digest/" class="archive-post-item">
+                    <div class="post-date">03-08</div>
+                    <div class="post-title">AI 技术日报 - 2026-03-08</div>
+                </a>
+                
+                <a href="/2026/03/07/2026-03-07-ai-news-digest/" class="archive-post-item">
+                    <div class="post-date">03-07</div>
+                    <div class="post-title">AI 技术日报 - 2026-03-07</div>
+                </a>
+                
+                <a href="/2026/03/06/2026-03-06-ai-agent-vs-ai/" class="archive-post-item">
+                    <div class="post-date">03-06</div>
+                    <div class="post-title">AI Agent 与传统 AI 的本质区别</div>
+                </a>
+                
+                <a href="/2026/02/25/2026-02-25-ai-tech-trends-2026/" class="archive-post-item">
+                    <div class="post-date">02-25</div>
+                    <div class="post-title">2026年人工智能技术发展趋势：深度学习与大模型的进化</div>
+                </a>
+                
+                <a href="/2026/02/24/2026-02-24-a-stock-market-update/" class="archive-post-item">
+                    <div class="post-date">02-24</div>
+                    <div class="post-title">2026年2月24日A股市场：三大指数全线上涨，市场信心提振</div>
+                </a>
+                
+                </div></div>
+                
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-bottom" style="margin-top: var(--space-xl); padding-top: var(--space-sm); border-top: 1px solid var(--border);">
+                <span class="t-label">© 2026 Arch_jing. ALL RIGHTS RESERVED.</span>
+                <span class="t-label">ARCHIVE SYSTEM v1.0.0</span>
+            </div>
+        </footer>
     </div>
-  
-    <ul class="card-archive-list">
-      
-        <li class="card-archive-list-item">
-          <a class="card-archive-list-link" href="/archives/2026/02/">
-            <span class="card-archive-list-date">
-              February 2026
-            </span>
-            <span class="card-archive-list-count">5</span>
-          </a>
-        </li>
-      
-    </ul>
-  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">5</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-02-24T06:31:17.299Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Arch_jing</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+
+    <script>
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toISOString().substr(11, 8);
+        }, 1000);
+
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog('#020202', 3, 10);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0, 5);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const vertexShader = `
+            varying vec3 vNormal;
+            varying vec3 vPosition;
+            varying vec2 vUv;
+            uniform float time;
+
+            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+            vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+            float snoise(vec3 v) {
+                const vec2  C = vec2(1.0/6.0, 1.0/3.0);
+                const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+                vec3 i  = floor(v + dot(v, C.yyy));
+                vec3 x0 = v - i + dot(i, C.xxx);
+                vec3 g = step(x0.yzx, x0.xyz);
+                vec3 l = 1.0 - g;
+                vec3 i1 = min(g.xyz, l.zxy);
+                vec3 i2 = max(g.xyz, l.zxy);
+                vec3 x1 = x0 - i1 + C.xxx;
+                vec3 x2 = x0 - i2 + C.yyy;
+                vec3 x3 = x0 - D.yyy;
+                i = mod289(i);
+                vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+                float n_ = 0.142857142857;
+                vec3  ns = n_ * D.wyz - D.xzx;
+                vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+                vec4 x_ = floor(j * ns.z);
+                vec4 y_ = floor(j - 7.0 * x_);
+                vec4 x = x_ *ns.x + ns.yyyy;
+                vec4 y = y_ *ns.x + ns.yyyy;
+                vec4 h = 1.0 - abs(x) - abs(y);
+                vec4 b0 = vec4(x.xy, y.xy);
+                vec4 b1 = vec4(x.zw, y.zw);
+                vec4 s0 = floor(b0)*2.0 + 1.0;
+                vec4 s1 = floor(b1)*2.0 + 1.0;
+                vec4 sh = -step(h, vec4(0.0));
+                vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+                vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+                vec3 p0 = vec3(a0.xy,h.x);
+                vec3 p1 = vec3(a0.zw,h.y);
+                vec3 p2 = vec3(a1.xy,h.z);
+                vec3 p3 = vec3(a1.zw,h.w);
+                vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+                p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+                vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                m = m * m;
+                return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+            }
+
+            void main() {
+                vUv = uv;
+                vNormal = normalize(normalMatrix * normal);
+                float noise = snoise(vec3(position.x * 2.0 + time * 0.2, position.y * 2.0, position.z * 2.0));
+                vec3 newPosition = position + normal * (noise * 0.15);
+                vPosition = (modelViewMatrix * vec4(newPosition, 1.0)).xyz;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            varying vec3 vNormal;
+            varying vec3 vPosition;
+
+            vec3 palette(float t, vec3 a, vec3 b, vec3 c, vec3 d) {
+                return a + b*cos(6.28318*(c*t+d));
+            }
+
+            void main() {
+                vec3 viewDirection = normalize(-vPosition);
+                float fresnel = dot(viewDirection, vNormal);
+                fresnel = clamp(1.0 - fresnel, 0.0, 1.0);
+                fresnel = pow(fresnel, 3.0);
+                float colorFactor = vNormal.x * 0.5 + vNormal.y * 0.5 + 0.5;
+                vec3 a = vec3(0.5, 0.5, 0.5);
+                vec3 b = vec3(0.5, 0.5, 0.5);
+                vec3 c = vec3(1.0, 1.0, 1.0);
+                vec3 d = vec3(0.263, 0.416, 0.557);
+                vec3 baseColor = palette(colorFactor + fresnel, a, b, c, d);
+                vec3 finalColor = mix(vec3(0.01, 0.01, 0.05), baseColor, fresnel * 1.5);
+                finalColor += vec3(0.5, 0.8, 1.0) * pow(fresnel, 5.0);
+                gl_FragColor = vec4(finalColor, 0.85);
+            }
+        `;
+
+        const geometry = new THREE.SphereGeometry(1.2, 128, 128);
+        geometry.scale(0.6, 1.2, 0.6);
+
+        const material = new THREE.ShaderMaterial({
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+            uniforms: { time: { value: 0.0 } },
+            transparent: true,
+            wireframe: false
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.y = 0.5;
+        scene.add(mesh);
+
+        let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX) * 0.001;
+            mouseY = (event.clientY - windowHalfY) * 0.001;
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+            material.uniforms.time.value = elapsedTime;
+            targetX = mouseX * 0.5;
+            targetY = mouseY * 0.5;
+            mesh.rotation.y += 0.01 + (targetX - mesh.rotation.y) * 0.05;
+            mesh.rotation.x += 0.005 + (targetY - mesh.rotation.x) * 0.05;
+            mesh.position.y = 0.5 + Math.sin(elapsedTime * 0.5) * 0.1;
+            mesh.position.z = -window.scrollY * 0.005;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

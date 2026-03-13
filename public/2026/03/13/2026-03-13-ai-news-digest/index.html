@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 技术日报 - 2026-03-13 - Arch_jing&#39;s Blog</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@100;300;400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <style>
+        .back-link {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            z-index: 100;
+            cursor: pointer;
+            padding: 6px 12px;
+            background: rgba(2, 2, 2, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .back-link:hover {
+            color: var(--fg);
+            border-color: var(--border-hover);
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .article-nav-fixed {
+            position: fixed;
+            top: 60px;
+            left: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .nav-item-fixed {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 6px 12px;
+            background: rgba(2, 2, 2, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            max-width: 200px;
+        }
+
+        .nav-item-fixed:hover {
+            color: var(--fg);
+            border-color: var(--border-hover);
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .nav-item-fixed .nav-label {
+            white-space: nowrap;
+        }
+
+        .article-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-md);
+            padding-top: 100px;
+        }
+
+        .article-header {
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .article-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--fg);
+            margin-bottom: var(--space-md);
+        }
+
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .article-meta .divider {
+            color: var(--border);
+        }
+
+        .tag-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .tag-link:hover {
+            color: var(--fg);
+        }
+
+        .category-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .category-link:hover {
+            color: var(--fg);
+        }
+
+        .article-body {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--accent);
+        }
+
+        .article-body h2 {
+            font-size: 1.8rem;
+            margin: var(--space-lg) 0 var(--space-md);
+            color: var(--fg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .article-body h3 {
+            font-size: 1.4rem;
+            margin: var(--space-md) 0;
+            color: var(--fg);
+        }
+
+        .article-body p {
+            margin-bottom: var(--space-md);
+        }
+
+        .article-body code {
+            background: #111;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--fg);
+        }
+
+        .article-body pre {
+            background: #0a0a0a;
+            border: 1px solid var(--border);
+            padding: var(--space-md);
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+        }
+
+        .article-body pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        .article-body a {
+            color: var(--fg);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s ease;
+        }
+
+        .article-body a:hover {
+            border-color: var(--fg);
+        }
+
+        .article-body blockquote {
+            border-left: 2px solid var(--muted);
+            padding-left: var(--space-md);
+            margin: var(--space-md) 0;
+            color: var(--muted);
+            font-style: italic;
+            background: #0a0a0a;
+            padding: var(--space-md);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin: var(--space-md) 0;
+            padding-left: var(--space-lg);
+        }
+
+        .article-body li {
+            margin-bottom: var(--space-xs);
+        }
+
+        .article-body img {
+            max-width: 100%;
+            margin: var(--space-md) 0;
+            border: 1px solid var(--border);
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .article-body img:hover {
+            opacity: 1;
+        }
+
+        .article-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+        }
+
+        .article-body th,
+        .article-body td {
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .article-body th {
+            color: var(--fg);
+            font-weight: 400;
+            background: #0a0a0a;
+        }
+
+        .article-body hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: var(--space-xl) 0;
+        }
+
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-lg);
+            transition: color 0.3s ease;
+        }
+
+        .back-nav:hover {
+            color: var(--fg);
+        }
+
+        .article-footer {
+            margin-top: var(--space-xl);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border);
+        }
+
+        .article-footer .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .tag-item {
+            padding: var(--space-xs) var(--space-md);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--fg);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .tag-item:hover {
+            border-color: var(--fg);
+            background: #111;
+        }
+    </style>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <a href="/" class="back-link">← Back to Home</a>
+
+    
+    <div class="article-nav-fixed">
+        
+        
+        <a href="/2026/03/12/2026-03-12-ai-news-digest/" class="nav-item-fixed">
+            <span class="nav-label">Next →</span>
+        </a>
+        
+    </div>
+    
+
+    <div class="container">
+        <div class="article-wrapper">
+            <header class="article-header">
+                <h1 class="article-title">AI 技术日报 - 2026-03-13</h1>
+                <div class="article-meta">
+                    <span>
+                        <span class="t-label">Date:</span>
+                        2026-03-13
+                    </span>
+                    <span class="divider">|</span>
+                    
+                    <span>
+                        <span class="t-label">Category:</span>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF%E8%A7%82%E5%AF%9F/" class="category-link">
+                            技术观察
+                        </a>
+                    </span>
+                    <span class="divider">|</span>
+                    
+                    <span>
+                        <span class="t-label">Words:</span>
+                        1745
+                    </span>
+                </div>
+            </header>
+
+            <article class="article-body">
+                <h1 id="AI-技术日报-2026年3月13日"><a href="#AI-技术日报-2026年3月13日" class="headerlink" title="AI 技术日报 - 2026年3月13日"></a>AI 技术日报 - 2026年3月13日</h1><p>今日 AI 行业新闻摘要，涵盖大模型进展、Agent 技术、安全研究等前沿动态。</p>
+<hr>
+<h2 id="🔥-OpenAI-重大发布"><a href="#🔥-OpenAI-重大发布" class="headerlink" title="🔥 OpenAI 重大发布"></a>🔥 OpenAI 重大发布</h2><h3 id="GPT-5-4-震撼登场"><a href="#GPT-5-4-震撼登场" class="headerlink" title="GPT-5.4 震撼登场"></a>GPT-5.4 震撼登场</h3><p><strong>日期：</strong> 2026年3月5日<br><strong>类型：</strong> 产品发布</p>
+<p>OpenAI 正式发布 GPT-5.4，带来更强推理能力和多模态理解。这是继 GPT-5.3 之后的又一重大更新，标志着大语言模型进入新纪元。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://openai.com/index/introducing-gpt-5-4/">OpenAI 官网</a></p>
+</blockquote>
+<h3 id="Codex-Security-研究预览版上线"><a href="#Codex-Security-研究预览版上线" class="headerlink" title="Codex Security 研究预览版上线"></a>Codex Security 研究预览版上线</h3><p><strong>日期：</strong> 2026年3月6日<br><strong>类型：</strong> 产品发布</p>
+<p>专为安全研究人员设计的 Codex Security 版本发布预览版，提供代码安全分析和漏洞检测能力。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://openai.com/zh-Hans-CN/index/codex-security-now-in-research-preview/">OpenAI 官网</a></p>
+</blockquote>
+<h3 id="ChatGPT-新增数学与科学学习功能"><a href="#ChatGPT-新增数学与科学学习功能" class="headerlink" title="ChatGPT 新增数学与科学学习功能"></a>ChatGPT 新增数学与科学学习功能</h3><p><strong>日期：</strong> 2026年3月10日<br><strong>类型：</strong> 产品更新</p>
+<p>ChatGPT 推出全新的数学和科学学习模式，为教育场景提供更专业的辅导能力。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://openai.com/index/new-ways-to-learn-math-and-science-in-chatgpt/">OpenAI 官网</a></p>
+</blockquote>
+<hr>
+<h2 id="🤖-Agent-技术突破"><a href="#🤖-Agent-技术突破" class="headerlink" title="🤖 Agent 技术突破"></a>🤖 Agent 技术突破</h2><h3 id="AI-智能体抗提示注入设计"><a href="#AI-智能体抗提示注入设计" class="headerlink" title="AI 智能体抗提示注入设计"></a>AI 智能体抗提示注入设计</h3><p><strong>日期：</strong> 2026年3月11日<br><strong>类型：</strong> 安全研究</p>
+<p>OpenAI 发布研究，探讨如何优化 AI 智能体设计以提升对”提示注入”攻击的免疫力，这对 Agent 安全部署具有重要意义。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://openai.com/index/designing-agents-to-resist-prompt-injection/">OpenAI 官网</a></p>
+</blockquote>
+<h3 id="Responses-API-计算机环境集成"><a href="#Responses-API-计算机环境集成" class="headerlink" title="Responses API 计算机环境集成"></a>Responses API 计算机环境集成</h3><p><strong>日期：</strong> 2026年3月11日<br><strong>类型：</strong> 工程发布</p>
+<p>OpenAI 为 Responses API 添加计算机环境支持，让模型能够更好地执行 Agent 任务，实现从模型到智能体的转变。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://openai.com/index/equip-responses-api-computer-environment/">OpenAI 官网</a></p>
+</blockquote>
+<hr>
+<h2 id="🏢-Anthropic-动态"><a href="#🏢-Anthropic-动态" class="headerlink" title="🏢 Anthropic 动态"></a>🏢 Anthropic 动态</h2><h3 id="Claude-合作伙伴网络获-1-亿美元投资"><a href="#Claude-合作伙伴网络获-1-亿美元投资" class="headerlink" title="Claude 合作伙伴网络获 1 亿美元投资"></a>Claude 合作伙伴网络获 1 亿美元投资</h3><p><strong>日期：</strong> 2026年3月12日<br><strong>类型：</strong> 商业公告</p>
+<p>Anthropic 宣布向 Claude Partner Network 投资 1 亿美元，加速企业 AI 生态建设。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://www.anthropic.com/news/claude-partner-network">Anthropic 官网</a></p>
+</blockquote>
+<h3 id="Anthropic-Institute-正式成立"><a href="#Anthropic-Institute-正式成立" class="headerlink" title="Anthropic Institute 正式成立"></a>Anthropic Institute 正式成立</h3><p><strong>日期：</strong> 2026年3月11日<br><strong>类型：</strong> 组织公告</p>
+<p>Anthropic 成立研究院，致力于 AI 安全研究和社会影响评估。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://www.anthropic.com/news/the-anthropic-institute">Anthropic 官网</a></p>
+</blockquote>
+<h3 id="悉尼成为亚太第四办公室"><a href="#悉尼成为亚太第四办公室" class="headerlink" title="悉尼成为亚太第四办公室"></a>悉尼成为亚太第四办公室</h3><p><strong>日期：</strong> 2026年3月10日<br><strong>类型：</strong> 公司公告</p>
+<p>Anthropic 宣布悉尼将成为其亚太地区第四个办公室，显示对亚太市场的重视。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://www.anthropic.com/news/sydney-fourth-office-asia-pacific">Anthropic 官网</a></p>
+</blockquote>
+<h3 id="与-Mozilla-合作提升-Firefox-安全性"><a href="#与-Mozilla-合作提升-Firefox-安全性" class="headerlink" title="与 Mozilla 合作提升 Firefox 安全性"></a>与 Mozilla 合作提升 Firefox 安全性</h3><p><strong>日期：</strong> 2026年3月6日<br><strong>类型：</strong> 技术合作</p>
+<p>Anthropic 与 Mozilla 达成合作，利用 AI 技术提升 Firefox 浏览器的安全性。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://www.anthropic.com/news/mozilla-firefox-security">Anthropic 官网</a></p>
+</blockquote>
+<hr>
+<h2 id="📚-研究前沿"><a href="#📚-研究前沿" class="headerlink" title="📚 研究前沿"></a>📚 研究前沿</h2><h3 id="大语言模型指令层级结构研究"><a href="#大语言模型指令层级结构研究" class="headerlink" title="大语言模型指令层级结构研究"></a>大语言模型指令层级结构研究</h3><p><strong>日期：</strong> 2026年3月10日<br><strong>类型：</strong> 学术研究</p>
+<p>OpenAI 发布关于提升前沿大语言模型指令层级结构的研究，探索模型如何更好地理解和执行复杂指令。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://openai.com/index/instruction-hierarchy-challenge/">OpenAI 官网</a></p>
+</blockquote>
+<h3 id="推理模型思维链可控性研究"><a href="#推理模型思维链可控性研究" class="headerlink" title="推理模型思维链可控性研究"></a>推理模型思维链可控性研究</h3><p><strong>日期：</strong> 2026年3月5日<br><strong>类型：</strong> 学术研究</p>
+<p>研究揭示推理模型的思维链（Chain of Thought）难以被完全掌控，但这反而有助于模型产生更真实的推理过程。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://openai.com/zh-Hans-CN/index/reasoning-models-chain-of-thought-controllability/">OpenAI 官网</a></p>
+</blockquote>
+<hr>
+<h2 id="💼-商业动态"><a href="#💼-商业动态" class="headerlink" title="💼 商业动态"></a>💼 商业动态</h2><h3 id="OpenAI-收购-Promptfoo"><a href="#OpenAI-收购-Promptfoo" class="headerlink" title="OpenAI 收购 Promptfoo"></a>OpenAI 收购 Promptfoo</h3><p><strong>日期：</strong> 2026年3月9日<br><strong>类型：</strong> 收购公告</p>
+<p>OpenAI 宣布收购 Promptfoo，这是一家专注于 AI 提示工程和测试工具的初创公司，此举将增强 OpenAI 在提示工程领域的能力。</p>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://openai.com/zh-Hans-CN/index/openai-to-acquire-promptfoo/">OpenAI 官网</a></p>
+</blockquote>
+<hr>
+<h2 id="📊-今日总结"><a href="#📊-今日总结" class="headerlink" title="📊 今日总结"></a>📊 今日总结</h2><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>主要动态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>大模型</strong></td>
+<td>GPT-5.4 发布、Claude Sonnet 4.6 发布</td>
+</tr>
+<tr>
+<td><strong>Agent</strong></td>
+<td>Responses API 计算机环境、抗提示注入设计</td>
+</tr>
+<tr>
+<td><strong>安全</strong></td>
+<td>Codex Security 预览版、Firefox 安全合作</td>
+</tr>
+<tr>
+<td><strong>商业</strong></td>
+<td>Claude Partner Network 投资、OpenAI 收购 Promptfoo</td>
+</tr>
+<tr>
+<td><strong>研究</strong></td>
+<td>指令层级结构、思维链可控性</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>本日报由 AI 助手自动抓取整理，数据来源：Anthropic、OpenAI 官方新闻</em></p>
+<p><em>发布时间：2026年3月13日 10:00 (UTC+8)</em></p>
+
+            </article>
+
+            <footer class="article-footer">
+                
+                <div class="tags">
+                    
+                    <a href="/tags/AI/" class="tag-item">#AI</a>
+                    
+                    <a href="/tags/%E6%8A%80%E6%9C%AF%E6%96%B0%E9%97%BB/" class="tag-item">#技术新闻</a>
+                    
+                    <a href="/tags/%E6%97%A5%E6%8A%A5/" class="tag-item">#日报</a>
+                    
+                </div>
+                
+            </footer>
+        </div>
+
+        <footer>
+            <div class="footer-bottom" style="margin-top: var(--space-xl);">
+                <span class="t-label">© 2026 Arch_jing. ALL RIGHTS RESERVED.</span>
+                <span class="t-label">THEME: KKG v1.0.0</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

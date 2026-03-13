@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent 与传统 AI 的本质区别 - Arch_jing&#39;s Blog</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@100;300;400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <style>
+        .back-link {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            z-index: 100;
+            cursor: pointer;
+            padding: 6px 12px;
+            background: rgba(2, 2, 2, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .back-link:hover {
+            color: var(--fg);
+            border-color: var(--border-hover);
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .article-nav-fixed {
+            position: fixed;
+            top: 60px;
+            left: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .nav-item-fixed {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 6px 12px;
+            background: rgba(2, 2, 2, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            max-width: 200px;
+        }
+
+        .nav-item-fixed:hover {
+            color: var(--fg);
+            border-color: var(--border-hover);
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .nav-item-fixed .nav-label {
+            white-space: nowrap;
+        }
+
+        .article-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-md);
+            padding-top: 100px;
+        }
+
+        .article-header {
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .article-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--fg);
+            margin-bottom: var(--space-md);
+        }
+
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .article-meta .divider {
+            color: var(--border);
+        }
+
+        .tag-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .tag-link:hover {
+            color: var(--fg);
+        }
+
+        .category-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .category-link:hover {
+            color: var(--fg);
+        }
+
+        .article-body {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--accent);
+        }
+
+        .article-body h2 {
+            font-size: 1.8rem;
+            margin: var(--space-lg) 0 var(--space-md);
+            color: var(--fg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .article-body h3 {
+            font-size: 1.4rem;
+            margin: var(--space-md) 0;
+            color: var(--fg);
+        }
+
+        .article-body p {
+            margin-bottom: var(--space-md);
+        }
+
+        .article-body code {
+            background: #111;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--fg);
+        }
+
+        .article-body pre {
+            background: #0a0a0a;
+            border: 1px solid var(--border);
+            padding: var(--space-md);
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+        }
+
+        .article-body pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        .article-body a {
+            color: var(--fg);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s ease;
+        }
+
+        .article-body a:hover {
+            border-color: var(--fg);
+        }
+
+        .article-body blockquote {
+            border-left: 2px solid var(--muted);
+            padding-left: var(--space-md);
+            margin: var(--space-md) 0;
+            color: var(--muted);
+            font-style: italic;
+            background: #0a0a0a;
+            padding: var(--space-md);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin: var(--space-md) 0;
+            padding-left: var(--space-lg);
+        }
+
+        .article-body li {
+            margin-bottom: var(--space-xs);
+        }
+
+        .article-body img {
+            max-width: 100%;
+            margin: var(--space-md) 0;
+            border: 1px solid var(--border);
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .article-body img:hover {
+            opacity: 1;
+        }
+
+        .article-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+        }
+
+        .article-body th,
+        .article-body td {
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .article-body th {
+            color: var(--fg);
+            font-weight: 400;
+            background: #0a0a0a;
+        }
+
+        .article-body hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: var(--space-xl) 0;
+        }
+
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-lg);
+            transition: color 0.3s ease;
+        }
+
+        .back-nav:hover {
+            color: var(--fg);
+        }
+
+        .article-footer {
+            margin-top: var(--space-xl);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border);
+        }
+
+        .article-footer .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .tag-item {
+            padding: var(--space-xs) var(--space-md);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--fg);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .tag-item:hover {
+            border-color: var(--fg);
+            background: #111;
+        }
+    </style>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <a href="/" class="back-link">← Back to Home</a>
+
+    
+    <div class="article-nav-fixed">
+        
+        <a href="/2026/03/07/2026-03-07-ai-news-digest/" class="nav-item-fixed">
+            <span class="nav-label">← Previous</span>
+        </a>
+        
+        
+        <a href="/2026/02/25/2026-02-25-ai-tech-trends-2026/" class="nav-item-fixed">
+            <span class="nav-label">Next →</span>
+        </a>
+        
+    </div>
+    
+
+    <div class="container">
+        <div class="article-wrapper">
+            <header class="article-header">
+                <h1 class="article-title">AI Agent 与传统 AI 的本质区别</h1>
+                <div class="article-meta">
+                    <span>
+                        <span class="t-label">Date:</span>
+                        2026-03-06
+                    </span>
+                    <span class="divider">|</span>
+                    
+                    <span>
+                        <span class="t-label">Category:</span>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF/" class="category-link">
+                            技术
+                        </a>
+                    </span>
+                    <span class="divider">|</span>
+                    
+                    <span>
+                        <span class="t-label">Words:</span>
+                        2104
+                    </span>
+                </div>
+            </header>
+
+            <article class="article-body">
+                <blockquote>
+<p>本文基于 Anthropic 官方研究文章《Building effective agents》及行业实践整理而成。</p>
+</blockquote>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>“Agent”这个词在 AI 领域被广泛使用，但很多人对它理解模糊。有些人认为 Agent 是完全自主、能独立运行完成复杂任务的系统；另一些人则认为它只是遵循预定义流程的自动化程序。</p>
+<p>在本文中，我将深入探讨 <strong>AI Agent 与传统 AI（工作流）的本质区别</strong>，以及何时应该使用哪种方案。</p>
+<h2 id="核心定义：工作流-vs-Agent"><a href="#核心定义：工作流-vs-Agent" class="headerlink" title="核心定义：工作流 vs Agent"></a>核心定义：工作流 vs Agent</h2><p>Anthropic 在研究中提出了一个重要的架构区分：</p>
+<h3 id="🔄-工作流（Workflows）"><a href="#🔄-工作流（Workflows）" class="headerlink" title="🔄 工作流（Workflows）"></a>🔄 工作流（Workflows）</h3><blockquote>
+<p><strong>工作流是通过预定义代码路径编排 LLM 和工具的系统。</strong></p>
+</blockquote>
+<p>特点：</p>
+<ul>
+<li>任务流程是预先设计好的</li>
+<li>每一步执行什么操作由代码决定</li>
+<li>适合定义清晰、可预测的任务</li>
+<li>优势：可预测性、一致性、易调试</li>
+</ul>
+<h3 id="🤖-Agent（智能体）"><a href="#🤖-Agent（智能体）" class="headerlink" title="🤖 Agent（智能体）"></a>🤖 Agent（智能体）</h3><blockquote>
+<p><strong>Agent 是 LLM 动态自主决定流程和工具使用的系统，自己掌控如何完成任务。</strong></p>
+</blockquote>
+<p>特点：</p>
+<ul>
+<li>LLM 自主决定调用哪些工具、以什么顺序</li>
+<li>根据环境反馈动态调整策略</li>
+<li>适合开放性、需要灵活决策的任务</li>
+<li>优势：灵活性、可扩展、能处理未知情况</li>
+</ul>
+<h2 id="关键区别对比"><a href="#关键区别对比" class="headerlink" title="关键区别对比"></a>关键区别对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>传统 AI&#x2F;工作流</th>
+<th>AI Agent</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>决策权</strong></td>
+<td>代码决定流程</td>
+<td>LLM 自主决策</td>
+</tr>
+<tr>
+<td><strong>可预测性</strong></td>
+<td>高（固定路径）</td>
+<td>中低（动态路径）</td>
+</tr>
+<tr>
+<td><strong>灵活性</strong></td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>定义清晰的任务</td>
+<td>开放性任务</td>
+</tr>
+<tr>
+<td><strong>调试难度</strong></td>
+<td>容易</td>
+<td>较难</td>
+</tr>
+<tr>
+<td><strong>成本&#x2F;延迟</strong></td>
+<td>较低</td>
+<td>较高</td>
+</tr>
+</tbody></table>
+<h2 id="何时使用-Agent？"><a href="#何时使用-Agent？" class="headerlink" title="何时使用 Agent？"></a>何时使用 Agent？</h2><p>Anthropic 的建议是：<strong>从简单开始，只在必要时增加复杂度</strong>。</p>
+<h3 id="✅-适合使用-Agent-的场景"><a href="#✅-适合使用-Agent-的场景" class="headerlink" title="✅ 适合使用 Agent 的场景"></a>✅ 适合使用 Agent 的场景</h3><ol>
+<li><strong>开放式问题</strong> - 无法预先确定需要多少步骤</li>
+<li><strong>需要多轮迭代</strong> - 根据反馈持续调整策略</li>
+<li><strong>工具使用复杂</strong> - 需要动态选择调用哪些 API</li>
+<li><strong>环境不确定性高</strong> - 需要根据实时反馈做决策</li>
+</ol>
+<h3 id="❌-不建议使用-Agent-的场景"><a href="#❌-不建议使用-Agent-的场景" class="headerlink" title="❌ 不建议使用 Agent 的场景"></a>❌ 不建议使用 Agent 的场景</h3><ol>
+<li><strong>简单任务</strong> - 单次 LLM 调用就能解决</li>
+<li><strong>流程固定</strong> - 每一步都很明确，不需要动态决策</li>
+<li><strong>对延迟敏感</strong> - Agent 多轮迭代会增加响应时间</li>
+<li><strong>需要严格可控</strong> - 工作流更容易保证一致性</li>
+</ol>
+<h2 id="常见的工作流模式"><a href="#常见的工作流模式" class="headerlink" title="常见的工作流模式"></a>常见的工作流模式</h2><p>在决定使用 Agent 之前，可以先考虑这些工作流模式：</p>
+<h3 id="1-提示链（Prompt-Chaining）"><a href="#1-提示链（Prompt-Chaining）" class="headerlink" title="1. 提示链（Prompt Chaining）"></a>1. 提示链（Prompt Chaining）</h3><p>将任务分解为多个步骤，每一步处理上一步的输出。</p>
+<p><code>任务 → LLM → 检查 → LLM → 检查 → 结果</code></p>
+<p><strong>适用场景：</strong> 文档生成（先写大纲→检查→写正文）</p>
+<h3 id="2-路由（Routing）"><a href="#2-路由（Routing）" class="headerlink" title="2. 路由（Routing）"></a>2. 路由（Routing）</h3><p>根据输入类型分类，导向不同的处理流程。</p>
+<p><code>输入 → 分类器 → 专业流程 A/B/C → 结果</code></p>
+<p><strong>适用场景：</strong> 客服系统（咨询&#x2F;退款&#x2F;技术支持分流）</p>
+<h3 id="3-并行化（Parallelization）"><a href="#3-并行化（Parallelization）" class="headerlink" title="3. 并行化（Parallelization）"></a>3. 并行化（Parallelization）</h3><p>多个 LLM 同时处理任务的不同部分。</p>
+<p><code>        → LLM 1 → 输入    → LLM 2 → 聚合 → 结果         → LLM 3 →</code></p>
+<p><strong>适用场景：</strong> 代码审查、内容安全审核</p>
+<h3 id="4-评估-优化（Evaluator-Optimizer）"><a href="#4-评估-优化（Evaluator-Optimizer）" class="headerlink" title="4. 评估 - 优化（Evaluator-Optimizer）"></a>4. 评估 - 优化（Evaluator-Optimizer）</h3><p>一个 LLM 生成，另一个 LLM 评估并提供反馈，循环迭代。</p>
+<p><code>生成 → 评估 → 反馈 → 再生成 → ...</code></p>
+<p><strong>适用场景：</strong> 文学翻译、复杂搜索任务</p>
+<h2 id="Agent-的实现架构"><a href="#Agent-的实现架构" class="headerlink" title="Agent 的实现架构"></a>Agent 的实现架构</h2><p>一个典型的自主 Agent 架构如下：</p>
+<p><code>用户指令     ↓ [LLM + 工具集 + 记忆]     ↓ 执行动作 → 获取环境反馈     ↓ 评估进展 → 继续/暂停/请求帮助     ↓ 任务完成或达到停止条件</code></p>
+<p>关键点：</p>
+<ul>
+<li><strong>工具设计</strong> 至关重要 - 需要清晰的文档和接口</li>
+<li><strong>环境反馈</strong> 是核心 - Agent 需要知道每一步的结果</li>
+<li><strong>停止条件</strong> 必须明确 - 防止无限循环</li>
+</ul>
+<h2 id="实践建议"><a href="#实践建议" class="headerlink" title="实践建议"></a>实践建议</h2><h3 id="1-从简单开始"><a href="#1-从简单开始" class="headerlink" title="1. 从简单开始"></a>1. 从简单开始</h3><p>先用单次 LLM 调用 + RAG 解决问题，不行再加复杂度。</p>
+<h3 id="2-理解底层原理"><a href="#2-理解底层原理" class="headerlink" title="2. 理解底层原理"></a>2. 理解底层原理</h3><p>如果使用框架（如 LangChain、AutoGen），要明白底层发生了什么。</p>
+<h3 id="3-重视工具设计"><a href="#3-重视工具设计" class="headerlink" title="3. 重视工具设计"></a>3. 重视工具设计</h3><p>Anthropic 在 SWE-bench 项目中，花在优化工具上的时间比优化提示词还多。</p>
+<h3 id="4-充分测试"><a href="#4-充分测试" class="headerlink" title="4. 充分测试"></a>4. 充分测试</h3><p>Agent 可能在测试时表现良好，但在生产环境出现意外行为。</p>
+<h3 id="5-保持透明"><a href="#5-保持透明" class="headerlink" title="5. 保持透明"></a>5. 保持透明</h3><p>让 Agent 展示其规划和决策过程，便于调试和建立信任。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>AI Agent 不是万能药，而是工具箱中的一种工具。<strong>成功的 AI 系统不在于构建最复杂的架构，而在于构建最适合需求的系统。</strong></p>
+<ul>
+<li>对于定义清晰的任务 → 使用工作流</li>
+<li>对于开放性、需要灵活性的任务 → 使用 Agent</li>
+<li>始终遵循：简单优先，按需增加复杂度</li>
+</ul>
+<p>记住 Anthropic 的三原则：</p>
+<ol>
+<li><strong>保持简洁</strong> - Agent 设计不要过度复杂</li>
+<li><strong>保持透明</strong> - 展示规划和决策步骤</li>
+<li><strong>重视工具</strong> - 精心设计和文档化工具接口</li>
+</ol>
+<hr>
+<p><strong>参考资料：</strong></p>
+<ul>
+<li>Anthropic. “Building effective agents” (Dec 2024)</li>
+<li>Model Context Protocol (MCP) 官方文档</li>
+<li>Claude Agent SDK 文档</li>
+</ul>
+
+            </article>
+
+            <footer class="article-footer">
+                
+                <div class="tags">
+                    
+                    <a href="/tags/AI/" class="tag-item">#AI</a>
+                    
+                    <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" class="tag-item">#人工智能</a>
+                    
+                    <a href="/tags/Agent/" class="tag-item">#Agent</a>
+                    
+                    <a href="/tags/%E6%8A%80%E6%9C%AF%E6%80%9D%E8%80%83/" class="tag-item">#技术思考</a>
+                    
+                </div>
+                
+            </footer>
+        </div>
+
+        <footer>
+            <div class="footer-bottom" style="margin-top: var(--space-xl);">
+                <span class="t-label">© 2026 Arch_jing. ALL RIGHTS RESERVED.</span>
+                <span class="t-label">THEME: KKG v1.0.0</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
