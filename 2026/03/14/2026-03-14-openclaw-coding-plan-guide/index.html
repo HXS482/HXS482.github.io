@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿里云 Coding Plan + OpenClaw 配置指南 - Arch_jing&#39;s Blog</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@100;300;400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <style>
+        .back-link {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            z-index: 100;
+            cursor: pointer;
+            padding: 6px 12px;
+            background: rgba(2, 2, 2, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .back-link:hover {
+            color: var(--fg);
+            border-color: var(--border-hover);
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .article-nav-fixed {
+            position: fixed;
+            top: 60px;
+            left: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .nav-item-fixed {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 6px 12px;
+            background: rgba(2, 2, 2, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            max-width: 200px;
+        }
+
+        .nav-item-fixed:hover {
+            color: var(--fg);
+            border-color: var(--border-hover);
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .nav-item-fixed .nav-label {
+            white-space: nowrap;
+        }
+
+        .article-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-md);
+            padding-top: 100px;
+        }
+
+        .article-header {
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .article-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--fg);
+            margin-bottom: var(--space-md);
+        }
+
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .article-meta .divider {
+            color: var(--border);
+        }
+
+        .tag-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .tag-link:hover {
+            color: var(--fg);
+        }
+
+        .category-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .category-link:hover {
+            color: var(--fg);
+        }
+
+        .article-body {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--accent);
+        }
+
+        .article-body h2 {
+            font-size: 1.8rem;
+            margin: var(--space-lg) 0 var(--space-md);
+            color: var(--fg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .article-body h3 {
+            font-size: 1.4rem;
+            margin: var(--space-md) 0;
+            color: var(--fg);
+        }
+
+        .article-body p {
+            margin-bottom: var(--space-md);
+        }
+
+        .article-body code {
+            background: #111;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--fg);
+        }
+
+        .article-body pre {
+            background: #0a0a0a;
+            border: 1px solid var(--border);
+            padding: var(--space-md);
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+        }
+
+        .article-body pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        .article-body a {
+            color: var(--fg);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s ease;
+        }
+
+        .article-body a:hover {
+            border-color: var(--fg);
+        }
+
+        .article-body blockquote {
+            border-left: 2px solid var(--muted);
+            padding-left: var(--space-md);
+            margin: var(--space-md) 0;
+            color: var(--muted);
+            font-style: italic;
+            background: #0a0a0a;
+            padding: var(--space-md);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin: var(--space-md) 0;
+            padding-left: var(--space-lg);
+        }
+
+        .article-body li {
+            margin-bottom: var(--space-xs);
+        }
+
+        .article-body img {
+            max-width: 100%;
+            margin: var(--space-md) 0;
+            border: 1px solid var(--border);
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .article-body img:hover {
+            opacity: 1;
+        }
+
+        .article-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+        }
+
+        .article-body th,
+        .article-body td {
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .article-body th {
+            color: var(--fg);
+            font-weight: 400;
+            background: #0a0a0a;
+        }
+
+        .article-body hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: var(--space-xl) 0;
+        }
+
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-lg);
+            transition: color 0.3s ease;
+        }
+
+        .back-nav:hover {
+            color: var(--fg);
+        }
+
+        .article-footer {
+            margin-top: var(--space-xl);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border);
+        }
+
+        .article-footer .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .tag-item {
+            padding: var(--space-xs) var(--space-md);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--fg);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .tag-item:hover {
+            border-color: var(--fg);
+            background: #111;
+        }
+    </style>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <a href="/" class="back-link">← Back to Home</a>
+
+    
+    <div class="article-nav-fixed">
+        
+        
+        <a href="/2026/03/14/2026-03-14-ai-news-digest/" class="nav-item-fixed">
+            <span class="nav-label">Next →</span>
+        </a>
+        
+    </div>
+    
+
+    <div class="container">
+        <div class="article-wrapper">
+            <header class="article-header">
+                <h1 class="article-title">阿里云 Coding Plan + OpenClaw 配置指南</h1>
+                <div class="article-meta">
+                    <span>
+                        <span class="t-label">Date:</span>
+                        2026-03-14
+                    </span>
+                    <span class="divider">|</span>
+                    
+                    <span>
+                        <span class="t-label">Category:</span>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" class="category-link">
+                            技术教程
+                        </a>
+                    </span>
+                    <span class="divider">|</span>
+                    
+                    <span>
+                        <span class="t-label">Words:</span>
+                        9950
+                    </span>
+                </div>
+            </header>
+
+            <article class="article-body">
+                <p>OpenClaw（原名 Moltbot&#x2F;Clawdbot）是一个开源的个人 AI 助手平台，支持通过多种消息渠道与 AI 交互。本文介绍如何在 OpenClaw 中接入阿里云 Coding Plan。</p>
+<span id="more"></span>
+
+<h2 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h2><h3 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h3><ul>
+<li>安装或更新 <a target="_blank" rel="noopener" href="https://nodejs.org/en/download/">Node.js</a>（v22.0 或更高版本）</li>
+</ul>
+<h3 id="macOS-Linux"><a href="#macOS-Linux" class="headerlink" title="macOS&#x2F;Linux"></a>macOS&#x2F;Linux</h3><p>在终端执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://openclaw.ai/install.sh | bash</span><br></pre></td></tr></table></figure>
+
+<h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><p>在 PowerShell 中执行以下命令：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">iwr</span> <span class="literal">-useb</span> https://openclaw.ai/install.ps1 | <span class="built_in">iex</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><p>安装结束后会自动出现提示信息，请根据提示信息完成 OpenClaw 配置：</p>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>配置内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>I understand this is powerful and inherently risky. Continue?</td>
+<td>选择 “Yes”</td>
+</tr>
+<tr>
+<td>Onboarding mode</td>
+<td>选择 “QuickStart”</td>
+</tr>
+<tr>
+<td>Model&#x2F;auth provider</td>
+<td>选择 “Skip for now”，后续可以配置</td>
+</tr>
+<tr>
+<td>Filter models by provider</td>
+<td>选择 “All providers”</td>
+</tr>
+<tr>
+<td>Default model</td>
+<td>使用默认配置</td>
+</tr>
+<tr>
+<td>Select channel (QuickStart)</td>
+<td>选择 “Skip for now”，后续可以配置</td>
+</tr>
+<tr>
+<td>Configure skills now? (recommended)</td>
+<td>选择 “No”，后续可以配置</td>
+</tr>
+<tr>
+<td>Enable hooks?</td>
+<td>按空格键选中 “Skip for now”，按回车键进入下一步</td>
+</tr>
+<tr>
+<td>How do you want to hatch your bot?</td>
+<td>选择 “Hatch in TUI”</td>
+</tr>
+</tbody></table>
+<h2 id="Qwen-Code-引导安装"><a href="#Qwen-Code-引导安装" class="headerlink" title="Qwen Code 引导安装"></a>Qwen Code 引导安装</h2><p>OpenClaw 安装依赖于 Node.js 环境，手动安装可能会遇到环境配置问题。您可以使用 Qwen Code 来完成安装和验证。</p>
+<h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><ol>
+<li>安装并配置 <a target="_blank" rel="noopener" href="https://help.aliyun.com/zh/model-studio/qwen-code-coding-plan">Qwen Code</a></li>
+<li>在终端输入以下命令启动 Qwen Code：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qwen</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>在 Qwen Code 对话框中输入以下指令</li>
+</ol>
+<p><strong>macOS&#x2F;Linux：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">请帮我安装 OpenClaw，依次执行以下命令完成安装和初始配置：</span><br><span class="line">1. 前置条件：需要先安装 Node.js（v22.0 或更高版本），可通过 node --version 检查是否已安装。</span><br><span class="line">2. curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard</span><br><span class="line">3. openclaw gateway install</span><br><span class="line">4. openclaw onboard --non-interactive --accept-risk --flow quickstart --auth-choice skip --skip-channels --skip-skills</span><br></pre></td></tr></table></figure>
+
+<p><strong>Windows：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">请帮我安装 OpenClaw，依次执行以下命令完成安装和初始配置：</span><br><span class="line">1. 前置条件：需要先安装 Node.js（v22 或更高版本），可通过 node --version 检查是否已安装。</span><br><span class="line">2. 下载安装包：</span><br><span class="line">   mkdir D:\openclaw-install &amp;&amp; cd D:\openclaw-install</span><br><span class="line">   curl.exe -L -o openclaw.tgz https://registry.npmmirror.com/openclaw/-/openclaw-2026.3.11.tgz</span><br><span class="line">3. 解压并全局安装：</span><br><span class="line">   tar -zxf openclaw.tgz &amp;&amp; cd package &amp;&amp; npm install &amp;&amp; npm install -g .</span><br><span class="line">4. 验证安装并清理临时文件：</span><br><span class="line">   openclaw --version</span><br><span class="line">   cd D:\ &amp;&amp; rmdir /s /q D:\openclaw-install</span><br><span class="line">5. 安装 Gateway 服务：</span><br><span class="line">   openclaw gateway install</span><br><span class="line">6. 初始配置（跳过渠道和技能配置）：</span><br><span class="line">   openclaw onboard --non-interactive --accept-risk --flow quickstart --auth-choice skip --skip-channels --skip-skills</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>授权允许 Qwen Code 执行命令，直至完成安装</li>
+<li>输入 <code>/exit</code> 退出 Qwen Code</li>
+</ol>
+<h2 id="在-OpenClaw-中配置-Coding-Plan"><a href="#在-OpenClaw-中配置-Coding-Plan" class="headerlink" title="在 OpenClaw 中配置 Coding Plan"></a>在 OpenClaw 中配置 Coding Plan</h2><h3 id="方式一：通过-Web-UI-修改配置文件"><a href="#方式一：通过-Web-UI-修改配置文件" class="headerlink" title="方式一：通过 Web UI 修改配置文件"></a>方式一：通过 Web UI 修改配置文件</h3><ol>
+<li>在终端执行以下命令打开 Web UI：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw dashboard</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>在 Web UI 的左侧菜单栏中选择配置选项</p>
+</li>
+<li><p><strong>首次配置</strong>：复制以下内容到 Raw JSON 输入框，替换已有内容。<strong>已有配置</strong>：若需保留已有配置，请勿直接全量替换</p>
+</li>
+<li><p>将 <code>YOUR_API_KEY</code> 替换为 Coding Plan 专属 <a target="_blank" rel="noopener" href="https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan">API Key</a></p>
+</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;models&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;mode&quot;</span><span class="punctuation">:</span> <span class="string">&quot;merge&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;providers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;bailian&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;baseUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://coding.dashscope.aliyuncs.com/v1&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;apiKey&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YOUR_API_KEY&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;api&quot;</span><span class="punctuation">:</span> <span class="string">&quot;openai-completions&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;models&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen3.5-plus&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen3.5-plus&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;reasoning&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;text&quot;</span><span class="punctuation">,</span> <span class="string">&quot;image&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cost&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheRead&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheWrite&quot;</span><span class="punctuation">:</span> <span class="number">0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;contextWindow&quot;</span><span class="punctuation">:</span> <span class="number">1000000</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;maxTokens&quot;</span><span class="punctuation">:</span> <span class="number">65536</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;compat&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;thinkingFormat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen3-max-2026-01-23&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen3-max-2026-01-23&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;reasoning&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;text&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cost&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheRead&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheWrite&quot;</span><span class="punctuation">:</span> <span class="number">0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;contextWindow&quot;</span><span class="punctuation">:</span> <span class="number">262144</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;maxTokens&quot;</span><span class="punctuation">:</span> <span class="number">65536</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;compat&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;thinkingFormat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen3-coder-next&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen3-coder-next&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;reasoning&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;text&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cost&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheRead&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheWrite&quot;</span><span class="punctuation">:</span> <span class="number">0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;contextWindow&quot;</span><span class="punctuation">:</span> <span class="number">262144</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;maxTokens&quot;</span><span class="punctuation">:</span> <span class="number">65536</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen3-coder-plus&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen3-coder-plus&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;reasoning&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;text&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cost&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheRead&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheWrite&quot;</span><span class="punctuation">:</span> <span class="number">0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;contextWindow&quot;</span><span class="punctuation">:</span> <span class="number">1000000</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;maxTokens&quot;</span><span class="punctuation">:</span> <span class="number">65536</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;MiniMax-M2.5&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;MiniMax-M2.5&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;reasoning&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;text&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cost&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheRead&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheWrite&quot;</span><span class="punctuation">:</span> <span class="number">0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;contextWindow&quot;</span><span class="punctuation">:</span> <span class="number">196608</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;maxTokens&quot;</span><span class="punctuation">:</span> <span class="number">32768</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;glm-5&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;glm-5&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;reasoning&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;text&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cost&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheRead&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheWrite&quot;</span><span class="punctuation">:</span> <span class="number">0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;contextWindow&quot;</span><span class="punctuation">:</span> <span class="number">202752</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;maxTokens&quot;</span><span class="punctuation">:</span> <span class="number">16384</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;compat&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;thinkingFormat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;glm-4.7&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;glm-4.7&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;reasoning&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;text&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cost&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheRead&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheWrite&quot;</span><span class="punctuation">:</span> <span class="number">0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;contextWindow&quot;</span><span class="punctuation">:</span> <span class="number">202752</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;maxTokens&quot;</span><span class="punctuation">:</span> <span class="number">16384</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;compat&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;thinkingFormat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;kimi-k2.5&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;kimi-k2.5&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;reasoning&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;text&quot;</span><span class="punctuation">,</span> <span class="string">&quot;image&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cost&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheRead&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> <span class="attr">&quot;cacheWrite&quot;</span><span class="punctuation">:</span> <span class="number">0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;contextWindow&quot;</span><span class="punctuation">:</span> <span class="number">262144</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;maxTokens&quot;</span><span class="punctuation">:</span> <span class="number">32768</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;compat&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;thinkingFormat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;agents&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;defaults&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;primary&quot;</span><span class="punctuation">:</span> <span class="string">&quot;bailian/qwen3.5-plus&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;models&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;bailian/qwen3.5-plus&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;bailian/qwen3-max-2026-01-23&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;bailian/qwen3-coder-next&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;bailian/qwen3-coder-plus&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;bailian/MiniMax-M2.5&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;bailian/glm-5&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;bailian/glm-4.7&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;bailian/kimi-k2.5&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;gateway&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;mode&quot;</span><span class="punctuation">:</span> <span class="string">&quot;local&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>单击右上角 Save 保存，然后单击 Update 使配置生效</li>
+</ol>
+<h3 id="方式二：通过终端修改配置文件"><a href="#方式二：通过终端修改配置文件" class="headerlink" title="方式二：通过终端修改配置文件"></a>方式二：通过终端修改配置文件</h3><ol>
+<li>在终端执行以下命令打开配置文件：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano ~/.openclaw/openclaw.json</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>复制上述配置内容到配置文件（首次配置直接替换，已有配置请局部修改）</p>
+</li>
+<li><p>保存文件并退出，运行以下命令使配置生效：</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw gateway restart</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-OpenClaw"><a href="#使用-OpenClaw" class="headerlink" title="使用 OpenClaw"></a>使用 OpenClaw</h2><h3 id="Web-UI"><a href="#Web-UI" class="headerlink" title="Web UI"></a>Web UI</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw dashboard</span><br></pre></td></tr></table></figure>
+
+<p>在 Web UI 中进行对话。</p>
+<h3 id="TUI"><a href="#TUI" class="headerlink" title="TUI"></a>TUI</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw tui</span><br></pre></td></tr></table></figure>
+
+<p>进入 TUI 界面开始对话。</p>
+<h2 id="切换模型"><a href="#切换模型" class="headerlink" title="切换模型"></a>切换模型</h2><h3 id="当前会话切换（临时有效）"><a href="#当前会话切换（临时有效）" class="headerlink" title="当前会话切换（临时有效）"></a>当前会话切换（临时有效）</h3><p>在 TUI 界面中使用 <code>/model</code> 命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/model qwen3-coder-next</span><br></pre></td></tr></table></figure>
+
+<h3 id="切换默认模型（永久有效）"><a href="#切换默认模型（永久有效）" class="headerlink" title="切换默认模型（永久有效）"></a>切换默认模型（永久有效）</h3><p>修改配置文件中的 <code>agents.defaults.model.primary</code> 字段：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;agents&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;defaults&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;primary&quot;</span><span class="punctuation">:</span> <span class="string">&quot;bailian/qwen3.5-plus&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="接入钉钉机器人"><a href="#接入钉钉机器人" class="headerlink" title="接入钉钉机器人"></a>接入钉钉机器人</h2><h3 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h3><ul>
+<li>已安装 OpenClaw</li>
+<li>已在 OpenClaw 中配置 Coding Plan</li>
+</ul>
+<h3 id="步骤一：创建钉钉应用并获取凭证"><a href="#步骤一：创建钉钉应用并获取凭证" class="headerlink" title="步骤一：创建钉钉应用并获取凭证"></a>步骤一：创建钉钉应用并获取凭证</h3><ol>
+<li>登录 <a target="_blank" rel="noopener" href="https://open-dev.dingtalk.com/">钉钉开放平台</a>，选择有开发者权限的组织</li>
+<li>创建钉钉机器人应用</li>
+<li>在应用详情的添加应用能力页面，选择添加机器人</li>
+<li>配置机器人：开启机器人配置开关，消息接收模式采用默认的 Stream 模式</li>
+<li>获取 Client ID 和 Client Secret</li>
+<li>发布应用</li>
+</ol>
+<h3 id="步骤二：安装钉钉渠道插件"><a href="#步骤二：安装钉钉渠道插件" class="headerlink" title="步骤二：安装钉钉渠道插件"></a>步骤二：安装钉钉渠道插件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw plugins install @soimy/dingtalk</span><br></pre></td></tr></table></figure>
+
+<p>确认插件已加载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw plugins list</span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤三：配置钉钉渠道"><a href="#步骤三：配置钉钉渠道" class="headerlink" title="步骤三：配置钉钉渠道"></a>步骤三：配置钉钉渠道</h3><p>在 <code>~/.openclaw/openclaw.json</code> 中添加配置：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;channels&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;dingtalk&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;enabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;clientId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YOUR_DINGTALK_APPKEY&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;clientSecret&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YOUR_DINGTALK_APPSECRET&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;robotCode&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YOUR_DINGTALK_APPKEY&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;dmPolicy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;open&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;groupPolicy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;open&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;messageType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;markdown&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;allow&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;dingtalk&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;entries&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;dingtalk&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;enabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤四：测试"><a href="#步骤四：测试" class="headerlink" title="步骤四：测试"></a>步骤四：测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">openclaw gateway restart</span><br><span class="line">openclaw status</span><br></pre></td></tr></table></figure>
+
+<p>在 Channels 部分，DingTalk 应显示为 ON 且状态为 OK - configured。</p>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="如何查看已配置的模型？"><a href="#如何查看已配置的模型？" class="headerlink" title="如何查看已配置的模型？"></a>如何查看已配置的模型？</h3><p>在 TUI 界面输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/model</span><br></pre></td></tr></table></figure>
+
+<h3 id="为什么报错-“HTTP-401-Incorrect-API-key-provided-”？"><a href="#为什么报错-“HTTP-401-Incorrect-API-key-provided-”？" class="headerlink" title="为什么报错 “HTTP 401: Incorrect API key provided.”？"></a>为什么报错 “HTTP 401: Incorrect API key provided.”？</h3><p>可能原因：</p>
+<ul>
+<li>API Key 无效、过期、为空、格式错误，或与端点环境不匹配</li>
+<li>请检查 API Key 是否为 Coding Plan 套餐专属 Key</li>
+<li>OpenClaw 的历史配置缓存导致配置错误，请删除 <code>~/.openclaw/agents/main/agent/models.json</code> 文件中的 <code>providers.bailian</code> 配置项，并重启 OpenClaw</li>
+</ul>
+<h3 id="如何安全地添加-Coding-Plan-模型（防止原有配置丢失）？"><a href="#如何安全地添加-Coding-Plan-模型（防止原有配置丢失）？" class="headerlink" title="如何安全地添加 Coding Plan 模型（防止原有配置丢失）？"></a>如何安全地添加 Coding Plan 模型（防止原有配置丢失）？</h3><p>请勿直接全量覆盖，进行局部修改。可以通过以下方式：</p>
+<ol>
+<li>OpenClaw 可正常对话：直接在 OpenClaw 对话中输入配置指令</li>
+<li>OpenClaw 未配置模型或无法对话：使用 Qwen Code 完成配置合并</li>
+</ol>
+<hr>
+<p><strong>参考链接：</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://help.aliyun.com/zh/model-studio/openclaw-coding-plan">阿里云官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.openclaw.ai/">OpenClaw 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://clawhub.ai/">ClawHub 技能市场</a></li>
+</ul>
+
+            </article>
+
+            <footer class="article-footer">
+                
+                <div class="tags">
+                    
+                    <a href="/tags/AI/" class="tag-item">#AI</a>
+                    
+                    <a href="/tags/OpenClaw/" class="tag-item">#OpenClaw</a>
+                    
+                    <a href="/tags/%E6%95%99%E7%A8%8B/" class="tag-item">#教程</a>
+                    
+                    <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" class="tag-item">#阿里云</a>
+                    
+                    <a href="/tags/Coding-Plan/" class="tag-item">#Coding Plan</a>
+                    
+                </div>
+                
+            </footer>
+        </div>
+
+        <footer>
+            <div class="footer-bottom" style="margin-top: var(--space-xl);">
+                <span class="t-label">© 2026 Arch_jing. ALL RIGHTS RESERVED.</span>
+                <span class="t-label">THEME: KKG v1.0.0</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
