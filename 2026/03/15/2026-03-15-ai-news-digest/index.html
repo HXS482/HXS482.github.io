@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 技术日报 - 2026-03-15 - Arch_jing&#39;s Blog</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@100;300;400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <style>
+        .back-link {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            z-index: 100;
+            cursor: pointer;
+            padding: 6px 12px;
+            background: rgba(2, 2, 2, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .back-link:hover {
+            color: var(--fg);
+            border-color: var(--border-hover);
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .article-nav-fixed {
+            position: fixed;
+            top: 60px;
+            left: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .nav-item-fixed {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 6px 12px;
+            background: rgba(2, 2, 2, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            max-width: 200px;
+        }
+
+        .nav-item-fixed:hover {
+            color: var(--fg);
+            border-color: var(--border-hover);
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .nav-item-fixed .nav-label {
+            white-space: nowrap;
+        }
+
+        .article-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-md);
+            padding-top: 100px;
+        }
+
+        .article-header {
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .article-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--fg);
+            margin-bottom: var(--space-md);
+        }
+
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .article-meta .divider {
+            color: var(--border);
+        }
+
+        .tag-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .tag-link:hover {
+            color: var(--fg);
+        }
+
+        .category-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .category-link:hover {
+            color: var(--fg);
+        }
+
+        .article-body {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--accent);
+        }
+
+        .article-body h2 {
+            font-size: 1.8rem;
+            margin: var(--space-lg) 0 var(--space-md);
+            color: var(--fg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .article-body h3 {
+            font-size: 1.4rem;
+            margin: var(--space-md) 0;
+            color: var(--fg);
+        }
+
+        .article-body p {
+            margin-bottom: var(--space-md);
+        }
+
+        .article-body code {
+            background: #111;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--fg);
+        }
+
+        .article-body pre {
+            background: #0a0a0a;
+            border: 1px solid var(--border);
+            padding: var(--space-md);
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+        }
+
+        .article-body pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        .article-body a {
+            color: var(--fg);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s ease;
+        }
+
+        .article-body a:hover {
+            border-color: var(--fg);
+        }
+
+        .article-body blockquote {
+            border-left: 2px solid var(--muted);
+            padding-left: var(--space-md);
+            margin: var(--space-md) 0;
+            color: var(--muted);
+            font-style: italic;
+            background: #0a0a0a;
+            padding: var(--space-md);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin: var(--space-md) 0;
+            padding-left: var(--space-lg);
+        }
+
+        .article-body li {
+            margin-bottom: var(--space-xs);
+        }
+
+        .article-body img {
+            max-width: 100%;
+            margin: var(--space-md) 0;
+            border: 1px solid var(--border);
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .article-body img:hover {
+            opacity: 1;
+        }
+
+        .article-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+        }
+
+        .article-body th,
+        .article-body td {
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .article-body th {
+            color: var(--fg);
+            font-weight: 400;
+            background: #0a0a0a;
+        }
+
+        .article-body hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: var(--space-xl) 0;
+        }
+
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            text-decoration: none;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-lg);
+            transition: color 0.3s ease;
+        }
+
+        .back-nav:hover {
+            color: var(--fg);
+        }
+
+        .article-footer {
+            margin-top: var(--space-xl);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border);
+        }
+
+        .article-footer .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .tag-item {
+            padding: var(--space-xs) var(--space-md);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--fg);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .tag-item:hover {
+            border-color: var(--fg);
+            background: #111;
+        }
+    </style>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <a href="/" class="back-link">← Back to Home</a>
+
+    
+    <div class="article-nav-fixed">
+        
+        
+        <a href="/2026/03/14/2026-03-14-openclaw-coding-plan-guide/" class="nav-item-fixed">
+            <span class="nav-label">Next →</span>
+        </a>
+        
+    </div>
+    
+
+    <div class="container">
+        <div class="article-wrapper">
+            <header class="article-header">
+                <h1 class="article-title">AI 技术日报 - 2026-03-15</h1>
+                <div class="article-meta">
+                    <span>
+                        <span class="t-label">Date:</span>
+                        2026-03-15
+                    </span>
+                    <span class="divider">|</span>
+                    
+                    <span>
+                        <span class="t-label">Category:</span>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF%E8%A7%82%E5%AF%9F/" class="category-link">
+                            技术观察
+                        </a>
+                    </span>
+                    <span class="divider">|</span>
+                    
+                    <span>
+                        <span class="t-label">Words:</span>
+                        1656
+                    </span>
+                </div>
+            </header>
+
+            <article class="article-body">
+                <h1 id="AI-技术日报-2026年3月15日"><a href="#AI-技术日报-2026年3月15日" class="headerlink" title="AI 技术日报 - 2026年3月15日"></a>AI 技术日报 - 2026年3月15日</h1><p>今日 AI 行业新闻摘要，涵盖 Anthropic 和 OpenAI 最新动态。</p>
+<hr>
+<h2 id="Anthropic-动态"><a href="#Anthropic-动态" class="headerlink" title="Anthropic 动态"></a>Anthropic 动态</h2><h3 id="Claude-Partner-Network-获-1-亿美元投资"><a href="#Claude-Partner-Network-获-1-亿美元投资" class="headerlink" title="Claude Partner Network 获 1 亿美元投资"></a>Claude Partner Network 获 1 亿美元投资</h3><p><strong>日期：</strong> 2026年3月12日<br><strong>类别：</strong> 公告</p>
+<p>Anthropic 宣布向 Claude Partner Network 投资 1 亿美元，进一步加强生态系统建设，推动 Claude 在企业级应用中的落地。</p>
+<h3 id="Anthropic-Institute-正式成立"><a href="#Anthropic-Institute-正式成立" class="headerlink" title="Anthropic Institute 正式成立"></a>Anthropic Institute 正式成立</h3><p><strong>日期：</strong> 2026年3月11日<br><strong>类别：</strong> 公告</p>
+<p>Anthropic 成立研究机构 Anthropic Institute，致力于 AI 安全与对齐研究。</p>
+<h3 id="悉尼成为-Anthropic-亚太区第四个办公室"><a href="#悉尼成为-Anthropic-亚太区第四个办公室" class="headerlink" title="悉尼成为 Anthropic 亚太区第四个办公室"></a>悉尼成为 Anthropic 亚太区第四个办公室</h3><p><strong>日期：</strong> 2026年3月10日<br><strong>类别：</strong> 公告</p>
+<p>Anthropic 继续扩展全球布局，悉尼将成为其亚太区第四个办公室，进一步拓展澳洲市场。</p>
+<h3 id="与-Mozilla-合作提升-Firefox-安全性"><a href="#与-Mozilla-合作提升-Firefox-安全性" class="headerlink" title="与 Mozilla 合作提升 Firefox 安全性"></a>与 Mozilla 合作提升 Firefox 安全性</h3><p><strong>日期：</strong> 2026年3月6日<br><strong>类别：</strong> 政策</p>
+<p>Anthropic 与 Mozilla 达成合作，共同提升 Firefox 浏览器的安全性，展示了 AI 在网络安全领域的应用潜力。</p>
+<h3 id="Claude-Sonnet-4-6-发布"><a href="#Claude-Sonnet-4-6-发布" class="headerlink" title="Claude Sonnet 4.6 发布"></a>Claude Sonnet 4.6 发布</h3><p><strong>日期：</strong> 2026年2月17日<br><strong>类别：</strong> 产品</p>
+<p>Claude Sonnet 4.6 正式发布，在编程、智能体和专业工作规模化方面提供前沿性能。</p>
+<hr>
+<h2 id="OpenAI-动态"><a href="#OpenAI-动态" class="headerlink" title="OpenAI 动态"></a>OpenAI 动态</h2><h3 id="优化-AI-智能体设计：提升对「提示注入」的免疫力"><a href="#优化-AI-智能体设计：提升对「提示注入」的免疫力" class="headerlink" title="优化 AI 智能体设计：提升对「提示注入」的免疫力"></a>优化 AI 智能体设计：提升对「提示注入」的免疫力</h3><p><strong>日期：</strong> 2026年3月11日<br><strong>类别：</strong> 安全防护</p>
+<p>OpenAI 发布研究，探讨如何优化 AI 智能体设计以提升对提示注入攻击的防御能力，这对智能体安全具有重要意义。</p>
+<h3 id="Responses-API-集成计算机环境"><a href="#Responses-API-集成计算机环境" class="headerlink" title="Responses API 集成计算机环境"></a>Responses API 集成计算机环境</h3><p><strong>日期：</strong> 2026年3月11日<br><strong>类别：</strong> 工程</p>
+<p>OpenAI 为 Responses API 添加计算机环境能力，推动从模型到智能体的演进，让 AI 能够更好地与计算机系统交互。</p>
+<h3 id="提升前沿大语言模型的指令层级结构"><a href="#提升前沿大语言模型的指令层级结构" class="headerlink" title="提升前沿大语言模型的指令层级结构"></a>提升前沿大语言模型的指令层级结构</h3><p><strong>日期：</strong> 2026年3月10日<br><strong>类别：</strong> 研究</p>
+<p>OpenAI 发布关于指令层级结构的研究，探讨如何提升大语言模型理解和执行复杂指令的能力。</p>
+<h3 id="ChatGPT-数学与科学学习新功能"><a href="#ChatGPT-数学与科学学习新功能" class="headerlink" title="ChatGPT 数学与科学学习新功能"></a>ChatGPT 数学与科学学习新功能</h3><p><strong>日期：</strong> 2026年3月10日<br><strong>类别：</strong> 产品</p>
+<p>ChatGPT 推出数学和科学学习的新方式，进一步强化其在教育领域的应用价值。</p>
+<h3 id="OpenAI-将收购-Promptfoo"><a href="#OpenAI-将收购-Promptfoo" class="headerlink" title="OpenAI 将收购 Promptfoo"></a>OpenAI 将收购 Promptfoo</h3><p><strong>日期：</strong> 2026年3月9日<br><strong>类别：</strong> 公司公告</p>
+<p>OpenAI 宣布将收购 Promptfoo，这是一家专注于 AI 提示测试和评估的公司，此举将增强 OpenAI 在 AI 开发工具领域的能力。</p>
+<h3 id="Codex-Security-研究预览版上线"><a href="#Codex-Security-研究预览版上线" class="headerlink" title="Codex Security 研究预览版上线"></a>Codex Security 研究预览版上线</h3><p><strong>日期：</strong> 2026年3月6日<br><strong>类别：</strong> 产品</p>
+<p>Codex Security 研究预览版正式上线，为开发者提供 AI 辅助的代码安全分析能力。</p>
+<h3 id="GPT-5-4-正式发布"><a href="#GPT-5-4-正式发布" class="headerlink" title="GPT-5.4 正式发布"></a>GPT-5.4 正式发布</h3><p><strong>日期：</strong> 2026年3月5日<br><strong>类别：</strong> 产品</p>
+<p>OpenAI 发布 GPT-5.4，这是 GPT 系列的最新版本，带来性能和能力的全面提升。</p>
+<h3 id="GPT-5-4-Thinking-System-Card"><a href="#GPT-5-4-Thinking-System-Card" class="headerlink" title="GPT-5.4 Thinking System Card"></a>GPT-5.4 Thinking System Card</h3><p><strong>日期：</strong> 2026年3月5日<br><strong>类别：</strong> 刊发</p>
+<p>OpenAI 发布 GPT-5.4 Thinking System Card，详细介绍其思维链系统的工作原理和安全考量。</p>
+<hr>
+<h2 id="行业趋势观察"><a href="#行业趋势观察" class="headerlink" title="行业趋势观察"></a>行业趋势观察</h2><ol>
+<li><p><strong>智能体安全成为焦点</strong> - Anthropic 和 OpenAI 都在加强智能体安全研究，提示注入防御和计算机环境集成成为热点。</p>
+</li>
+<li><p><strong>企业生态建设加速</strong> - Anthropic 大力投资合作伙伴网络，OpenAI 收购 Promptfoo，都在构建更完善的企业服务生态。</p>
+</li>
+<li><p><strong>AI 编程能力持续提升</strong> - Claude Sonnet 4.6 和 Codex Security 都在强化 AI 在软件开发领域的应用。</p>
+</li>
+<li><p><strong>全球化布局</strong> - Anthropic 在亚太区持续扩张，AI 公司的全球竞争态势加剧。</p>
+</li>
+</ol>
+<hr>
+<p><em>本日报由 AI 自动抓取生成，仅供参考。</em></p>
+
+            </article>
+
+            <footer class="article-footer">
+                
+                <div class="tags">
+                    
+                    <a href="/tags/AI/" class="tag-item">#AI</a>
+                    
+                    <a href="/tags/%E6%8A%80%E6%9C%AF%E6%96%B0%E9%97%BB/" class="tag-item">#技术新闻</a>
+                    
+                    <a href="/tags/%E6%97%A5%E6%8A%A5/" class="tag-item">#日报</a>
+                    
+                </div>
+                
+            </footer>
+        </div>
+
+        <footer>
+            <div class="footer-bottom" style="margin-top: var(--space-xl);">
+                <span class="t-label">© 2026 Arch_jing. ALL RIGHTS RESERVED.</span>
+                <span class="t-label">THEME: KKG v1.0.0</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
