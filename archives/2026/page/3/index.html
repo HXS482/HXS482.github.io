@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>#Agent - Arch_jing&#39;s Blog</title>
+    <title>Archive - Arch_jing&#39;s Blog</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,101 +20,103 @@
             color: var(--fg);
         }
 
-        .page-wrapper {
+        .archive-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: var(--space-xl) 0;
-            min-height: 70vh;
         }
 
-        .back-nav {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-xs);
-            text-decoration: none;
-            color: var(--muted);
-            font-family: var(--font-mono);
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: var(--space-lg);
-            transition: color 0.3s ease;
-            cursor: pointer;
-        }
-
-        .back-nav:hover {
-            color: var(--fg);
-        }
-
-        .taxonomy-header {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            margin-bottom: var(--space-lg);
-            padding: var(--space-md);
-            border: 1px solid var(--border);
-            background: #050505;
-        }
-
-        .taxonomy-icon {
-            width: 50px;
-            height: 50px;
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: var(--muted);
-            font-family: var(--font-mono);
-        }
-
-        .taxonomy-info .taxonomy-title {
-            color: var(--fg);
-            font-size: 1.5rem;
-            margin-bottom: var(--space-xs);
-        }
-
-        .taxonomy-info .taxonomy-count {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .posts-list {
+        .archive-list {
             margin-top: var(--space-lg);
         }
 
-        .post-item {
+        .archive-year {
+            margin-bottom: var(--space-xl);
+        }
+
+        .archive-year-title {
+            font-size: 1.5rem;
+            color: var(--fg);
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .archive-year-title .year-count {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        .archive-posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .archive-post-item {
             padding: var(--space-md);
             border: 1px solid var(--border);
             background: #050505;
-            margin-bottom: var(--space-sm);
             text-decoration: none;
             transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .post-item:hover {
+        .archive-post-item:hover {
             border-color: var(--border-hover);
             background: #0a0a0a;
         }
 
-        .post-item .post-title {
+        .archive-post-item .post-date {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: var(--space-xs);
+        }
+
+        .archive-post-item .post-title {
             color: var(--fg);
             font-size: 14px;
             font-weight: 400;
+            line-height: 1.4;
         }
 
-        .post-item .post-date {
+        .archive-nav {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-btn {
+            padding: var(--space-xs) var(--space-md);
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
             font-family: var(--font-mono);
             font-size: 10px;
-            color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--fg);
+            color: var(--fg);
+        }
+
+        .nav-btn.active {
+            border-color: var(--fg);
+            background: var(--fg);
+            color: var(--bg);
         }
     </style>
 <meta name="generator" content="Hexo 7.3.0"></head>
@@ -135,45 +137,33 @@
     </nav>
 
     <div class="container">
-        <div class="page-wrapper">
-            <a href="javascript:history.back()" class="back-nav">← Back</a>
-
-            <div class="taxonomy-header">
-                <div class="taxonomy-icon">
-                    A
+        <div class="archive-container">
+            <div class="page-header">
+                <div>
+                    <div class="t-label">Section_02</div>
+                    <h2 class="t-hero-sub" style="font-size: 2rem;">Master Archive</h2>
                 </div>
-                <div class="taxonomy-info">
-                    <h1 class="taxonomy-title">#Agent</h1>
-                    <span class="taxonomy-count">5 posts</span>
-                </div>
+                <div class="t-label">Total: 1 posts</div>
             </div>
 
-            <div class="posts-list">
+            <div class="archive-list">
                 
-                <a href="/2026/03/18/2026-03-18-agent-tech-digest/" class="post-item">
-                    <span class="post-title">Agent技术迎来爆发期：企业级平台密集发布，AI Agent基础设施加速演进</span>
-                    <span class="post-date">2026-03-18</span>
+                <div class="archive-year">
+                    <h3 class="archive-year-title">
+                        2026
+                        <span class="year-count">
+                            
+                            [1 items]
+                        </span>
+                    </h3>
+                    <div class="archive-posts">
+                
+                <a href="/2026/02/13/My-First-Hexo-Blog/" class="archive-post-item">
+                    <div class="post-date">02-13</div>
+                    <div class="post-title">My First Hexo Blog</div>
                 </a>
                 
-                <a href="/2026/03/17/2026-03-17-agent-tech-digest/" class="post-item">
-                    <span class="post-title">GPT-5.4震撼登场，Claude记忆系统引发革命，Agent技术进入黄金时代</span>
-                    <span class="post-date">2026-03-17</span>
-                </a>
-                
-                <a href="/2026/03/16/2026-03-16-agent-tech-digest/" class="post-item">
-                    <span class="post-title">Agent生态大爆发：从Claude Sonnet 4.6到开源超级代理框架</span>
-                    <span class="post-date">2026-03-16</span>
-                </a>
-                
-                <a href="/2026/03/15/2026-03-15-agent-tech-digest/" class="post-item">
-                    <span class="post-title">Agent技术大爆发：从安全防护到原生模型，智能体生态全面升级</span>
-                    <span class="post-date">2026-03-15</span>
-                </a>
-                
-                <a href="/2026/03/06/2026-03-06-ai-agent-vs-ai/" class="post-item">
-                    <span class="post-title">AI Agent 与传统 AI 的本质区别</span>
-                    <span class="post-date">2026-03-06</span>
-                </a>
+                </div></div>
                 
             </div>
         </div>
@@ -181,7 +171,7 @@
         <footer>
             <div class="footer-bottom" style="margin-top: var(--space-xl); padding-top: var(--space-sm); border-top: 1px solid var(--border);">
                 <span class="t-label">© 2026 Arch_jing. ALL RIGHTS RESERVED.</span>
-                <span class="t-label">THEME: KKG v1.0.0</span>
+                <span class="t-label">ARCHIVE SYSTEM v1.0.0</span>
             </div>
         </footer>
     </div>
@@ -189,8 +179,7 @@
     <script>
         setInterval(() => {
             const now = new Date();
-            const clock = document.getElementById('clock');
-            if (clock) clock.innerText = now.toISOString().substr(11, 8);
+            document.getElementById('clock').innerText = now.toISOString().substr(11, 8);
         }, 1000);
 
         const container = document.getElementById('canvas-container');

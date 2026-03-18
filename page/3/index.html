@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>#Agent - Arch_jing&#39;s Blog</title>
+    <title>Arch_jing&#39;s Blog</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,101 +20,97 @@
             color: var(--fg);
         }
 
-        .page-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: var(--space-xl) 0;
-            min-height: 70vh;
-        }
-
-        .back-nav {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-xs);
-            text-decoration: none;
-            color: var(--muted);
-            font-family: var(--font-mono);
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: var(--space-lg);
-            transition: color 0.3s ease;
-            cursor: pointer;
-        }
-
-        .back-nav:hover {
-            color: var(--fg);
-        }
-
-        .taxonomy-header {
+        /* 左侧入口容器 - 左上角导航栏下方 */
+        .side-entries {
+            position: fixed;
+            left: 16px;
+            top: 100px;
             display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            margin-bottom: var(--space-lg);
-            padding: var(--space-md);
-            border: 1px solid var(--border);
-            background: #050505;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 90;
         }
 
-        .taxonomy-icon {
-            width: 50px;
-            height: 50px;
+        /* 入口项基础样式 - 圆形容器带环形嵌套效果 */
+        .entry-item {
+            width: 36px;
+            height: 36px;
             border: 1px solid var(--border);
+            border-radius: 50%;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            color: var(--muted);
-            font-family: var(--font-mono);
+            background: rgba(2, 2, 2, 0.8);
+            backdrop-filter: blur(8px);
+            text-decoration: none;
+            padding: 2px;
         }
 
-        .taxonomy-info .taxonomy-title {
-            color: var(--fg);
-            font-size: 1.5rem;
-            margin-bottom: var(--space-xs);
+        /* OpenClaw 入口 - 圆形带悬浮动画 */
+        .entry-item.openclaw {
+            animation: openclaw-float 3s ease-in-out infinite;
         }
 
-        .taxonomy-info .taxonomy-count {
+        @keyframes openclaw-float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* 悬停效果 */
+        .entry-item:hover {
+            border-color: var(--border-hover);
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .entry-item.github:hover {
+            transform: scale(1.05);
+        }
+
+        .entry-item.openclaw:hover {
+            animation: none;
+            transform: scale(1.05);
+        }
+
+        .entry-item img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        /* 响应式：小屏幕隐藏 */
+        @media (max-width: 768px) {
+            .side-entries {
+                display: none;
+            }
+        }
+
+        .post-list-section {
+            padding-top: var(--space-lg);
+            padding-bottom: var(--space-xl);
+        }
+
+        .section-label {
             font-family: var(--font-mono);
             font-size: 10px;
-            color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 0.1em;
-        }
-
-        .posts-list {
-            margin-top: var(--space-lg);
-        }
-
-        .post-item {
-            padding: var(--space-md);
-            border: 1px solid var(--border);
-            background: #050505;
-            margin-bottom: var(--space-sm);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .post-item:hover {
-            border-color: var(--border-hover);
-            background: #0a0a0a;
-        }
-
-        .post-item .post-title {
-            color: var(--fg);
-            font-size: 14px;
-            font-weight: 400;
-        }
-
-        .post-item .post-date {
-            font-family: var(--font-mono);
-            font-size: 10px;
             color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            color: var(--fg);
         }
     </style>
 <meta name="generator" content="Hexo 7.3.0"></head>
@@ -134,54 +130,100 @@
         </div>
     </nav>
 
+    <!-- 左侧入口 -->
+    <div class="side-entries">
+        <!-- GitHub 入口 -->
+        <a href="https://github.com/HXS482" class="entry-item github" target="_blank" title="GitHub">
+            <img src="https://avatars.githubusercontent.com/HXS482" alt="GitHub">
+        </a>
+        <!-- OpenClaw 入口 -->
+        <a href="http://127.0.0.1:18789/chat?session=agent%3Amain%3Atelegram%3Adirect%3A1620807165" class="entry-item openclaw" target="_blank" title="OpenClaw">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.568c-6.33 0-9.495 5.275-9.495 9.495 0 4.22 3.165 8.44 6.33 9.494v2.11h2.11v-2.11s1.055.422 2.11 0v2.11h2.11v-2.11c3.165-1.055 6.33-5.274 6.33-9.494S18.33 2.568 12 2.568z' fill='url(%23lobe-icons-open-claw-fill-0)'/%3E%3Cpath d='M3.56 9.953C.396 8.898-.66 11.008.396 13.118c1.055 2.11 3.164 1.055 4.22-1.055.632-1.477 0-2.11-1.056-2.11z' fill='url(%23lobe-icons-open-claw-fill-1)'/%3E%3Cpath d='M20.44 9.953c3.164-1.055 4.22 1.055 3.164 3.165-1.055 2.11-3.164 1.055-4.22-1.055-.632-1.477 0-2.11 1.056-2.11z' fill='url(%23lobe-icons-open-claw-fill-2)'/%3E%3Cpath d='M5.507 1.875c.476-.285 1.036-.233 1.615.037.577.27 1.223.774 1.937 1.488a.316.316 0 01-.447.447c-.693-.693-1.279-1.138-1.757-1.361-.475-.222-.795-.205-1.022-.069a.317.317 0 01-.326-.542zM16.877 1.913c.58-.27 1.14-.323 1.616-.038a.317.317 0 01-.326.542c-.227-.136-.547-.153-1.022.069-.478.223-1.064.668-1.756 1.361a.316.316 0 11-.448-.447c.714-.714 1.36-1.218 1.936-1.487z' fill='%23FF4D4D'/%3E%3Cpath d='M8.835 9.109a1.266 1.266 0 100-2.532 1.266 1.266 0 000 2.532zM15.165 9.109a1.266 1.266 0 100-2.532 1.266 1.266 0 000 2.532z' fill='%23050810'/%3E%3Cpath d='M9.046 8.16a.527.527 0 100-1.056.527.527 0 000 1.055zM15.376 8.16a.527.527 0 100-1.055.527.527 0 000 1.054z' fill='%2300E5CC'/%3E%3Cdefs%3E%3ClinearGradient gradientUnits='userSpaceOnUse' id='lobe-icons-open-claw-fill-0' x1='-.659' x2='27.023' y1='.458' y2='22.855'%3E%3Cstop stop-color='%23FF4D4D'/%3E%3Cstop offset='1' stop-color='%23991B1B'/%3E%3C/linearGradient%3E%3ClinearGradient gradientUnits='userSpaceOnUse' id='lobe-icons-open-claw-fill-1' x1='0' x2='4.311' y1='9.672' y2='14.949'%3E%3Cstop stop-color='%23FF4D4D'/%3E%3Cstop offset='1' stop-color='%23991B1B'/%3E%3C/linearGradient%3E%3ClinearGradient gradientUnits='userSpaceOnUse' id='lobe-icons-open-claw-fill-2' x1='19.385' x2='24.399' y1='9.953' y2='14.462'%3E%3Cstop stop-color='%23FF4D4D'/%3E%3Cstop offset='1' stop-color='%23991B1B'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E" alt="OpenClaw">
+        </a>
+    </div>
+
     <div class="container">
-        <div class="page-wrapper">
-            <a href="javascript:history.back()" class="back-nav">← Back</a>
-
-            <div class="taxonomy-header">
-                <div class="taxonomy-icon">
-                    A
+        <section id="landing">
+            <div class="hero-data-corners">
+                <div class="data-block">
+                    <span class="t-label">Protocol</span>
+                    <span class="t-data">BLOG-CORE-V1</span>
+                    <span class="t-data">HEXO-ENGINE</span>
                 </div>
-                <div class="taxonomy-info">
-                    <h1 class="taxonomy-title">#Agent</h1>
-                    <span class="taxonomy-count">5 posts</span>
+                <div class="data-block text-right">
+                    <span class="t-label">Status</span>
+                    <span class="t-data">ONLINE</span>
+                    <span class="t-data text-right" id="clock">00:00:00</span>
                 </div>
             </div>
 
-            <div class="posts-list">
+            <div class="hero-title-wrapper">
+                <h2 class="t-hero-sub" style="margin-bottom: var(--space-md); font-size: clamp(1rem, 2vw, 1.5rem);">记录技术，分享生活</h2>
+                <h1 class="t-hero" style="font-size: clamp(1.5rem, 4vw, 3rem); letter-spacing: 0.05em;">Arch_jing&#39;s Blog</h1>
+            </div>
+
+            <div style="position:absolute; bottom: var(--space-xl); width: calc(100% - var(--space-md)*2);">
+                <div class="system-banner">
+                    <div class="sys-item">
+                        <span class="t-label sys-label">Mission</span>
+                        <span class="t-body">敬厚萍的个人技术博客</span>
+                    </div>
+                    <div class="sys-item">
+                        <span class="t-label">Posts: 21</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="posts" class="post-list-section">
+            <div class="page-header">
+                <div>
+                    <div class="section-label">Section_01</div>
+                    <h2 class="section-title">Latest Transmissions</h2>
+                </div>
+                <div class="t-label">Items: 1</div>
+            </div>
+
+            <div class="post-list">
                 
-                <a href="/2026/03/18/2026-03-18-agent-tech-digest/" class="post-item">
-                    <span class="post-title">Agent技术迎来爆发期：企业级平台密集发布，AI Agent基础设施加速演进</span>
-                    <span class="post-date">2026-03-18</span>
-                </a>
-                
-                <a href="/2026/03/17/2026-03-17-agent-tech-digest/" class="post-item">
-                    <span class="post-title">GPT-5.4震撼登场，Claude记忆系统引发革命，Agent技术进入黄金时代</span>
-                    <span class="post-date">2026-03-17</span>
-                </a>
-                
-                <a href="/2026/03/16/2026-03-16-agent-tech-digest/" class="post-item">
-                    <span class="post-title">Agent生态大爆发：从Claude Sonnet 4.6到开源超级代理框架</span>
-                    <span class="post-date">2026-03-16</span>
-                </a>
-                
-                <a href="/2026/03/15/2026-03-15-agent-tech-digest/" class="post-item">
-                    <span class="post-title">Agent技术大爆发：从安全防护到原生模型，智能体生态全面升级</span>
-                    <span class="post-date">2026-03-15</span>
-                </a>
-                
-                <a href="/2026/03/06/2026-03-06-ai-agent-vs-ai/" class="post-item">
-                    <span class="post-title">AI Agent 与传统 AI 的本质区别</span>
-                    <span class="post-date">2026-03-06</span>
+                <a href="/2026/02/13/My-First-Hexo-Blog/" style="text-decoration: none;">
+                    <div class="bracket-box post-card">
+                        <div class="bb-inner"></div>
+                        <h3 class="post-title">My First Hexo Blog</h3>
+                        <div class="post-meta">
+                            <div class="post-date">2026-02-13</div>
+                            
+                            
+                        </div>
+                    </div>
                 </a>
                 
             </div>
-        </div>
+        </section>
 
         <footer>
-            <div class="footer-bottom" style="margin-top: var(--space-xl); padding-top: var(--space-sm); border-top: 1px solid var(--border);">
+            <div class="footer-grid">
+                <div class="f-col" style="grid-column: span 2;">
+                    <h2 class="t-hero-sub" style="font-size: 1.5rem; margin-bottom:var(--space-sm);">Arch_jing&#39;s Blog</h2>
+                    <p class="t-body" style="font-size:12px;">敬厚萍的个人技术博客</p>
+                </div>
+                <div class="f-col">
+                    <span class="t-label">Navigation</span>
+                    <a href="/">Home</a>
+                    <a href="/archives">Archive</a>
+                    <a href="/categories">Categories</a>
+                    <a href="/tags">Tags</a>
+                </div>
+                <div class="f-col">
+                    <span class="t-label">System</span>
+                    <span class="t-data">Powered by Hexo</span>
+                    <span class="t-data">Theme: KKG</span>
+                    <span class="t-data">v1.0.0</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
                 <span class="t-label">© 2026 Arch_jing. ALL RIGHTS RESERVED.</span>
-                <span class="t-label">THEME: KKG v1.0.0</span>
+                <span class="t-label">SYSTEM V.1.0.0</span>
             </div>
         </footer>
     </div>
@@ -189,12 +231,12 @@
     <script>
         setInterval(() => {
             const now = new Date();
-            const clock = document.getElementById('clock');
-            if (clock) clock.innerText = now.toISOString().substr(11, 8);
+            document.getElementById('clock').innerText = now.toISOString().substr(11, 8);
         }, 1000);
 
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
+
         scene.fog = new THREE.Fog('#020202', 3, 10);
 
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
