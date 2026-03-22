@@ -1,6 +1,13 @@
 /**
- * AURA Background Animation
- * 基于 AURA SSO 设计的 Three.js 参数化背景动画
+ * AURA Background Animation - Optimized
+ * 基于 AURA SSO 设计的 Three.js 参数化背景动画（性能优化版）
+ *
+ * 优化项:
+ * - 帧率限制 (60fps -> 30fps)
+ * - 简化 Shader 计算
+ * - 鼠标移动节流
+ * - 移动端自动禁用
+ * - 页面不可见时暂停
  */
 
 (function() {
@@ -10,6 +17,14 @@
     const container = document.getElementById('webgl-container');
     if (!container) return;
 
+    // 移动端检测 - 移动端禁用动画
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) return;
+
+    // 性能检测 - 低性能设备禁用
+    const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
+    if (isLowEnd) return;
+
     // 场景
     const scene = new THREE.Scene();
 
@@ -17,21 +32,23 @@
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
     camera.position.z = 1;
 
-    // 渲染器
+    // 渲染器 - 优化配置
     const renderer = new THREE.WebGLRenderer({
-        antialias: true,
+        antialias: false,  // 关闭抗锯齿提升性能
         alpha: true,
-        powerPreference: 'high-performance'
+        powerPreference: 'low-power',  // 低功耗模式
+        preserveDrawingBuffer: false
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // 降低像素比提升性能
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
 
     // 几何体
     const geometry = new THREE.PlaneGeometry(2, 2);
 
-    // Vertex Shader
+    // Vertex Shader (保持不变)
     const vertexShader = `
         varying vec2 vUv;
         void main() {
@@ -40,7 +57,7 @@
         }
     `;
 
-    // Fragment Shader
+    // Fragment Shader - 简化版本
     const fragmentShader = `
         uniform float u_time;
         uniform vec2 u_resolution;
@@ -50,35 +67,25 @@
         uniform float u_isLightMode;
         varying vec2 vUv;
 
-        // Simple 2D Noise function
-        vec2 hash(vec2 p) {
-            p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
-            return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
-        }
-
-        float noise(vec2 p) {
-            const float K1 = 0.366025404;
-            const float K2 = 0.211324865;
-            vec2 i = floor(p + (p.x + p.y) * K1);
-            vec2 a = p - i + (i.x + i.y) * K2;
-            vec2 o = (a.x > a.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-            vec2 b = a - o + K2;
-            vec2 c = a - 1.0 + 2.0 * K2;
-            vec3 h = max(0.5 - vec3(dot(a, a), dot(b, b), dot(c, c)), 0.0);
-            vec3 n = h * h * h * h * vec3(
-                dot(a, hash(i + 0.0)),
-                dot(b, hash(i + o)),
-                dot(c, hash(i + 1.0))
+        // 简化的噪声函数 - 减少计算量
+        float simpleNoise(vec2 p) {
+            vec2 i = floor(p);
+            vec2 f = fract(p);
+            f = f * f * (3.0 - 2.0 * f);
+            float a = dot(i, vec2(127.1, 311.7));
+            float b = dot(i + 1.0, vec2(127.1, 311.7));
+            return mix(
+                fract(sin(a) * 43758.5453),
+                fract(sin(b) * 43758.5453),
+                f.x
             );
-            return dot(n, vec3(70.0));
         }
 
-        // Signed distance function for a sweeping arc/curve
-        float sdArc(vec2 p, vec2 center, float radius, float width, float warp) {
-            p.y += sin(p.x * 3.0 + u_time * 0.5) * warp;
-            p.x += noise(p * 2.0 + u_time * 0.2) * (warp * 0.5);
-            float d = length(p - center) - radius;
-            return abs(d) - width;
+        // 简化的距离场 - 移除噪声扰动
+        float sdArc(vec2 p, vec2 center, float radius, float width) {
+            // 简单的正弦波扰动，替代复杂的噪声
+            p.y += sin(p.x * 2.0 + u_time * 0.3) * 0.05;
+            return abs(length(p - center) - radius) - width;
         }
 
         void main() {
@@ -86,31 +93,35 @@
             vec2 st = uv;
             st.x *= u_resolution.x / u_resolution.y;
 
-            vec2 mouseOffset = (u_mouse - 0.5) * 0.1;
+            // 鼠标偏移减弱
+            vec2 mouseOffset = (u_mouse - 0.5) * 0.05;
             st += mouseOffset;
 
             vec2 center = vec2(0.2, 0.5);
 
-            float d1 = sdArc(st, center, 0.8, 0.01, 0.1);
-            float d2 = sdArc(st, center, 0.82, 0.04, 0.15);
+            // 简化的距离场调用
+            float d1 = sdArc(st, center, 0.8, 0.01);
+            float d2 = sdArc(st, center, 0.82, 0.04);
 
-            float coreGlow = exp(-d1 * 40.0);
-            float fringeGlow = exp(-d2 * 15.0);
+            // 简化的发光计算
+            float coreGlow = exp(-d1 * 30.0);
+            float fringeGlow = exp(-d2 * 12.0);
 
-            float wash = smoothstep(1.0, -0.2, st.x) * 0.3;
+            // 简化的背景渐变
+            float wash = smoothstep(1.0, -0.2, st.x) * 0.2;
 
             vec3 finalColor = vec3(0.0);
-
             finalColor += u_colorCore * coreGlow;
             finalColor += u_colorFringe * fringeGlow;
-            finalColor += u_colorFringe * wash * (sin(u_time) * 0.1 + 0.9);
+            finalColor += u_colorFringe * wash;
 
             float alpha = clamp(coreGlow + fringeGlow + wash, 0.0, 1.0);
 
-            finalColor = vec3(1.0) - exp(-finalColor * 2.0);
+            // 简化的色调映射
+            finalColor = finalColor / (1.0 + finalColor);
 
             if (u_isLightMode > 0.5) {
-                alpha = clamp((coreGlow * 1.5 + fringeGlow + wash * 0.5), 0.0, 0.6);
+                alpha = clamp((coreGlow * 1.2 + fringeGlow + wash * 0.4), 0.0, 0.5);
             }
 
             gl_FragColor = vec4(finalColor, alpha);
@@ -147,53 +158,78 @@
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    // 鼠标跟踪
+    // 鼠标跟踪 - 节流优化
     let targetMouse = new THREE.Vector2(0.5, 0.5);
+    let mouseThrottle = false;
+
     document.addEventListener('mousemove', (e) => {
+        if (mouseThrottle) return;
+        mouseThrottle = true;
         targetMouse.x = e.clientX / window.innerWidth;
         targetMouse.y = 1.0 - (e.clientY / window.innerHeight);
-    });
+        setTimeout(() => { mouseThrottle = false; }, 50);  // 50ms 节流
+    }, { passive: true });
 
     // 时钟
     const clock = new THREE.Clock();
 
-    // 动画循环
-    function animate() {
-        requestAnimationFrame(animate);
+    // 帧率控制 - 限制到 30fps
+    let lastFrameTime = 0;
+    const frameInterval = 1000 / 30;  // 30fps
+
+    // 动画循环 - 带帧率限制
+    function animate(currentTime) {
+        if (currentTime - lastFrameTime < frameInterval) {
+            requestAnimationFrame(animate);
+            return;
+        }
+        lastFrameTime = currentTime;
 
         const elapsedTime = clock.getElapsedTime();
         material.uniforms.u_time.value = elapsedTime;
-        material.uniforms.u_mouse.value.lerp(targetMouse, 0.05);
+        // 降低鼠标插值速度，减少计算
+        material.uniforms.u_mouse.value.lerp(targetMouse, 0.03);
 
         renderer.render(scene, camera);
+        requestAnimationFrame(animate);
     }
-    animate();
+    requestAnimationFrame(animate);
 
-    // 窗口大小调整
+    // 窗口大小调整 - 节流
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-
-        renderer.setSize(width, height);
-        material.uniforms.u_resolution.value.set(width, height);
-    });
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            renderer.setSize(width, height);
+            material.uniforms.u_resolution.value.set(width, height);
+        }, 150);  // 150ms 防抖
+    }, { passive: true });
 
     // 主题切换监听
     window.updateAuraTheme = function() {
         const isLight = document.documentElement.getAttribute('data-theme') === 'light';
         const colors = getComputedColors();
-
         material.uniforms.u_colorCore.value = colors.core;
         material.uniforms.u_colorFringe.value = colors.fringe;
         material.uniforms.u_isLightMode.value = isLight ? 1.0 : 0.0;
     };
 
-    // 性能优化：页面不可见时降低帧率
+    // 页面可见性优化 - 不可见时暂停
+    let isAnimationPaused = false;
+
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
-            renderer.setAnimationLoop(null);
-        } else {
-            animate();
+            isAnimationPaused = true;
+            // 停止渲染循环
+            if (renderer.setAnimationLoop) {
+                renderer.setAnimationLoop(null);
+            }
+        } else if (isAnimationPaused) {
+            isAnimationPaused = false;
+            // 恢复动画
+            requestAnimationFrame(animate);
         }
     });
 

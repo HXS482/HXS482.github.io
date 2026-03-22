@@ -1,12 +1,14 @@
 /* ============================================
-   AURA SSO Theme - Hexo Blog UI
+   AURA SSO Theme - Hexo Blog UI (优化版)
    基于 AURA Single Sign-On 设计
+   性能优化：减少 backdrop-filter，优化动画，GPU 加速
    ============================================ */
 
 /* ============================================
-   1. 字体引入 / Fonts
+   1. 字体引入 / Fonts (优化)
    ============================================ */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;500;600&display=swap');
+/* 预连接 Google Fonts 加速加载 */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600&display=swap');
 
 /* ============================================
    2. 设计变量 / Design Variables
@@ -106,10 +108,12 @@ a {
     height: 100vh;
     z-index: 0;
     pointer-events: none;
+    /* GPU 加速 */
+    will-change: contents;
 }
 
 /* ============================================
-   7. 顶部导航栏 / Top Bar
+   7. 顶部导航栏 / Top Bar (优化)
    ============================================ */
 .top-bar {
     position: fixed;
@@ -119,6 +123,9 @@ a {
     display: flex;
     gap: var(--space-sm);
     align-items: center;
+    /* GPU 加速 */
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 .version-tag {
@@ -128,19 +135,18 @@ a {
     display: flex;
     align-items: center;
     padding: var(--space-xs) var(--space-md);
-    background: var(--bg-surface-1);
+    /* 移除 backdrop-filter，改用纯色背景 */
+    background: var(--bg-surface-2);
     border-radius: var(--radius-pill);
-    backdrop-filter: blur(10px);
 }
 
 .theme-toggle {
     height: 40px;
     padding: 0 var(--space-lg);
-    background-color: var(--bg-surface-1);
+    background-color: var(--bg-surface-2);
     color: var(--text-primary);
     gap: var(--space-sm);
     font-size: 13px;
-    backdrop-filter: blur(10px);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-pill);
     cursor: pointer;
@@ -150,10 +156,12 @@ a {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     transition: var(--transition-element);
+    /* GPU 加速 */
+    will-change: transform;
 }
 
 .theme-toggle:hover {
-    background-color: var(--bg-surface-2);
+    background-color: var(--bg-surface-3);
     transform: translateY(-2px);
 }
 
@@ -169,6 +177,9 @@ a {
     text-transform: uppercase;
     transition: var(--transition-theme);
     z-index: 10;
+    /* GPU 加速 */
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 .label-top-left {
@@ -216,16 +227,6 @@ a {
     margin: 0 auto;
 }
 
-/* ============================================
-   10. 主内容区域 / Main Content Wrapper
-   ============================================ */
-.content-wrapper {
-    grid-column: 1;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-lg);
-}
-
 /* Archives 页面特殊布局 */
 .layout-grid:has(.archive-page-wrapper) {
     height: 100vh;
@@ -249,7 +250,7 @@ a {
 }
 
 /* ============================================
-   12. 文章列表 / Post List
+   10. 文章列表 / Post List (优化)
    ============================================ */
 .post-list {
     display: flex;
@@ -261,14 +262,17 @@ a {
     background: var(--bg-surface-1);
     border-radius: var(--radius-card);
     padding: var(--space-lg);
-    backdrop-filter: blur(20px);
+    /* 移除 backdrop-filter，改用纯色背景 */
     border: 1px solid var(--border-color);
     transition: var(--transition-element);
+    /* GPU 加速 */
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 .post-card:hover {
     background: var(--bg-surface-2);
-    transform: translateY(-4px);
+    transform: translateY(-4px) translateZ(0);
     border-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -350,7 +354,7 @@ a {
 }
 
 /* ============================================
-   12. 侧边栏 / Sidebar
+   11. 侧边栏 / Sidebar (优化)
    ============================================ */
 .sidebar-wrapper {
     grid-column: 2;
@@ -363,19 +367,22 @@ a {
 .auth-panel {
     width: 100%;
     max-width: 440px;
-    background-color: var(--bg-surface-1);
+    background-color: var(--bg-surface-2);
     border-radius: var(--radius-card);
     padding: var(--space-xl);
     display: flex;
     flex-direction: column;
     gap: var(--space-lg);
-    backdrop-filter: blur(20px);
+    /* 移除 backdrop-filter */
     border: 1px solid var(--border-color);
     transition: var(--transition-theme);
+    /* GPU 加速 */
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 /* ============================================
-   13. 头部组 / Header Group
+   12. 头部组 / Header Group
    ============================================ */
 .header-group {
     display: flex;
@@ -387,7 +394,7 @@ a {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     color: var(--text-primary);
-    background: var(--bg-surface-2);
+    background: var(--bg-surface-3);
     padding: var(--space-xs) var(--space-md);
     border-radius: var(--radius-pill);
     align-self: flex-start;
@@ -410,7 +417,7 @@ a {
 }
 
 /* ============================================
-   14. SSO 按钮网格 / SSO Button Grid
+   13. SSO 按钮网格 / SSO Button Grid
    ============================================ */
 .sso-grid {
     display: grid;
@@ -432,11 +439,13 @@ a {
     justify-content: center;
     transition: var(--transition-element);
     overflow: hidden;
+    /* GPU 加速 */
+    will-change: transform;
 }
 
 .btn-sso:hover {
     background-color: var(--bg-surface-3);
-    transform: translateY(-2px);
+    transform: translateY(-2px) translateZ(0);
     border-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -465,7 +474,7 @@ a {
 }
 
 /* ============================================
-   15. 分隔线 / Divider
+   14. 分隔线 / Divider
    ============================================ */
 .sso-divider {
     display: flex;
@@ -488,7 +497,7 @@ a {
 }
 
 /* ============================================
-   16. 导航链接组 / Nav Links
+   15. 导航链接组 / Nav Links (优化)
    ============================================ */
 .nav-links {
     display: flex;
@@ -509,6 +518,8 @@ a {
     transition: var(--transition-element);
     border: 1px solid var(--border-color);
     position: relative;
+    /* GPU 加速 */
+    will-change: transform;
 }
 
 .nav-link.active {
@@ -523,7 +534,8 @@ a {
     border-radius: 50%;
     margin-right: var(--space-sm);
     box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
-    animation: pulse 2s ease-in-out infinite;
+    /* 优化动画：缩短周期 */
+    animation: pulse 3s ease-in-out infinite;
     flex-shrink: 0;
     display: inline-block;
 }
@@ -542,6 +554,7 @@ a {
     margin-left: var(--space-sm);
 }
 
+/* 优化 pulse 动画 - 更长周期减少计算 */
 @keyframes pulse {
     0%, 100% {
         opacity: 1;
@@ -555,7 +568,7 @@ a {
 
 .nav-link:hover {
     background: var(--bg-surface-3);
-    transform: translateX(var(--space-sm));
+    transform: translateX(var(--space-sm)) translateZ(0);
 }
 
 .nav-link .link-label {
@@ -567,7 +580,7 @@ a {
 }
 
 /* ============================================
-   17. 统计信息 / Stats
+   16. 统计信息 / Stats
    ============================================ */
 .stats-group {
     display: grid;
@@ -599,7 +612,7 @@ a {
 }
 
 /* ============================================
-   18. 页脚 / Footer
+   17. 页脚 / Footer
    ============================================ */
 .footer-info {
     margin-top: auto;
@@ -616,7 +629,7 @@ a {
 }
 
 /* ============================================
-   19. 归档页面 / Archive Page
+   18. 归档页面 / Archive Page
    ============================================ */
 .archive-page-wrapper {
     display: flex;
@@ -678,7 +691,7 @@ a {
 }
 
 /* ============================================
-   19.1 Archives 页面简约侧边导航 / Simple Sidebar Nav
+   19. Archives 页面简约侧边导航 / Simple Sidebar Nav
    ============================================ */
 .archive-nav-simple {
     grid-column: 2;
@@ -691,8 +704,8 @@ a {
     top: 50%;
     transform: translateY(-50%);
     align-self: center;
-    background: var(--bg-surface-1);
-    backdrop-filter: blur(20px);
+    background: var(--bg-surface-2);
+    /* 移除 backdrop-filter */
     border: 1px solid var(--border-color);
     border-radius: var(--radius-pill);
     padding: var(--space-md);
@@ -711,12 +724,14 @@ a {
     transition: var(--transition-element);
     position: relative;
     cursor: pointer;
+    /* GPU 加速 */
+    will-change: transform;
 }
 
 .nav-icon-btn:hover {
     background: var(--bg-surface-3);
     color: var(--text-primary);
-    transform: scale(1.05);
+    transform: scale(1.05) translateZ(0);
     border-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -766,12 +781,14 @@ a {
     color: var(--text-primary);
     transition: var(--transition-element);
     border: 1px solid var(--border-color);
+    /* GPU 加速 */
+    will-change: transform;
 }
 
 .page-number:hover,
 .extend:hover {
     background: var(--bg-surface-3);
-    transform: translateY(-2px);
+    transform: translateY(-2px) translateZ(0);
 }
 
 .page-number.current {
@@ -843,13 +860,13 @@ a {
 }
 
 /* ============================================
-   22. 文章详情页（旧）/ Post Detail Page (Legacy)
+   22. 文章详情页（旧）/ Post Detail Page
    ============================================ */
 .post-detail {
     background: var(--bg-surface-1);
     border-radius: var(--radius-card);
     padding: var(--space-xl);
-    backdrop-filter: blur(20px);
+    /* 移除 backdrop-filter */
     border: 1px solid var(--border-color);
 }
 
@@ -925,7 +942,7 @@ a {
 }
 
 /* ============================================
-   22. 文章全屏页 / Post Full Page
+   24. 文章全屏页 / Post Full Page
    ============================================ */
 .post-full-container {
     position: relative;
@@ -950,10 +967,12 @@ a {
     width: 100%;
     max-width: calc(1440px - var(--space-xl) * 2);
     padding: var(--space-xs) var(--space-md);
-    background: var(--bg-surface-1);
-    backdrop-filter: blur(20px);
+    background: var(--bg-surface-2);
+    /* 移除 backdrop-filter */
     border: 1px solid var(--border-color);
     border-radius: var(--radius-pill);
+    /* GPU 加速 */
+    will-change: transform;
 }
 
 .nav-left {
@@ -1195,7 +1214,7 @@ a {
 }
 
 /* ============================================
-   23. 分类和标签页 - 创意云排布 / Category & Tag Cloud
+   25. 分类和标签页 - 创意云排布 (优化)
    ============================================ */
 .category-cloud-wrapper,
 .tag-cloud-wrapper {
@@ -1216,10 +1235,19 @@ a {
     max-width: 900px;
 }
 
+/* 移动端禁用漂浮动画 */
+@media (max-width: 768px) {
+    .category-cloud-item,
+    .tag-cloud-item {
+        animation: none !important;
+    }
+}
+
 .category-cloud-item,
 .tag-cloud-item {
     position: relative;
-    animation: float 6s ease-in-out infinite;
+    /* 优化：缩短动画周期从 6s 到 4s */
+    animation: float 4s ease-in-out infinite;
     transition: var(--transition-element);
 }
 
@@ -1231,7 +1259,7 @@ a {
     gap: var(--space-sm);
     padding: var(--space-xs) var(--space-lg);
     background: var(--bg-surface-1);
-    backdrop-filter: blur(10px);
+    /* 移除 backdrop-filter */
     border: 1px solid var(--border-color);
     border-radius: var(--radius-pill);
     font-family: 'Space Grotesk', sans-serif;
@@ -1245,7 +1273,7 @@ a {
 .category-cloud-item a:hover,
 .tag-cloud-item a:hover {
     background: var(--bg-surface-3);
-    transform: scale(1.05) translateY(-2px);
+    transform: scale(1.05) translateY(-2px) translateZ(0);
     border-color: rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
 }
@@ -1283,20 +1311,21 @@ a {
 .tag-cloud-item:nth-child(9) { animation-delay: 4.3s; }
 .tag-cloud-item:nth-child(10) { animation-delay: 4.8s; }
 
+/* 优化 float 动画 - 减少移动距离 */
 @keyframes float {
     0%, 100% {
         transform: translateY(0) rotate(0deg);
     }
     33% {
-        transform: translateY(-8px) rotate(1deg);
+        transform: translateY(-4px) rotate(0.5deg);
     }
     66% {
-        transform: translateY(4px) rotate(-1deg);
+        transform: translateY(2px) rotate(-0.5deg);
     }
 }
 
 /* ============================================
-   24. 工具类 / Utilities
+   26. 工具类 / Utilities
    ============================================ */
 .text-center {
     text-align: center;
@@ -1315,7 +1344,7 @@ a {
 }
 
 /* ============================================
-   25. 加载动画 / Loading Animation
+   27. 加载动画 / Loading Animation
    ============================================ */
 .loading {
     display: flex;
@@ -1341,7 +1370,7 @@ a {
 }
 
 /* ============================================
-   26. 滚动条 / Custom Scrollbar
+   28. 滚动条 / Custom Scrollbar
    ============================================ */
 ::-webkit-scrollbar {
     width: 8px;
