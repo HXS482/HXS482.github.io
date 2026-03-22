@@ -1,10 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#ff6b6b"/>
-      <stop offset="100%" style="stop-color:#ee5a5a"/>
+    <!-- 背景渐变 -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1a1c24"/>
+      <stop offset="100%" stop-color="#030407"/>
+    </radialGradient>
+
+    <!-- 核心光晕渐变 -->
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4A88FF"/>
+      <stop offset="50%" stop-color="#6B9BFF"/>
+      <stop offset="100%" stop-color="#FFFFFF"/>
+    </linearGradient>
+
+    <!-- 外环渐变 -->
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4A88FF" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#8BA3CC" stop-opacity="0.5"/>
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="6" fill="url(#bg)"/>
-  <text x="16" y="23" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">A</text>
+
+  <!-- 背景圆 -->
+  <circle cx="32" cy="32" r="32" fill="url(#bgGrad)"/>
+
+  <!-- 外环光晕 -->
+  <circle cx="32" cy="32" r="28" fill="none" stroke="url(#ringGrad)" stroke-width="2" opacity="0.6"/>
+
+  <!-- 核心发光 -->
+  <circle cx="32" cy="32" r="20" fill="url(#glowGrad)" opacity="0.3"/>
+
+  <!-- 简化版 AURA 标志 - 抽象的 A 形 -->
+  <g transform="translate(32,32)">
+    <!-- 左斜线 -->
+    <path d="M -10 8 L 0 -10 L 4 -10 L -4 6 Z" fill="url(#glowGrad)"/>
+    <!-- 右斜线 -->
+    <path d="M 10 8 L 0 -10 L -4 -10 L 4 6 Z" fill="url(#glowGrad)"/>
+    <!-- 横杠 -->
+    <path d="M -6 2 L 6 2 L 4 5 L -4 5 Z" fill="url(#glowGrad)" opacity="0.8"/>
+  </g>
+
+  <!-- 装饰性光点 -->
+  <circle cx="32" cy="10" r="2" fill="#4A88FF" opacity="0.8"/>
+  <circle cx="48" cy="32" r="1.5" fill="#6B9BFF" opacity="0.6"/>
+  <circle cx="16" cy="36" r="1" fill="#FFFFFF" opacity="0.4"/>
 </svg>
